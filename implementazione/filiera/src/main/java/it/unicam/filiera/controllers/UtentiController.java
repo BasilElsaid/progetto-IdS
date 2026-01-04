@@ -1,4 +1,4 @@
-package it.unicam.filiera.conrollers;
+package it.unicam.filiera.controllers;
 
 import it.unicam.filiera.models.*;
 

@@ -1,4 +1,4 @@
-package it.unicam.filiera.conrollers;
+package it.unicam.filiera.controllers;
 
 public class MarketplaceController {
 }
