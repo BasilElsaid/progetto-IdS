@@ -10,19 +10,46 @@ public class Azienda {
     private Long id;
 
     private String nome;
-    private String tipo; // AGRICOLA, TRASFORMATORE, DISTRIBUTORE
 
+    private String sede;
+
+    @Enumerated(EnumType.STRING)
+    private TipoAzienda tipo;
+
+    // ===== COSTRUTTORI =====
     public Azienda() {}
 
-    public Azienda(String nome, String tipo) {
-        this.nome = nome;
-        this.tipo = tipo;
+    // ===== GETTERS =====
+    public Long getId() {
+        return id;
     }
 
-    public Long getId() { return id; }
-    public String getNome() { return nome; }
-    public String getTipo() { return tipo; }
+    public String getNome() {
+        return nome;
+    }
 
-    public void setNome(String nome) { this.nome = nome; }
-    public void setTipo(String tipo) { this.tipo = tipo; }
+    public String getSede() {
+        return sede;
+    }
+
+    public TipoAzienda getTipo() {
+        return tipo;
+    }
+
+    // ===== SETTERS =====
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setSede(String sede) {
+        this.sede = sede;
+    }
+
+    public void setTipo(TipoAzienda tipo) {
+        this.tipo = tipo;
+    }
 }
