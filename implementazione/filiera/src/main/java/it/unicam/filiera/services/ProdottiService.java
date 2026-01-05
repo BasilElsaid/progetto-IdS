@@ -11,7 +11,7 @@ public class ProdottiService {
     private final ProdottoRepository repo;
     
     public List<Prodotto> list(String nome, String origine) {
-        return prodottoRepository.findAll();
+        return repo.findAll();
     }
     
 
@@ -45,13 +45,5 @@ public class ProdottiService {
     public Prodotto addCertificazione(Long id, String nome) {
         return get(id);
     }
-
-
-	public List<Prodotto> list(String nome, String origine) {
-		// TODO Auto-generated method stub
-		return null;
-	}
- 
-
 
 }
