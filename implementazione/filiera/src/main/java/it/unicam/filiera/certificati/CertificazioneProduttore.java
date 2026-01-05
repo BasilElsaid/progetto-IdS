@@ -1,6 +1,6 @@
 package it.unicam.filiera.certificati;
 
-import it.unicam.filiera.prodotto.Prodotto;
+import it.unicam.filiera.models.Prodotto;
 
 public class CertificazioneProduttore implements StrategieCertificazioni {
 

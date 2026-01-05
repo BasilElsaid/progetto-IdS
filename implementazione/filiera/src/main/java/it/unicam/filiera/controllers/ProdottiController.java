@@ -1,51 +1,32 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.prodotto.*;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import it.unicam.filiera.models.Prodotto;
+import it.unicam.filiera.services.ProdottiService;
 
+@RestController
+@RequestMapping("/api/prodotti")
 public class ProdottiController {
 
-	/**
-	 * 
-	 * @param prodotto
-	 */
-	public void aggiungiProdotto(Prodotto prodotto) {
-		// TODO - implement ProdottiController.aggiungiProdotto
-		throw new UnsupportedOperationException();
-	}
+    private final ProdottiService service;
 
-	/**
-	 * 
-	 * @param id
-	 */
-	public void eliminaProdotto(int id) {
-		// TODO - implement ProdottiController.eliminaProdotto
-		throw new UnsupportedOperationException();
-	}
+    public ProdottiController(ProdottiService service) {
+        this.service = service;
+    }
 
-	/**
-	 * 
-	 * @param id
-	 */
-	public Prodotto getProdotto(int id) {
-		// TODO - implement ProdottiController.getProdotto
-		throw new UnsupportedOperationException();
-	}
+    @PostMapping
+    public Prodotto crea(@RequestBody Prodotto p) {
+        return service.crea(p);
+    }
 
-	/**
-	 * 
-	 * @param id
-	 * @param prodotto
-	 */
-	public void aggiornaProdotto(int id, Prodotto prodotto) {
-		// TODO - implement ProdottiController.aggiornaProdotto
-		throw new UnsupportedOperationException();
-	}
+    @GetMapping("/{id}")
+    public Prodotto get(@PathVariable Long id) {
+        return service.get(id);
+    }
 
-	public List<Prodotto> getAllProdotti() {
-		// TODO - implement ProdottiController.getAllProdotti
-		throw new UnsupportedOperationException();
-	}
-
+    @GetMapping
+    public List<Prodotto> all() {
+        return service.all();
+    }
 }

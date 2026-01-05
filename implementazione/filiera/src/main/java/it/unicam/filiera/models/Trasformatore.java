@@ -1,19 +1,10 @@
 package it.unicam.filiera.models;
 
-import java.util.*;
-import it.unicam.filiera.prodotto.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
-public class Trasformatore extends Azienda {
-
-	private Collection<ProcessoTrasformazione> processi = new ArrayList<>();
-
-	/**
-	 * 
-	 * @param processo
-	 */
-	public void aggiungiProcesso(ProcessoTrasformazione processo) {
-		// TODO - implement Trasformatore.aggiungiProcesso
-		throw new UnsupportedOperationException();
-	}
-
+@Entity
+@Table(name = "trasformatori")
+public class Trasformatore extends UtenteGenerico {
+    private String laboratorio;
 }

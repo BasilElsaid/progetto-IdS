@@ -1,19 +1,10 @@
 package it.unicam.filiera.models;
 
-import java.util.*;
-import it.unicam.filiera.prodotto.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
-public class DistributoreTipicita extends Azienda {
-
-	private Collection<Pacchetto> pacchetti = new ArrayList<>();
-
-	/**
-	 * 
-	 * @param pacchetto
-	 */
-	public void aggiungiPacchetto(Pacchetto pacchetto) {
-		// TODO - implement DistributoreTipicita.aggiungiPacchetto
-		throw new UnsupportedOperationException();
-	}
-
+@Entity
+@Table(name = "distributori")
+public class DistributoreTipicita extends UtenteGenerico {
+    private String areaDistribuzione;
 }

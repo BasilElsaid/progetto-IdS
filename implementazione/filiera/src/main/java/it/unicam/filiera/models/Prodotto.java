@@ -3,26 +3,26 @@ package it.unicam.filiera.models;
 import jakarta.persistence.*;
 
 @Entity
-public class Azienda {
+public class Prodotto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
-    private String tipo; // AGRICOLA, TRASFORMATORE, DISTRIBUTORE
+    private String categoria;
 
-    public Azienda() {}
+    public Prodotto() {}
 
-    public Azienda(String nome, String tipo) {
+    public Prodotto(String nome, String categoria) {
         this.nome = nome;
-        this.tipo = tipo;
+        this.categoria = categoria;
     }
 
     public Long getId() { return id; }
     public String getNome() { return nome; }
-    public String getTipo() { return tipo; }
+    public String getCategoria() { return categoria; }
 
     public void setNome(String nome) { this.nome = nome; }
-    public void setTipo(String tipo) { this.tipo = tipo; }
+    public void setCategoria(String categoria) { this.categoria = categoria; }
 }

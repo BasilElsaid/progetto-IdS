@@ -1,4 +1,10 @@
 package it.unicam.filiera.models;
 
-public class Curatore extends Personale {
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "curatori")
+public class Curatore extends UtenteGenerico {
+    private String ente;
 }

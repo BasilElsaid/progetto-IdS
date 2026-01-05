@@ -1,22 +1,45 @@
 package it.unicam.filiera.prodotto;
 
-import java.util.*;
+import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import it.unicam.filiera.models.Prodotto;
+
+@Entity
+@Table(name = "pacchetti")
 public class Pacchetto {
 
-	private int quantitaProdotti;
-	private int numeroPacchetto;
-	private String descrizione;
-	private Collection<Prodotto> prodotti = new ArrayList<>();
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	/**
-	 * 
-	 * @param prodotto
-	 */
-	public void aggiungiProdotto(Prodotto prodotto) {
-		// TODO - implement Pacchetto.aggiungiProdotto
-		throw new UnsupportedOperationException();
-	}
+    @Column(nullable = false)
+    private String nome;
 
+    @Column(length = 2000)
+    private String descrizione;
+
+    @ManyToMany
+    @JoinTable(
+            name = "pacchetto_prodotti",
+            joinColumns = @JoinColumn(name = "pacchetto_id"),
+            inverseJoinColumns = @JoinColumn(name = "prodotto_id")
+    )
+    private List<Prodotto> prodotti = new ArrayList<>();
+
+    @Column(precision = 12, scale = 2)
+    private BigDecimal prezzoTotale;
+
+    public Long getId() { return id; }
+    public String getNome() { return nome; }
+    public String getDescrizione() { return descrizione; }
+    public List<Prodotto> getProdotti() { return prodotti; }
+    public BigDecimal getPrezzoTotale() { return prezzoTotale; }
+
+    public void setNome(String nome) { this.nome = nome; }
+    public void setDescrizione(String descrizione) { this.descrizione = descrizione; }
+    public void setPrezzoTotale(BigDecimal prezzoTotale) { this.prezzoTotale = prezzoTotale; }
 }

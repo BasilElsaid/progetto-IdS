@@ -1,23 +1,26 @@
 package it.unicam.filiera.prodotto;
 
+import jakarta.persistence.*;
+
+@Entity
 public class ProcessoTrasformazione {
 
-	private String descrizione;
-	private Prodotto prodottoOriginale;
-	private Prodotto prodottoTrasformato;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	/**
-	 * 
-	 * @param descrizione
-	 * @param prodottoOriginale
-	 */
-	public ProcessoTrasformazione(String descrizione, Prodotto prodottoOriginale) {
-		// TODO - implement ProcessoTrasformazione.ProcessoTrasformazione
-		throw new UnsupportedOperationException();
-	}
+    private String descrizione;
+    private boolean chiuso = false;
 
-	public Prodotto getProdottoTrasformato() {
-		return this.prodottoTrasformato;
-	}
+    public ProcessoTrasformazione() {}
 
+    public ProcessoTrasformazione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+
+    public Long getId() { return id; }
+    public String getDescrizione() { return descrizione; }
+    public boolean isChiuso() { return chiuso; }
+
+    public void chiudi() { this.chiuso = true; }
 }
