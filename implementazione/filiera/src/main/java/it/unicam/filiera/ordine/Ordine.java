@@ -1,66 +1,43 @@
 package it.unicam.filiera.ordine;
 
-import java.util.*;
-import it.unicam.filiera.prodotto.*;
-import it.unicam.filiera.models.*;
+import it.unicam.filiera.models.Acquirente;
+import it.unicam.filiera.prodotto.Pacchetto;
+import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Entity
 public class Ordine {
 
-	private String dataOra;
-	private double totale;
-	private int numeroOrdine;
-	private Collection<Prodotto> prodotti = new ArrayList<>();
-	private Acquirente acquirente;
-	private Pagamento pagamento;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	/**
-	 * 
-	 * @param acquirente
-	 */
-	public Ordine(Acquirente acquirente) {
-		// TODO - implement Ordine.Ordine
-		throw new UnsupportedOperationException();
-	}
+    private LocalDateTime dataOra = LocalDateTime.now();
 
-	/**
-	 * 
-	 * @param prodotto
-	 */
-	public void aggiuniProdotto(Prodotto prodotto) {
-		// TODO - implement Ordine.aggiuniProdotto
-		throw new UnsupportedOperationException();
-	}
+    private double totale;
 
-	/**
-	 * 
-	 * @param pacchetto
-	 */
-	public void aggiuniPacchetto(Pacchetto pacchetto) {
-		// TODO - implement Ordine.aggiuniPacchetto
-		throw new UnsupportedOperationException();
-	}
+    @ManyToOne
+    private Acquirente acquirente;
 
-	/**
-	 * 
-	 * @param prodotto
-	 */
-	public void eliminaProdotto(Prodotto prodotto) {
-		// TODO - implement Ordine.eliminaProdotto
-		throw new UnsupportedOperationException();
-	}
+    @ManyToMany
+    private List<Pacchetto> pacchetti;
 
-	/**
-	 * 
-	 * @param pacchetto
-	 */
-	public void eliminaPacchetto(Pacchetto pacchetto) {
-		// TODO - implement Ordine.eliminaPacchetto
-		throw new UnsupportedOperationException();
-	}
+    @Enumerated(EnumType.STRING)
+    private StatoOrdine stato = StatoOrdine.CREATO;
 
-	public boolean paga() {
-		// TODO - implement Ordine.paga
-		throw new UnsupportedOperationException();
-	}
+    public Ordine() {} // richiesto da JPA/Hibernate :contentReference[oaicite:5]{index=5}
 
+    public Long getId() { return id; }
+    public LocalDateTime getDataOra() { return dataOra; }
+    public double getTotale() { return totale; }
+    public Acquirente getAcquirente() { return acquirente; }
+    public List<Pacchetto> getPacchetti() { return pacchetti; }
+    public StatoOrdine getStato() { return stato; }
+
+    public void setTotale(double totale) { this.totale = totale; }
+    public void setAcquirente(Acquirente acquirente) { this.acquirente = acquirente; }
+    public void setPacchetti(List<Pacchetto> pacchetti) { this.pacchetti = pacchetti; }
+    public void setStato(StatoOrdine stato) { this.stato = stato; }
 }
