@@ -1,62 +1,47 @@
 package it.unicam.filiera.controllers;
 
+import it.unicam.filiera.controllers.dto.EventoCreateDTO;
 import it.unicam.filiera.evento.*;
+import it.unicam.filiera.models.Acquirente;
+import it.unicam.filiera.models.Animatore;
+import it.unicam.filiera.services.EventiService;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@RestController
+@RequestMapping("/eventi")
 public class EventiController {
 
-	/**
-	 * 
-	 * @param evento
-	 */
-	public void aggiungiEvento(Evento evento) {
-		// TODO - implement EventiController.aggiungiEvento
-		throw new UnsupportedOperationException();
+	private final EventiService eventiService;
+
+	public EventiController(EventiService eventiService) {
+		this.eventiService = eventiService;
 	}
 
-	/**
-	 * 
-	 * @param id
-	 * @param evento
-	 */
-	public void aggiornaEvento(int id, Evento evento) {
-		// TODO - implement EventiController.aggiornaEvento
-		throw new UnsupportedOperationException();
+	@PostMapping
+	public Evento aggiungiEvento(@RequestBody EventoCreateDTO dto) {
+		return eventiService.creaEvento(dto);
 	}
 
-	/**
-	 * 
-	 * @param id
-	 */
-	public void eliminaEvento(int id) {
-		// TODO - implement EventiController.eliminaEvento
-		throw new UnsupportedOperationException();
+	@GetMapping
+	public List<Evento> getTuttiEventi() {
+		return eventiService.getTuttiEventi();
 	}
 
-	/**
-	 * 
-	 * @param evento
-	 */
-	public TicketEvento generaBiglietto(Evento evento) {
-		// TODO - implement EventiController.generaBiglietto
-		throw new UnsupportedOperationException();
+	@GetMapping("/{id}")
+	public Evento getEvento(@PathVariable Long id) {
+		return eventiService.getEvento(id)
+				.orElseThrow(() -> new RuntimeException("Evento non trovato: " + id));
 	}
 
-	/**
-	 * 
-	 * @param numero
-	 */
-	public TicketEvento getBiglietto(int numero) {
-		// TODO - implement EventiController.getBiglietto
-		throw new UnsupportedOperationException();
+	@PutMapping("/{id}")
+	public Evento aggiornaEvento(@PathVariable Long id, @RequestBody Evento evento) {
+		return eventiService.aggiornaEvento(id, evento);
 	}
 
-	/**
-	 * 
-	 * @param numero
-	 */
-	public void eliminaBiglietto(int numero) {
-		// TODO - implement EventiController.eliminaBiglietto
-		throw new UnsupportedOperationException();
+	@DeleteMapping("/{id}")
+	public void eliminaEvento(@PathVariable Long id) {
+		eventiService.eliminaEvento(id);
 	}
-
 }
