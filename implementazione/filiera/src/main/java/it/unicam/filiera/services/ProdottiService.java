@@ -36,6 +36,7 @@ public class ProdottiService {
     }
 
     public void delete(Long id) {
+        repo.deleteById(id);
     }
 
     public Prodotto addProcesso(Long id, String descrizione) {
