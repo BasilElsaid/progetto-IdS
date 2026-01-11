@@ -78,7 +78,6 @@ La piattaforma è pensata per supportare diversi soggetti coinvolti nella filier
 
 - **Basil Elsaid**  
 - **Ahmad Kassar**  
-- **Louido Nathaniel Solonirina**
 
 ---
 
