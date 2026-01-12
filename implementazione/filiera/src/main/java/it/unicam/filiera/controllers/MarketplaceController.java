@@ -18,7 +18,7 @@ public class MarketplaceController {
 
     @GetMapping("/prodotti")
     public List<Prodotto> list(@RequestParam(required = false) String nome,
-                              @RequestParam(required = false) String origine) {
-        return prodottiService.list(nome, origine);
+                              @RequestParam(required = false) String categoria) {
+        return prodottiService.list(nome, categoria);
     }
 }

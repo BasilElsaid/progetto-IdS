@@ -10,7 +10,7 @@ public class ProdottiService {
 
     private final ProdottoRepository repo;
     
-    public List<Prodotto> list(String nome, String origine) {
+    public List<Prodotto> list(String nome, String categoria) {
         return repo.findAll();
     }
     

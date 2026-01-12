@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 public record CreateProdottoRequest(
         @NotBlank String nome,
         @NotBlank String descrizione,
-        @NotBlank String origine,
+        @NotBlank String categoria,
         @NotBlank String lotto,
         @Min(0) double prezzo,
         @NotNull Long produttoreId
