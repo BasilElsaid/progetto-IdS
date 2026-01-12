@@ -1,7 +1,8 @@
 package it.unicam.filiera.controllers;
 
 import it.unicam.filiera.controllers.dto.CertificatoDTO;
-import it.unicam.filiera.certificati.*;
+import it.unicam.filiera.models.TipoCertificatore;
+import it.unicam.filiera.certificati.Certificato;
 import it.unicam.filiera.services.CertificatiService;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,34 +12,45 @@ import java.util.List;
 @RequestMapping("/certificati")
 public class CertificatiController {
 
-    private final CertificatiService service;
+    private final CertificatiService certificatiService;
 
-    public CertificatiController(CertificatiService service) {
-        this.service = service;
+    public CertificatiController(CertificatiService certificatiService) {
+        this.certificatiService = certificatiService;
     }
 
+    // --- CREATE ---
     @PostMapping
-    public Certificato crea(@RequestBody CertificatoDTO dto) {
-        return service.creaCertificato(dto);
+    public Certificato creaCertificato(@RequestBody CertificatoDTO dto) {
+        return certificatiService.creaCertificato(dto);
     }
 
+    // --- READ ---
     @GetMapping
-    public List<Certificato> tutti() {
-        return service.getTuttiCertificati();
+    public List<Certificato> getTuttiCertificati() {
+        return certificatiService.getTuttiCertificati();
     }
 
     @GetMapping("/{id}")
-    public Certificato uno(@PathVariable Long id) {
-        return service.getCertificato(id);
+    public Certificato getCertificato(@PathVariable Long id) {
+        return certificatiService.getCertificato(id);
     }
 
+    // --- UPDATE ---
     @PutMapping("/{id}")
-    public Certificato aggiorna(@PathVariable Long id, @RequestBody CertificatoDTO dto) {
-        return service.aggiornaCertificato(id, dto);
+    public Certificato aggiornaCertificato(@PathVariable Long id, @RequestBody CertificatoDTO dto) {
+        return certificatiService.aggiornaCertificato(id, dto);
     }
 
+    // --- DELETE ---
     @DeleteMapping("/{id}")
-    public void elimina(@PathVariable Long id) {
-        service.eliminaCertificato(id);
+    public void eliminaCertificato(@PathVariable Long id) {
+        certificatiService.eliminaCertificato(id);
+    }
+
+    // --- VERIFICA CERTIFICATO (opzionale) ---
+    @PostMapping("/verifica")
+    public boolean verificaCertificato(@RequestParam TipoCertificatore tipo,
+                                       @RequestParam Long prodottoId) {
+        return certificatiService.verificaCertificato(tipo, prodottoId);
     }
 }

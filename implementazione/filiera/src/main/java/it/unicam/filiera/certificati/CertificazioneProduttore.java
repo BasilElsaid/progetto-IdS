@@ -4,7 +4,8 @@ import it.unicam.filiera.models.Prodotto;
 import jakarta.persistence.Entity;
 
 @Entity
-public class CertificazioneProduttore extends Certificato {
+public class CertificazioneProduttore extends Certificato
+		implements StrategieCertificazioni{
 
 	private String azienda;
 	private String origineMateriaPrima;
