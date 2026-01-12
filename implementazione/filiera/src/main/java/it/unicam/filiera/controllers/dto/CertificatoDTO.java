@@ -2,9 +2,14 @@ package it.unicam.filiera.controllers.dto;
 
 import it.unicam.filiera.models.TipoCertificatore;
 
+import jakarta.validation.constraints.NotNull;
+
 public class CertificatoDTO {
 
+    @NotNull
     public TipoCertificatore tipo; // tipo di certificatore
+
+    @NotNull
     public Long prodottoId;
 
     // campi Produttore
