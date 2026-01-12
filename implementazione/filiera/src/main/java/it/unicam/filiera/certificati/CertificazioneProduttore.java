@@ -1,22 +1,28 @@
 package it.unicam.filiera.certificati;
 
 import it.unicam.filiera.models.Prodotto;
+import jakarta.persistence.Entity;
 
-public class CertificazioneProduttore implements StrategieCertificazioni {
+@Entity
+public class CertificazioneProduttore extends Certificato {
 
 	private String azienda;
 	private String origineMateriaPrima;
 
-	/**
-	 * @param p
-	 */
 	@Override
 	public boolean verifica(Prodotto p) {
-		return false;
+		// logica reale qui
+		return true;
 	}
 
 	@Override
 	public String getNome() {
-		return "";
+		return "Certificazione Produttore";
 	}
+
+	public String getAzienda() { return azienda; }
+	public void setAzienda(String azienda) { this.azienda = azienda; }
+
+	public String getOrigineMateriaPrima() { return origineMateriaPrima; }
+	public void setOrigineMateriaPrima(String origine) { this.origineMateriaPrima = origine; }
 }

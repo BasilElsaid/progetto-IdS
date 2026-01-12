@@ -1,22 +1,27 @@
 package it.unicam.filiera.certificati;
 
 import it.unicam.filiera.models.Prodotto;
+import jakarta.persistence.Entity;
 
-public class CertificatoCuratore implements StrategieCertificazioni {
+@Entity
+public class CertificatoCuratore extends Certificato {
 
 	private boolean approvato;
 	private String commento;
 
-	/**
-	 * @param p
-	 */
 	@Override
 	public boolean verifica(Prodotto p) {
-		return false;
+		return approvato;
 	}
 
 	@Override
 	public String getNome() {
-		return "";
+		return "Certificato Curatore";
 	}
+
+	public boolean isApprovato() { return approvato; }
+	public void setApprovato(boolean approvato) { this.approvato = approvato; }
+
+	public String getCommento() { return commento; }
+	public void setCommento(String commento) { this.commento = commento; }
 }
