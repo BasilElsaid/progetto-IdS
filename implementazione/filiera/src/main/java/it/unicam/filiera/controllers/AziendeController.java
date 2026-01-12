@@ -35,7 +35,7 @@ public class AziendeController {
     public List<Azienda> byTipo(@RequestParam(required = false) TipoAzienda tipo) {
         if (tipo == null) {
             // fallback semplice (tutte)
-            return service.byTipo(TipoAzienda.AGRICOLA);
+            return service.byTipo(TipoAzienda.produttore);
         }
         return service.byTipo(tipo);
     }

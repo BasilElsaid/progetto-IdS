@@ -1,7 +1,7 @@
 package it.unicam.filiera.models;
 
 public enum TipoAzienda {
-    AGRICOLA,
+    produttore,
     TRASFORMATORE,
     DISTRIBUTORE
 }
