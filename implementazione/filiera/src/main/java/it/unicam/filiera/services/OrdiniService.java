@@ -6,7 +6,7 @@ import it.unicam.filiera.ordine.StatoOrdine;
 import it.unicam.filiera.prodotto.Pacchetto;
 import it.unicam.filiera.repositories.AcquirenteRepository;
 import it.unicam.filiera.repositories.OrdineRepository;
-import it.unicam.filiera.repositories.PacchettiRepo;
+import it.unicam.filiera.repositories.PacchettoRepository;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
@@ -17,11 +17,11 @@ public class OrdiniService {
 
     private final OrdineRepository ordineRepository;
     private final AcquirenteRepository acquirenteRepository;
-    private final PacchettiRepo pacchettiRepo;
+    private final PacchettoRepository pacchettiRepo;
 
     public OrdiniService(OrdineRepository ordineRepository,
                          AcquirenteRepository acquirenteRepository,
-                         PacchettiRepo pacchettiRepo) {
+                         PacchettoRepository pacchettiRepo) {
         this.ordineRepository = ordineRepository;
         this.acquirenteRepository = acquirenteRepository;
         this.pacchettiRepo = pacchettiRepo;

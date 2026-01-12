@@ -1,5 +1,8 @@
 package it.unicam.filiera.controllers.dto;
 
-public class CreateUtenteRequest {
+import jakarta.validation.constraints.NotBlank;
 
-}
+public record CreateUtenteRequest(
+        @NotBlank String username,
+        @NotBlank String email
+) {}

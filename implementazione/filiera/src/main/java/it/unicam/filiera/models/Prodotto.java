@@ -11,18 +11,14 @@ public class Prodotto {
 
     private String nome;
     private String categoria;
-
-    public Prodotto() {}
-
-    public Prodotto(String nome, String categoria) {
-        this.nome = nome;
-        this.categoria = categoria;
-    }
+    private Double prezzo;
 
     public Long getId() { return id; }
     public String getNome() { return nome; }
     public String getCategoria() { return categoria; }
+    public Double getPrezzo() { return prezzo; }
 
     public void setNome(String nome) { this.nome = nome; }
     public void setCategoria(String categoria) { this.categoria = categoria; }
+    public void setPrezzo(Double prezzo) { this.prezzo = prezzo; }
 }

@@ -5,6 +5,8 @@ import it.unicam.filiera.ordine.Ordine;
 import it.unicam.filiera.services.OrdiniService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/ordini")
 public class OrdiniController {
@@ -26,5 +28,15 @@ public class OrdiniController {
     @GetMapping("/{id}")
     public Ordine get(@PathVariable Long id) {
         return service.getById(id);
+    }
+
+    @GetMapping
+    public List<Ordine> all() {
+        return service.all();
+    }
+
+    @GetMapping("/acquirente/{acquirenteId}")
+    public List<Ordine> byAcquirente(@PathVariable Long acquirenteId) {
+        return service.getByAcquirente(acquirenteId);
     }
 }

@@ -1,31 +1,21 @@
 package it.unicam.filiera.controllers;
 
+import it.unicam.filiera.controllers.dto.CreatePacchettoRequest;
 import it.unicam.filiera.prodotto.Pacchetto;
-import it.unicam.filiera.repositories.PacchettiRepo;
-
-import org.springframework.http.HttpStatus;
+import it.unicam.filiera.services.PacchettiService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
 @RequestMapping("/api/pacchetti")
 public class PacchettiController {
 
-    private final PacchettiRepo pacchettiRepo;
+    private final PacchettiService service;
 
-    public PacchettiController(PacchettiRepo pacchettiRepo) {
-        this.pacchettiRepo = pacchettiRepo;
-    }
-
-    @GetMapping
-    public List<Pacchetto> list() {
-        return pacchettiRepo.findAll();
+    public PacchettiController(PacchettiService service) {
+        this.service = service;
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Pacchetto create(@RequestBody Pacchetto p) {
-        return pacchettiRepo.save(p);
+    public Pacchetto crea(@RequestBody CreatePacchettoRequest request) {
+        return service.crea(request);
     }
 }
