@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Filiera – Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        button {
+            width: 200px;
+            padding: 12px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+        }
+
+        .swagger {
+            background-color: #85ea2d;
+        }
+
+        .h2 {
+            background-color: #4a90e2;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Filiera – Console</h1>
+
+    <button class="swagger"
+            onclick="window.location.href='/swagger-ui/index.html'">
+        Swagger UI
+    </button>
+
+    <br>
+
+    <button class="h2"
+            onclick="window.location.href='/h2-console'">
+        H2 Console
+    </button>
+</div>
+
+</body>
+</html>
