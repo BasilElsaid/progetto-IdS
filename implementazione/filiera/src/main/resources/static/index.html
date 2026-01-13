@@ -7,9 +7,9 @@
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
             background-color: #f4f4f4;
         }
 
@@ -19,6 +19,7 @@
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin: auto; /* centra verticalmente */
         }
 
         h1 {
@@ -43,6 +44,17 @@
             background-color: #4a90e2;
             color: white;
         }
+
+        footer {
+            background-color: #e0e0e0;
+            color: black;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 14px;
+            position: sticky; /* resta in fondo */
+            bottom: 0;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -62,6 +74,10 @@
         H2 Console
     </button>
 </div>
+
+<footer>
+    Developed by: Basil Elsaid & Ahmad Kassar
+</footer>
 
 </body>
 </html>
