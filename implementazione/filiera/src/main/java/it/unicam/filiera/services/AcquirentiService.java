@@ -19,7 +19,8 @@ public class AcquirentiService {
         Acquirente a = new Acquirente();
         a.setUsername(request.getUsername());
         a.setEmail(request.getEmail());
-        a.setRuolo(Ruolo.ACQUIRENTE); // ✅ enum, non stringa
+        a.setRuolo(Ruolo.ACQUIRENTE);
         return repository.save(a);
     }
 }
+

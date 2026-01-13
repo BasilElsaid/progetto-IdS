@@ -1,27 +1,30 @@
 package it.unicam.filiera.controllers;
 
+import it.unicam.filiera.controllers.dto.CreateUtenteRequest;
+import it.unicam.filiera.controllers.dto.LoginRequest;
+import it.unicam.filiera.controllers.dto.UtenteResponse;
+import it.unicam.filiera.services.AuthService;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import it.unicam.filiera.models.Produttore;
-import it.unicam.filiera.repositories.ProduttoreRepository;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final ProduttoreRepository produttoreRepository;
+    private final AuthService service;
 
-    public AuthController(ProduttoreRepository produttoreRepository) {
-        this.produttoreRepository = produttoreRepository;
+    public AuthController(AuthService service) {
+        this.service = service;
     }
 
     @PostMapping("/register")
-    public Produttore register(@RequestBody Produttore produttore) {
-        return produttoreRepository.save(produttore);
+    public UtenteResponse register(@RequestBody @Valid CreateUtenteRequest request) {
+        return UtenteResponse.from(service.register(request));
     }
 
     @PostMapping("/login")
-    public String login() {
-        return "TOKEN_FAKE_OK";
+    public ResponseEntity<String> login(@RequestBody @Valid LoginRequest request) {
+        return ResponseEntity.ok(service.login(request));
     }
 }

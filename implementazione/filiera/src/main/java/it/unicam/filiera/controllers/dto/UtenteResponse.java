@@ -4,7 +4,6 @@ import it.unicam.filiera.models.Ruolo;
 import it.unicam.filiera.models.UtenteGenerico;
 
 public class UtenteResponse {
-
     public Long id;
     public String username;
     public String email;

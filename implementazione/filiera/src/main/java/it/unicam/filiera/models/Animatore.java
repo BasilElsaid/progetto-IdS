@@ -1,36 +1,27 @@
 package it.unicam.filiera.models;
 
-import java.util.*;
-import it.unicam.filiera.evento.*;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import it.unicam.filiera.evento.Evento;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "animatori")
 public class Animatore extends Personale {
 
-	@Id
-	private Long id;
+    @OneToMany(mappedBy = "animatore", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Evento> eventi = new ArrayList<>();
 
-	public Long getId() {
-		return id;
-	}
+    public List<Evento> getEventi() { return eventi; }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void aggiungiEvento(Evento evento) {
+        eventi.add(evento);
+        evento.setAnimatore(this);
+    }
 
-	@OneToMany(mappedBy = "animatore", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Evento> eventi = new ArrayList<>();
-
-	/**
-	 * 
-	 * @param evento
-	 */
-	public void aggiungiEvento(Evento evento) {
-		// TODO - implement Animatore.aggiungiEvento
-		throw new UnsupportedOperationException();
-	}
-
+    public void rimuoviEvento(Evento evento) {
+        eventi.remove(evento);
+        evento.setAnimatore(null);
+    }
 }

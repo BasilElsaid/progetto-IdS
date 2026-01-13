@@ -1,7 +1,11 @@
 package it.unicam.filiera.repositories;
 
+import it.unicam.filiera.models.UtenteGenerico;
 import org.springframework.data.jpa.repository.JpaRepository;
-import it.unicam.filiera.models.Produttore;
 
-public interface UtenteRepository extends JpaRepository<Produttore, Long> {
+import java.util.Optional;
+
+public interface UtenteRepository extends JpaRepository<UtenteGenerico, Long> {
+    Optional<UtenteGenerico> findByUsername(String username);
+    Optional<UtenteGenerico> findByEmail(String email);
 }

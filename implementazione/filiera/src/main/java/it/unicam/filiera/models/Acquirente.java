@@ -1,10 +1,14 @@
 package it.unicam.filiera.models;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "acquirenti")
+@DiscriminatorValue("ACQUIRENTE")
 public class Acquirente extends UtenteGenerico {
-    // NON serve aggiungere altro
+
+
+    public Acquirente() {
+        setRuolo(Ruolo.ACQUIRENTE);
+    }
 }

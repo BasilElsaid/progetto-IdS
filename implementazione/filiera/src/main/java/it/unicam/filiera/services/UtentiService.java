@@ -1,35 +1,51 @@
 package it.unicam.filiera.services;
 
-import java.util.List;
-
+import it.unicam.filiera.controllers.dto.UtenteResponse;
+import it.unicam.filiera.repositories.*;
 import org.springframework.stereotype.Service;
 
-import it.unicam.filiera.models.Acquirente;
-import it.unicam.filiera.repositories.AcquirenteRepository;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UtentiService {
 
-    private final AcquirenteRepository repository;
+    private final AcquirenteRepository acquirenteRepository;
+    private final ProduttoreRepository produttoreRepository;
+    private final TrasformatoreRepository trasformatoreRepository;
+    private final CuratoreRepository curatoreRepository;
+    private final AnimatoreRepository animatoreRepository;
+    private final DistributoreTipicitaRepository distributoreRepository;
+    private final GestorePiattaformaRepository gestoreRepository;
 
-    public UtentiService(AcquirenteRepository repository) {
-        this.repository = repository;
+    public UtentiService(
+            AcquirenteRepository acquirenteRepository,
+            ProduttoreRepository produttoreRepository,
+            TrasformatoreRepository trasformatoreRepository,
+            CuratoreRepository curatoreRepository,
+            AnimatoreRepository animatoreRepository,
+            DistributoreTipicitaRepository distributoreRepository,
+            GestorePiattaformaRepository gestoreRepository
+    ) {
+        this.acquirenteRepository = acquirenteRepository;
+        this.produttoreRepository = produttoreRepository;
+        this.trasformatoreRepository = trasformatoreRepository;
+        this.curatoreRepository = curatoreRepository;
+        this.animatoreRepository = animatoreRepository;
+        this.distributoreRepository = distributoreRepository;
+        this.gestoreRepository = gestoreRepository;
     }
 
-    public Acquirente getCurrentUser() {
-        List<Acquirente> utenti = repository.findAll();
-        if (utenti.isEmpty()) {
-            throw new RuntimeException("Nessun utente presente");
-        }
-        return utenti.get(0);
-    }
-
-    public Acquirente getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utente non trovato"));
-    }
-
-    public Acquirente save(Acquirente u) {
-        return repository.save(u);
+    // Endpoint DEMO per il prof: mostra chiaramente tutti i ruoli (guest escluso perché non è persistito)
+    public List<UtenteResponse> listaTutti() {
+        List<UtenteResponse> out = new ArrayList<>();
+        acquirenteRepository.findAll().forEach(u -> out.add(UtenteResponse.from(u)));
+        produttoreRepository.findAll().forEach(u -> out.add(UtenteResponse.from(u)));
+        trasformatoreRepository.findAll().forEach(u -> out.add(UtenteResponse.from(u)));
+        curatoreRepository.findAll().forEach(u -> out.add(UtenteResponse.from(u)));
+        animatoreRepository.findAll().forEach(u -> out.add(UtenteResponse.from(u)));
+        distributoreRepository.findAll().forEach(u -> out.add(UtenteResponse.from(u)));
+        gestoreRepository.findAll().forEach(u -> out.add(UtenteResponse.from(u)));
+        return out;
     }
 }

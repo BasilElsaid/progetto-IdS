@@ -6,5 +6,9 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "distributori")
 public class DistributoreTipicita extends UtenteGenerico {
+
     private String areaDistribuzione;
+
+    public String getAreaDistribuzione() { return areaDistribuzione; }
+    public void setAreaDistribuzione(String areaDistribuzione) { this.areaDistribuzione = areaDistribuzione; }
 }
