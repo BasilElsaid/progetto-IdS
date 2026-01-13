@@ -1,9 +1,20 @@
 package it.unicam.filiera.models;
 
-/**
- * Classe ponte per ruoli "staff" (curatore/animatore/gestore/distributore).
- * Non è Entity: le Entity vere restano le sottoclassi.
- */
+import jakarta.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public abstract class Personale extends UtenteGenerico {
-    public Personale() { super(); }
+
+    private String nome;
+    private String cognome;
+    private String telefono;
+
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+
+    public String getCognome() { return cognome; }
+    public void setCognome(String cognome) { this.cognome = cognome; }
+
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
 }
