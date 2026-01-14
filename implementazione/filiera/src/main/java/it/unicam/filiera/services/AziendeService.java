@@ -80,4 +80,42 @@ public class AziendeService {
                 .or(() -> distributoreRepo.findById(id).map(UtenteResponse::from))
                 .orElseThrow(() -> new RuntimeException("Azienda non trovata"));
     }
+
+    public void deleteAzienda(Long id) {
+        if (produttoreRepo.existsById(id)) {
+            produttoreRepo.deleteById(id);
+            return;
+        }
+        if (trasformatoreRepo.existsById(id)) {
+            trasformatoreRepo.deleteById(id);
+            return;
+        }
+        if (distributoreRepo.existsById(id)) {
+            distributoreRepo.deleteById(id);
+            return;
+        }
+        throw new RuntimeException("Azienda non trovata");
+    }
+
+    public UtenteResponse patchAzienda(Long id, CreateAziendaRequest request) {
+        if (produttoreRepo.existsById(id)) {
+            Produttore p = produttoreRepo.findById(id).get();
+            if(request.getEmail() != null) p.setEmail(request.getEmail());
+            if(request.getPassword() != null) p.setPassword(request.getPassword());
+            return UtenteResponse.from(produttoreRepo.save(p));
+        }
+        if (trasformatoreRepo.existsById(id)) {
+            Trasformatore t = trasformatoreRepo.findById(id).get();
+            if(request.getEmail() != null) t.setEmail(request.getEmail());
+            if(request.getPassword() != null) t.setPassword(request.getPassword());
+            return UtenteResponse.from(trasformatoreRepo.save(t));
+        }
+        if (distributoreRepo.existsById(id)) {
+            DistributoreTipicita d = distributoreRepo.findById(id).get();
+            if(request.getEmail() != null) d.setEmail(request.getEmail());
+            if(request.getPassword() != null) d.setPassword(request.getPassword());
+            return UtenteResponse.from(distributoreRepo.save(d));
+        }
+        throw new RuntimeException("Azienda non trovata");
+    }
 }

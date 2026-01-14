@@ -33,4 +33,14 @@ public class PersonaleController {
     public UtenteResponse get(@PathVariable Long id) {
         return service.getPersonale(id);
     }
+
+    @DeleteMapping("/{id}")
+    public void elimina(@PathVariable Long id) {
+        service.eliminaPersonale(id);
+    }
+
+    @PatchMapping("/{id}")
+    public UtenteResponse patch(@PathVariable Long id, @RequestBody CreatePersonaleRequest request) {
+        return service.patchPersonale(id, request);
+    }
 }

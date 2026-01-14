@@ -34,4 +34,14 @@ public class AziendeController {
     public UtenteResponse get(@PathVariable Long id) {
         return service.getAzienda(id);
     }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        service.deleteAzienda(id);
+    }
+
+    @PatchMapping("/{id}")
+    public UtenteResponse patch(@PathVariable Long id, @RequestBody CreateAziendaRequest request) {
+        return service.patchAzienda(id, request);
+    }
 }

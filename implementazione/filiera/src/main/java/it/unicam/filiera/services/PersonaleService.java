@@ -95,4 +95,51 @@ public class PersonaleService {
                 .or(() -> gestoreRepository.findById(id).map(UtenteResponse::from))
                 .orElseThrow(() -> new RuntimeException("Personale non trovato"));
     }
+
+    public void eliminaPersonale(Long id) {
+        if(curatoreRepository.existsById(id)) {
+            curatoreRepository.deleteById(id);
+            return;
+        }
+        if(animatoreRepository.existsById(id)) {
+            animatoreRepository.deleteById(id);
+            return;
+        }
+        if(gestoreRepository.existsById(id)) {
+            gestoreRepository.deleteById(id);
+            return;
+        }
+        throw new RuntimeException("Personale non trovato");
+    }
+
+    public UtenteResponse patchPersonale(Long id, CreatePersonaleRequest request) {
+        if (curatoreRepository.existsById(id)) {
+            Curatore c = curatoreRepository.findById(id).get();
+            if(request.getEmail() != null) c.setEmail(request.getEmail());
+            if(request.getPassword() != null) c.setPassword(request.getPassword());
+            if(request.getNome() != null) c.setNome(request.getNome());
+            if(request.getCognome() != null) c.setCognome(request.getCognome());
+            if(request.getTelefono() != null) c.setTelefono(request.getTelefono());
+            return UtenteResponse.from(curatoreRepository.save(c));
+        }
+        if (animatoreRepository.existsById(id)) {
+            Animatore a = animatoreRepository.findById(id).get();
+            if(request.getEmail() != null) a.setEmail(request.getEmail());
+            if(request.getPassword() != null) a.setPassword(request.getPassword());
+            if(request.getNome() != null) a.setNome(request.getNome());
+            if(request.getCognome() != null) a.setCognome(request.getCognome());
+            if(request.getTelefono() != null) a.setTelefono(request.getTelefono());
+            return UtenteResponse.from(animatoreRepository.save(a));
+        }
+        if (gestoreRepository.existsById(id)) {
+            GestorePiattaforma g = gestoreRepository.findById(id).get();
+            if(request.getEmail() != null) g.setEmail(request.getEmail());
+            if(request.getPassword() != null) g.setPassword(request.getPassword());
+            if(request.getNome() != null) g.setNome(request.getNome());
+            if(request.getCognome() != null) g.setCognome(request.getCognome());
+            if(request.getTelefono() != null) g.setTelefono(request.getTelefono());
+            return UtenteResponse.from(gestoreRepository.save(g));
+        }
+        throw new RuntimeException("Personale non trovato");
+    }
 }

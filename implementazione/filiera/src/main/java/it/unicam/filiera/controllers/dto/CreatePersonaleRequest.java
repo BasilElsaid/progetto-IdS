@@ -1,7 +1,6 @@
 package it.unicam.filiera.controllers.dto;
 
 import it.unicam.filiera.models.Ruolo;
-import jakarta.validation.constraints.NotNull;
 
 public class CreatePersonaleRequest {
 
