@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/distributori")
+@RequestMapping("/api/aziende/distributori")
 @Tag(name = "Distributori di Tipicità", description = "Gestione Specifica di Distributori (pacchetti, vendita tipicità, ecc.)")
 public class DistributoriController {
 

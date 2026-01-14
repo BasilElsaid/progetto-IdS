@@ -28,4 +28,9 @@ public class PersonaleController {
     public List<UtenteResponse> lista() {
         return service.listaPersonale();
     }
+
+    @GetMapping("/{id}")
+    public UtenteResponse get(@PathVariable Long id) {
+        return service.getPersonale(id);
+    }
 }

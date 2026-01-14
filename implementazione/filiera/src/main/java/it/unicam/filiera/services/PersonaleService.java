@@ -87,4 +87,12 @@ public class PersonaleService {
         gestoreRepository.findAll().stream().findFirst().ifPresent(u -> out.add(UtenteResponse.from(u)));
         return out;
     }
+
+    public UtenteResponse getPersonale(Long id) {
+        return curatoreRepository.findById(id)
+                .map(UtenteResponse::from)
+                .or(() -> animatoreRepository.findById(id).map(UtenteResponse::from))
+                .or(() -> gestoreRepository.findById(id).map(UtenteResponse::from))
+                .orElseThrow(() -> new RuntimeException("Personale non trovato"));
+    }
 }

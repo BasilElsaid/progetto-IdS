@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/trasformatori")
+@RequestMapping("/api/aziende/trasformatori")
 @Tag(name = "Trasformatori", description = "Gestione Specifica di Trasformatori (processi di trasformazione e tracciabilità)")
 public class TrasformatoriController {
 
