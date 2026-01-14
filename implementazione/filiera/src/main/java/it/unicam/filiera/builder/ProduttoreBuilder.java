@@ -1,59 +1,45 @@
 package it.unicam.filiera.builder;
 
+import it.unicam.filiera.models.Produttore;
+
 public class ProduttoreBuilder implements UtenteBuilder {
 
-	/**
-	 * @param username
-	 */
+	private final Produttore produttore;
+
+	public ProduttoreBuilder() {
+		this.produttore = new Produttore();
+	}
+
 	@Override
-	public void setUsername(String username) {
-
+	public UtenteBuilder setUsername(String username) {
+		produttore.setUsername(username);
+		return this;
 	}
 
-	/**
-	 * @param password
-	 */
 	@Override
-	public void setPassword(String password) {
-
+	public UtenteBuilder setPassword(String password) {
+		produttore.setPassword(password);
+		return this;
 	}
 
-	/**
-	 * @param nome
-	 */
 	@Override
-	public void setNome(String nome) {
-
+	public UtenteBuilder setEmail(String email) {
+		produttore.setEmail(email);
+		return this;
 	}
 
-	/**
-	 * @param email
-	 */
+	public ProduttoreBuilder setNomeAzienda(String nomeAzienda) {
+		produttore.setNomeAzienda(nomeAzienda);
+		return this;
+	}
+
+	public ProduttoreBuilder setPartitaIva(String partitaIva) {
+		produttore.setPartitaIva(partitaIva);
+		return this;
+	}
+
 	@Override
-	public void setEmail(String email) {
-
+	public Produttore build() {
+		return produttore;
 	}
-
-	/**
-	 * @param telefono
-	 */
-	@Override
-	public void setTelefono(String telefono) {
-
-	}
-
-	public void build() {
-		// TODO - implement ProduttoreBuilder.build
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param pIVA
-	 */
-	public void setPartitaIVA(String pIVA) {
-		// TODO - implement ProduttoreBuilder.setPartitaIVA
-		throw new UnsupportedOperationException();
-	}
-
 }

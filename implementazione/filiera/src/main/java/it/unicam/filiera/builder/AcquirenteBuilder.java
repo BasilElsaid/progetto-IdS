@@ -1,59 +1,35 @@
 package it.unicam.filiera.builder;
 
+import it.unicam.filiera.models.Acquirente;
+
 public class AcquirenteBuilder implements UtenteBuilder {
 
-	/**
-	 * @param username
-	 */
+	private final Acquirente acquirente;
+
+	public AcquirenteBuilder() {
+		this.acquirente = new Acquirente();
+	}
+
 	@Override
-	public void setUsername(String username) {
-
+	public UtenteBuilder setUsername(String username) {
+		acquirente.setUsername(username);
+		return this;
 	}
 
-	/**
-	 * @param password
-	 */
 	@Override
-	public void setPassword(String password) {
-
+	public UtenteBuilder setPassword(String password) {
+		acquirente.setPassword(password);
+		return this;
 	}
 
-	/**
-	 * @param nome
-	 */
 	@Override
-	public void setNome(String nome) {
-
+	public UtenteBuilder setEmail(String email) {
+		acquirente.setEmail(email);
+		return this;
 	}
 
-	/**
-	 * @param email
-	 */
 	@Override
-	public void setEmail(String email) {
-
+	public Acquirente build() {
+		return acquirente;
 	}
-
-	/**
-	 * @param telefono
-	 */
-	@Override
-	public void setTelefono(String telefono) {
-
-	}
-
-	public void build() {
-		// TODO - implement AcquirenteBuilder.build
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param cognome
-	 */
-	public void setCognome(String cognome) {
-		// TODO - implement AcquirenteBuilder.setCognome
-		throw new UnsupportedOperationException();
-	}
-
 }

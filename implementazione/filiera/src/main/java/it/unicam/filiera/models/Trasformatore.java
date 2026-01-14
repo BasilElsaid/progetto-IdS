@@ -9,6 +9,10 @@ public class Trasformatore extends UtenteGenerico {
 
     private String laboratorio;
 
+    public Trasformatore() {
+        setRuolo(Ruolo.TRASFORMATORE);
+    }
+
     public String getLaboratorio() { return laboratorio; }
     public void setLaboratorio(String laboratorio) { this.laboratorio = laboratorio; }
 }

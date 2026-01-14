@@ -20,16 +20,6 @@ public class DistributoriController {
         this.repo = repo;
     }
 
-    @PostMapping
-    public DistributoreTipicita crea(@RequestBody CreateAcquirenteRequest request) {
-        DistributoreTipicita d = new DistributoreTipicita();
-        d.setUsername(request.getUsername());
-        d.setEmail(request.getEmail());
-        d.setPassword(request.getPassword());
-        d.setRuolo(Ruolo.DISTRIBUTORE_TIPICITA);
-        return repo.save(d);
-    }
-
     @GetMapping
     public List<DistributoreTipicita> lista() { return repo.findAll(); }
 

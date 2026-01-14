@@ -10,6 +10,10 @@ public class Produttore extends UtenteGenerico {
     private String nomeAzienda;
     private String partitaIva;
 
+    public Produttore() {
+        setRuolo(Ruolo.PRODUTTORE);
+    }
+
     public String getNomeAzienda() { return nomeAzienda; }
     public void setNomeAzienda(String nomeAzienda) { this.nomeAzienda = nomeAzienda; }
 

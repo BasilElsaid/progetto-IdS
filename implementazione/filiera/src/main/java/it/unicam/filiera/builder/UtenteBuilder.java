@@ -1,37 +1,12 @@
 package it.unicam.filiera.builder;
 
+import it.unicam.filiera.models.UtenteGenerico;
+
 public interface UtenteBuilder {
 
-	/**
-	 * 
-	 * @param username
-	 */
-	void setUsername(String username);
+	UtenteBuilder setUsername(String username);
+	UtenteBuilder setPassword(String password);
+	UtenteBuilder setEmail(String email);
 
-	/**
-	 * 
-	 * @param password
-	 */
-	void setPassword(String password);
-
-	/**
-	 * 
-	 * @param nome
-	 */
-	void setNome(String nome);
-
-	/**
-	 * 
-	 * @param email
-	 */
-	void setEmail(String email);
-
-	/**
-	 * 
-	 * @param telefono
-	 */
-	void setTelefono(String telefono);
-
-	abstract void build();
-
+	UtenteGenerico build();
 }

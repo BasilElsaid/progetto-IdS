@@ -1,59 +1,40 @@
 package it.unicam.filiera.builder;
 
+import it.unicam.filiera.models.Trasformatore;
+
 public class TrasformatoreBuilder implements UtenteBuilder {
 
-	/**
-	 * @param username
-	 */
+	private final Trasformatore trasformatore;
+
+	public TrasformatoreBuilder() {
+		this.trasformatore = new Trasformatore();
+	}
+
 	@Override
-	public void setUsername(String username) {
-
+	public UtenteBuilder setUsername(String username) {
+		trasformatore.setUsername(username);
+		return this;
 	}
 
-	/**
-	 * @param password
-	 */
 	@Override
-	public void setPassword(String password) {
-
+	public UtenteBuilder setPassword(String password) {
+		trasformatore.setPassword(password);
+		return this;
 	}
 
-	/**
-	 * @param nome
-	 */
 	@Override
-	public void setNome(String nome) {
-
+	public UtenteBuilder setEmail(String email) {
+		trasformatore.setEmail(email);
+		return this;
 	}
 
-	/**
-	 * @param email
-	 */
+	public TrasformatoreBuilder setLaboratorio(String laboratorio) {
+		trasformatore.setLaboratorio(laboratorio);
+		return this;
+	}
+
 	@Override
-	public void setEmail(String email) {
-
+	public Trasformatore build() {
+		return trasformatore;
 	}
-
-	/**
-	 * @param telefono
-	 */
-	@Override
-	public void setTelefono(String telefono) {
-
-	}
-
-	public void build() {
-		// TODO - implement TrasformatoreBuilder.build
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * 
-	 * @param pIVA
-	 */
-	public void setPartitaIVA(String pIVA) {
-		// TODO - implement TrasformatoreBuilder.setPartitaIVA
-		throw new UnsupportedOperationException();
-	}
-
 }

@@ -9,6 +9,10 @@ public class DistributoreTipicita extends UtenteGenerico {
 
     private String areaDistribuzione;
 
+    public DistributoreTipicita() {
+        setRuolo(Ruolo.DISTRIBUTORE_TIPICITA);
+    }
+
     public String getAreaDistribuzione() { return areaDistribuzione; }
     public void setAreaDistribuzione(String areaDistribuzione) { this.areaDistribuzione = areaDistribuzione; }
 }

@@ -20,16 +20,6 @@ public class TrasformatoriController {
         this.repo = repo;
     }
 
-    @PostMapping
-    public Trasformatore crea(@RequestBody CreateAcquirenteRequest request) {
-        Trasformatore t = new Trasformatore();
-        t.setUsername(request.getUsername());
-        t.setEmail(request.getEmail());
-        t.setPassword(request.getPassword());
-        t.setRuolo(Ruolo.TRASFORMATORE);
-        return repo.save(t);
-    }
-
     @GetMapping
     public List<Trasformatore> lista() { return repo.findAll(); }
 

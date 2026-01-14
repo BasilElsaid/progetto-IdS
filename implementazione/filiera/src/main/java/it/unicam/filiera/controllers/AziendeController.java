@@ -1,15 +1,16 @@
 package it.unicam.filiera.controllers;
 
-import java.util.List;
-
+import io.swagger.v3.oas.annotations.tags.Tag;
+import it.unicam.filiera.controllers.dto.CreateUtenteRequest;
+import it.unicam.filiera.controllers.dto.UtenteResponse;
+import it.unicam.filiera.services.AziendeService;
 import org.springframework.web.bind.annotation.*;
 
-import it.unicam.filiera.models.Azienda;
-import it.unicam.filiera.models.TipoAzienda;
-import it.unicam.filiera.services.AziendeService;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/aziende")
+@Tag(name = "Aziende", description = "Gestione Produttori, Trasformatori e Distributori di tipicità")
 public class AziendeController {
 
     private final AziendeService service;
@@ -18,31 +19,19 @@ public class AziendeController {
         this.service = service;
     }
 
-    // POST /api/aziende
     @PostMapping
-    public Azienda create(@RequestBody Azienda azienda) {
-        return service.create(azienda);
+    public Object crea(@RequestBody CreateUtenteRequest request) {
+        // switch interno per decidere il tipo di azienda
+        return service.creaAzienda(request);
     }
 
-    // GET /api/aziende/{id}
-    @GetMapping("/{id}")
-    public Azienda get(@PathVariable Long id) {
-        return service.get(id);
-    }
-
-    // GET /api/aziende?tipo=AGRICOLA
     @GetMapping
-    public List<Azienda> byTipo(@RequestParam(required = false) TipoAzienda tipo) {
-        if (tipo == null) {
-            // fallback semplice (tutte)
-            return service.byTipo(TipoAzienda.PRODUTTORE);
-        }
-        return service.byTipo(tipo);
+    public List<UtenteResponse> listaTutti() {
+        return service.listaAziende();
     }
 
-    // PATCH /api/aziende/{id}
-    @PatchMapping("/{id}")
-    public Azienda update(@PathVariable Long id, @RequestBody Azienda azienda) {
-        return service.update(id, azienda);
+    @GetMapping("/{id}")
+    public UtenteResponse get(@PathVariable Long id) {
+        return service.getAzienda(id);
     }
 }
