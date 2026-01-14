@@ -34,4 +34,14 @@ public class AcquirentiController {
     public UtenteResponse get(@PathVariable Long id) {
         return service.getAcquirente(id);
     }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        service.deleteAcquirente(id);
+    }
+
+    @PatchMapping("/{id}")
+    public UtenteResponse patch(@PathVariable Long id, @RequestBody CreateAcquirenteRequest request) {
+        return service.patchAcquirente(id, request);
+    }
 }

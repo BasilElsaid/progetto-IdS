@@ -39,4 +39,21 @@ public class AcquirentiService {
                 .map(UtenteResponse::from)
                 .orElseThrow(() -> new RuntimeException("Acquirente non trovato"));
     }
+
+    public void deleteAcquirente(Long id) {
+        if (!acquirenteRepo.existsById(id)) {
+            throw new RuntimeException("Acquirente non trovato");
+        }
+        acquirenteRepo.deleteById(id);
+    }
+
+    public UtenteResponse patchAcquirente(Long id, CreateAcquirenteRequest request) {
+        Acquirente a = acquirenteRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Acquirente non trovato"));
+
+        if (request.getEmail() != null) a.setEmail(request.getEmail());
+        if (request.getPassword() != null) a.setPassword(request.getPassword());
+
+        return UtenteResponse.from(acquirenteRepo.save(a));
+    }
 }
