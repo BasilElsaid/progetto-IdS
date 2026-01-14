@@ -129,6 +129,9 @@ public class CertificatiService {
 
     // --- DELETE ---
     public void eliminaCertificato(Long id) {
+        if (!certificatoRepo.existsById(id)) {
+            throw new NotFoundException("Certificato non trovato");
+        }
         certificatoRepo.deleteById(id);
     }
 
