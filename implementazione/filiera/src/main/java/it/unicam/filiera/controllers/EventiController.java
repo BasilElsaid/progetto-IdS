@@ -2,9 +2,6 @@ package it.unicam.filiera.controllers;
 
 import it.unicam.filiera.controllers.dto.EventoCreateDTO;
 import it.unicam.filiera.evento.*;
-import it.unicam.filiera.exceptions.NotFoundException;
-import it.unicam.filiera.models.Acquirente;
-import it.unicam.filiera.models.Animatore;
 import it.unicam.filiera.services.EventiService;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,13 +29,15 @@ public class EventiController {
 
 	@GetMapping("/{id}")
 	public Evento getEvento(@PathVariable Long id) {
-		return eventiService.getEvento(id)
-				.orElseThrow(() -> new NotFoundException("Evento non trovato: " + id));
+		return eventiService.getEvento(id);
 	}
 
-	@PutMapping("/{id}")
-	public Evento aggiornaEvento(@PathVariable Long id, @RequestBody Evento evento) {
-		return eventiService.aggiornaEvento(id, evento);
+	@PatchMapping("/{id}")
+	public Evento aggiornaEvento(
+			@PathVariable Long id,
+			@RequestBody EventoCreateDTO dto
+	) {
+		return eventiService.aggiornaEvento(id, dto);
 	}
 
 	@DeleteMapping("/{id}")

@@ -3,6 +3,7 @@ package it.unicam.filiera.evento;
 import it.unicam.filiera.models.*;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -17,7 +18,7 @@ public class Evento {
 	protected String nome;
 
 	@Column
-	protected String dataOra;
+	protected LocalDateTime dataOra;
 
 	@Column
 	protected double prezzo;
@@ -50,7 +51,7 @@ public class Evento {
 
 	public Long getId() { return id; }
 	public String getNome() { return nome; }
-	public String getDataOra() { return dataOra; }
+	public LocalDateTime getDataOra() { return dataOra; }
 	public double getPrezzo() { return prezzo; }
 	public String getTipo() { return tipo;}
 	public int getPosti() { return posti; }
@@ -59,7 +60,7 @@ public class Evento {
 
 	public void setId(Long id) { this.id = id; }
 	public void setNome(String nome) { this.nome = nome; }
-	public void setDataOra(String dataOra) { this.dataOra = dataOra; }
+	public void setDataOra(LocalDateTime dataOra) { this.dataOra = dataOra; }
 	public void setPrezzo(double prezzo) { this.prezzo = prezzo; }
 	public void setTipo(String tipo) { this.tipo = tipo; }
 	public void setPosti(int posti) { this.posti = posti; }
