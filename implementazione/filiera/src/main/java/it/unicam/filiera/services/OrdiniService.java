@@ -1,5 +1,7 @@
 package it.unicam.filiera.services;
 
+import it.unicam.filiera.exceptions.BadRequestException;
+import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Acquirente;
 import it.unicam.filiera.ordine.Ordine;
 import it.unicam.filiera.ordine.StatoOrdine;
@@ -29,14 +31,14 @@ public class OrdiniService {
 
     public Ordine creaOrdine(Long acquirenteId, List<Long> pacchettoIds) {
         if (acquirenteId == null) {
-            throw new IllegalArgumentException("acquirenteId mancante");
+            throw new BadRequestException("acquirenteId mancante");
         }
         if (pacchettoIds == null || pacchettoIds.isEmpty()) {
-            throw new IllegalArgumentException("pacchettoIds mancanti");
+            throw new BadRequestException("pacchettoIds mancanti");
         }
 
         Acquirente acquirente = acquirenteRepository.findById(acquirenteId)
-                .orElseThrow(() -> new RuntimeException("Acquirente non trovato"));
+                .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
 
         List<Pacchetto> pacchetti = (List<Pacchetto>) pacchettiRepo.findAllById(pacchettoIds);
 
@@ -55,7 +57,7 @@ public class OrdiniService {
 
     public Ordine getById(Long id) {
         return ordineRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ordine non trovato"));
+                .orElseThrow(() -> new NotFoundException("Ordine non trovato"));
     }
 
     public List<Ordine> all() {
@@ -79,6 +81,6 @@ public class OrdiniService {
             } catch (Exception ignored) {
             }
         }
-        throw new RuntimeException("Pacchetto: impossibile determinare il prezzo (manca un getter tipo getPrezzo/getCostoTotale/...)");
+        throw new BadRequestException("Pacchetto: impossibile determinare il prezzo (manca un getter tipo getPrezzo/getCostoTotale/...)");
     }
 }

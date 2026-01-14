@@ -3,6 +3,7 @@ package it.unicam.filiera.services;
 import it.unicam.filiera.builder.AcquirenteBuilder;
 import it.unicam.filiera.controllers.dto.CreateAcquirenteRequest;
 import it.unicam.filiera.controllers.dto.UtenteResponse;
+import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Acquirente;
 import it.unicam.filiera.repositories.AcquirenteRepository;
 import org.springframework.stereotype.Service;
@@ -37,19 +38,18 @@ public class AcquirentiService {
     public UtenteResponse getAcquirente(Long id) {
         return acquirenteRepo.findById(id)
                 .map(UtenteResponse::from)
-                .orElseThrow(() -> new RuntimeException("Acquirente non trovato"));
-    }
+                .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));    }
 
     public void deleteAcquirente(Long id) {
         if (!acquirenteRepo.existsById(id)) {
-            throw new RuntimeException("Acquirente non trovato");
+            throw new NotFoundException("Acquirente non trovato");
         }
         acquirenteRepo.deleteById(id);
     }
 
     public UtenteResponse patchAcquirente(Long id, CreateAcquirenteRequest request) {
         Acquirente a = acquirenteRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Acquirente non trovato"));
+                .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
 
         if (request.getEmail() != null) a.setEmail(request.getEmail());
         if (request.getPassword() != null) a.setPassword(request.getPassword());

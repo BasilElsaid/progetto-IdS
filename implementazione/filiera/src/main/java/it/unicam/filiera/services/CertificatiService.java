@@ -3,6 +3,8 @@ package it.unicam.filiera.services;
 
 import it.unicam.filiera.controllers.dto.CertificatoDTO;
 import it.unicam.filiera.certificati.*;
+import it.unicam.filiera.exceptions.BadRequestException;
+import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Prodotto;
 import it.unicam.filiera.models.TipoCertificatore;
 import it.unicam.filiera.repositories.CertificatoRepository;
@@ -31,7 +33,7 @@ public class CertificatiService {
     // --- CREATE ---
     public Certificato creaCertificato(CertificatoDTO dto) {
         Prodotto p = prodottoRepo.findById(dto.prodottoId)
-                .orElseThrow(() -> new RuntimeException("Prodotto non trovato"));
+                .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
 
         // Validazione strict dei campi
         validaDto(dto);
@@ -63,7 +65,7 @@ public class CertificatiService {
                 cc.setTipo(TipoCertificatore.CURATORE);
                 c = cc;
             }
-            default -> throw new RuntimeException("Tipo certificatore non valido");
+            default -> throw new BadRequestException("Tipo certificatore non valido");
         }
 
         return certificatoRepo.save(c);
@@ -72,7 +74,7 @@ public class CertificatiService {
     // --- Recupero Prodotto ---
     public Prodotto getProdotto(Long prodottoId) {
         return prodottoRepo.findById(prodottoId)
-                .orElseThrow(() -> new RuntimeException("Prodotto non trovato con id: " + prodottoId));
+                .orElseThrow(() -> new NotFoundException("Prodotto non trovato con id: " + prodottoId));
     }
 
     // --- READ ---
@@ -82,16 +84,16 @@ public class CertificatiService {
 
     public Certificato getCertificato(Long id) {
         return certificatoRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Certificato non trovato"));
+                .orElseThrow(() -> new NotFoundException("Certificato non trovato"));
     }
 
     // --- UPDATE ---
     public Certificato aggiornaCertificato(Long id, CertificatoDTO dto) {
         Certificato c = certificatoRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Certificato non trovato"));
+                .orElseThrow(() -> new NotFoundException("Certificato non trovato"));
 
         Prodotto p = prodottoRepo.findById(dto.prodottoId)
-                .orElseThrow(() -> new RuntimeException("Prodotto non trovato"));
+                .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
 
         c.setProdotto(p);
 
@@ -103,19 +105,19 @@ public class CertificatiService {
                 if(c instanceof CertificazioneProduttore cp) {
                     cp.setAzienda(dto.azienda);
                     cp.setOrigineMateriaPrima(dto.origineMateriaPrima);
-                } else throw new RuntimeException("Tipo certificatore non corrisponde all'entità");
+                } else throw new BadRequestException("Tipo certificatore non corrisponde all'entità");
             }
             case TRASFORMATORE -> {
                 if(c instanceof CertificatoTrasformatore ct) {
                     ct.setProcesso(dto.processo);
                     ct.setImpianto(dto.impianto);
-                } else throw new RuntimeException("Tipo certificatore non corrisponde all'entità");
+                } else throw new BadRequestException("Tipo certificatore non corrisponde all'entità");
             }
             case CURATORE -> {
                 if(c instanceof CertificatoCuratore cc) {
                     cc.setApprovato(dto.approvato);
                     cc.setCommento(dto.commento);
-                } else throw new RuntimeException("Tipo certificatore non corrisponde all'entità");
+                } else throw new BadRequestException("Tipo certificatore non corrisponde all'entità");
             }
         }
 
@@ -151,21 +153,21 @@ public class CertificatiService {
         switch(dto.tipo) {
             case PRODUTTORE -> {
                 if(dto.azienda == null || dto.origineMateriaPrima == null)
-                    throw new RuntimeException("Campi azienda e origineMateriaPrima obbligatori per PRODUTTORE");
+                    throw new BadRequestException("Campi azienda e origineMateriaPrima obbligatori per PRODUTTORE");
                 if(dto.processo != null || dto.impianto != null || dto.approvato != null || dto.commento != null)
-                    throw new RuntimeException("Campi non validi presenti per PRODUTTORE");
+                    throw new BadRequestException("Campi non validi presenti per PRODUTTORE");
             }
             case TRASFORMATORE -> {
                 if(dto.processo == null || dto.impianto == null)
-                    throw new RuntimeException("Campi processo e impianto obbligatori per TRASFORMATORE");
+                    throw new BadRequestException("Campi processo e impianto obbligatori per TRASFORMATORE");
                 if(dto.azienda != null || dto.origineMateriaPrima != null || dto.approvato != null || dto.commento != null)
-                    throw new RuntimeException("Campi non validi presenti per TRASFORMATORE");
+                    throw new BadRequestException("Campi non validi presenti per TRASFORMATORE");
             }
             case CURATORE -> {
                 if(dto.approvato == null || dto.commento == null)
-                    throw new RuntimeException("Campi approvato e commento obbligatori per CURATORE");
+                    throw new BadRequestException("Campi approvato e commento obbligatori per CURATORE");
                 if(dto.azienda != null || dto.origineMateriaPrima != null || dto.processo != null || dto.impianto != null)
-                    throw new RuntimeException("Campi non validi presenti per CURATORE");
+                    throw new BadRequestException("Campi non validi presenti per CURATORE");
             }
         }
     }

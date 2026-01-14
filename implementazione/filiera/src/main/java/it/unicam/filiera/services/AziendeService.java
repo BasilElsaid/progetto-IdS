@@ -5,6 +5,8 @@ import it.unicam.filiera.builder.ProduttoreBuilder;
 import it.unicam.filiera.builder.TrasformatoreBuilder;
 import it.unicam.filiera.controllers.dto.CreateAziendaRequest;
 import it.unicam.filiera.controllers.dto.UtenteResponse;
+import it.unicam.filiera.exceptions.BadRequestException;
+import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.DistributoreTipicita;
 import it.unicam.filiera.models.Produttore;
 import it.unicam.filiera.models.Trasformatore;
@@ -63,7 +65,7 @@ public class AziendeService {
                 return distributoreRepo.save(d);
 
             default:
-                throw new RuntimeException("Ruolo non gestito dal sistema");
+                throw new BadRequestException("Ruolo non gestito dal sistema");
         }
     }
     public List<UtenteResponse> listaAziende() {
@@ -78,7 +80,7 @@ public class AziendeService {
         return produttoreRepo.findById(id).map(UtenteResponse::from)
                 .or(() -> trasformatoreRepo.findById(id).map(UtenteResponse::from))
                 .or(() -> distributoreRepo.findById(id).map(UtenteResponse::from))
-                .orElseThrow(() -> new RuntimeException("Azienda non trovata"));
+                .orElseThrow(() -> new NotFoundException("Azienda non trovata"));
     }
 
     public void deleteAzienda(Long id) {
@@ -94,7 +96,7 @@ public class AziendeService {
             distributoreRepo.deleteById(id);
             return;
         }
-        throw new RuntimeException("Azienda non trovata");
+        throw new NotFoundException("Azienda non trovata");
     }
 
     public UtenteResponse patchAzienda(Long id, CreateAziendaRequest request) {
@@ -116,6 +118,6 @@ public class AziendeService {
             if(request.getPassword() != null) d.setPassword(request.getPassword());
             return UtenteResponse.from(distributoreRepo.save(d));
         }
-        throw new RuntimeException("Azienda non trovata");
+        throw new NotFoundException("Azienda non trovata");
     }
 }

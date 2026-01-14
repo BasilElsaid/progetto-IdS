@@ -2,6 +2,8 @@ package it.unicam.filiera.services;
 
 import it.unicam.filiera.controllers.dto.CreatePersonaleRequest;
 import it.unicam.filiera.controllers.dto.UtenteResponse;
+import it.unicam.filiera.exceptions.BadRequestException;
+import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Animatore;
 import it.unicam.filiera.models.Curatore;
 import it.unicam.filiera.models.GestorePiattaforma;
@@ -35,7 +37,7 @@ public class PersonaleService {
         switch (request.getRuolo()) {
             case CURATORE:
                 if (curatoreRepository.count() > 0) {
-                    throw new RuntimeException("Curatore già presente");
+                    throw new BadRequestException("Curatore già presente");
                 }
                 Curatore c = new Curatore();
                 c.setUsername(request.getUsername());
@@ -49,7 +51,7 @@ public class PersonaleService {
 
             case ANIMATORE:
                 if (animatoreRepository.count() > 0) {
-                    throw new RuntimeException("Animatore già presente");
+                    throw new BadRequestException("Animatore già presente");
                 }
                 Animatore a = new Animatore();
                 a.setUsername(request.getUsername());
@@ -63,7 +65,7 @@ public class PersonaleService {
 
             case GESTORE_PIATTAFORMA:
                 if (gestoreRepository.count() > 0) {
-                    throw new RuntimeException("Gestore piattaforma già presente");
+                    throw new BadRequestException("Gestore piattaforma già presente");
                 }
                 GestorePiattaforma g = new GestorePiattaforma();
                 g.setUsername(request.getUsername());
@@ -76,7 +78,7 @@ public class PersonaleService {
                 return UtenteResponse.from(gestoreRepository.save(g));
 
             default:
-                throw new RuntimeException("Ruolo non valido per il personale");
+                throw new BadRequestException("Ruolo non valido per il personale");
         }
     }
 
@@ -93,7 +95,7 @@ public class PersonaleService {
                 .map(UtenteResponse::from)
                 .or(() -> animatoreRepository.findById(id).map(UtenteResponse::from))
                 .or(() -> gestoreRepository.findById(id).map(UtenteResponse::from))
-                .orElseThrow(() -> new RuntimeException("Personale non trovato"));
+                .orElseThrow(() -> new NotFoundException("Personale non trovato"));
     }
 
     public void eliminaPersonale(Long id) {
@@ -109,7 +111,7 @@ public class PersonaleService {
             gestoreRepository.deleteById(id);
             return;
         }
-        throw new RuntimeException("Personale non trovato");
+        throw new NotFoundException("Personale non trovato");
     }
 
     public UtenteResponse patchPersonale(Long id, CreatePersonaleRequest request) {
@@ -140,6 +142,6 @@ public class PersonaleService {
             if(request.getTelefono() != null) g.setTelefono(request.getTelefono());
             return UtenteResponse.from(gestoreRepository.save(g));
         }
-        throw new RuntimeException("Personale non trovato");
+        throw new NotFoundException("Personale non trovato");
     }
 }
