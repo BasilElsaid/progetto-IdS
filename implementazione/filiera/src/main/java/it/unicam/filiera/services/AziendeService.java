@@ -3,7 +3,7 @@ package it.unicam.filiera.services;
 import it.unicam.filiera.builder.DistributoreTipicitaBuilder;
 import it.unicam.filiera.builder.ProduttoreBuilder;
 import it.unicam.filiera.builder.TrasformatoreBuilder;
-import it.unicam.filiera.controllers.dto.CreateUtenteRequest;
+import it.unicam.filiera.controllers.dto.CreateAziendaRequest;
 import it.unicam.filiera.controllers.dto.UtenteResponse;
 import it.unicam.filiera.models.DistributoreTipicita;
 import it.unicam.filiera.models.Produttore;
@@ -35,7 +35,7 @@ public class AziendeService {
         this.distributoreRepo = distributoreRepo;
     }
 
-    public UtenteGenerico creaAzienda(CreateUtenteRequest request) {
+    public UtenteGenerico creaAzienda(CreateAziendaRequest request) {
         Ruolo ruolo = request.getRuolo();
         switch (ruolo) {
             case PRODUTTORE:

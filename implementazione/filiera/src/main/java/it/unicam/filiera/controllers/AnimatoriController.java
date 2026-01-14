@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/animatori")
-@Tag(name = "Animatori", description = "Gestione Animatori (eventi, fiere, tour, degustazioni)")
+@Tag(name = "Animatori", description = "Gestione Specifica di Animatori (eventi, fiere, tour, degustazioni)")
 public class AnimatoriController {
 
     private final AnimatoreRepository repo;

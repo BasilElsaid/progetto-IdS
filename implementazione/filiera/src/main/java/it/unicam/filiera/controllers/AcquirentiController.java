@@ -1,7 +1,7 @@
 package it.unicam.filiera.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.unicam.filiera.controllers.dto.CreateUtenteRequest;
+import it.unicam.filiera.controllers.dto.CreateAcquirenteRequest;
 import it.unicam.filiera.controllers.dto.UtenteResponse;
 import it.unicam.filiera.models.Acquirente;
 import it.unicam.filiera.services.AcquirentiService;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/acquirenti")
-@Tag(name = "Acquirenti", description = "Gestione Acquirenti")
+@Tag(name = "Acquirenti", description = "Gestione Specifica di Acquirenti")
 public class AcquirentiController {
 
     private final AcquirentiService service;
@@ -21,7 +21,7 @@ public class AcquirentiController {
     }
 
     @PostMapping
-    public Acquirente crea(@RequestBody CreateUtenteRequest request) {
+    public Acquirente crea(@RequestBody CreateAcquirenteRequest request) {
         return service.creaAcquirente(request);
     }
 

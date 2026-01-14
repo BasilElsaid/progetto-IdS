@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/produttori")
-@Tag(name = "Produttori", description = "Gestione Produttori")
+@Tag(name = "Produttori", description = "Gestione Specifica di Produttori")
 public class ProduttoriController {
 
     private final ProduttoreRepository repo;

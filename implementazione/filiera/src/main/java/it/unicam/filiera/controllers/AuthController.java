@@ -1,6 +1,6 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.CreateUtenteRequest;
+import it.unicam.filiera.controllers.dto.CreateAziendaRequest;
 import it.unicam.filiera.controllers.dto.LoginRequest;
 import it.unicam.filiera.controllers.dto.UtenteResponse;
 import it.unicam.filiera.services.AuthService;
@@ -19,7 +19,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public UtenteResponse register(@RequestBody @Valid CreateUtenteRequest request) {
+    public UtenteResponse register(@RequestBody @Valid CreateAziendaRequest request) {
         return UtenteResponse.from(service.register(request));
     }
 

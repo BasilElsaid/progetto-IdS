@@ -1,6 +1,11 @@
 package it.unicam.filiera.controllers.dto;
 
+import it.unicam.filiera.models.Ruolo;
+import jakarta.validation.constraints.NotNull;
+
 public class CreatePersonaleRequest {
+
+    private Ruolo ruolo;
     private String username;
     private String email;
     private String password;
@@ -8,6 +13,9 @@ public class CreatePersonaleRequest {
     private String nome;
     private String cognome;
     private String telefono;
+
+    public Ruolo getRuolo() { return ruolo; }
+    public void setRuolo(Ruolo ruolo) { this.ruolo = ruolo; }
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }

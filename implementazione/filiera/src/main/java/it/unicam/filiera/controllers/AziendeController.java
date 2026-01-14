@@ -1,7 +1,7 @@
 package it.unicam.filiera.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.unicam.filiera.controllers.dto.CreateUtenteRequest;
+import it.unicam.filiera.controllers.dto.CreateAziendaRequest;
 import it.unicam.filiera.controllers.dto.UtenteResponse;
 import it.unicam.filiera.services.AziendeService;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class AziendeController {
     }
 
     @PostMapping
-    public Object crea(@RequestBody CreateUtenteRequest request) {
+    public Object crea(@RequestBody CreateAziendaRequest request) {
         // switch interno per decidere il tipo di azienda
         return service.creaAzienda(request);
     }

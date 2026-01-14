@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/distributori")
-@Tag(name = "Distributori di Tipicità", description = "Gestione Distributori (pacchetti, vendita tipicità, ecc.)")
+@Tag(name = "Distributori di Tipicità", description = "Gestione Specifica di Distributori (pacchetti, vendita tipicità, ecc.)")
 public class DistributoriController {
 
     private final DistributoreTipicitaRepository repo;

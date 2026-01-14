@@ -1,6 +1,6 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.controllers.dto.CreateUtenteRequest;
+import it.unicam.filiera.controllers.dto.CreateAziendaRequest;
 import it.unicam.filiera.controllers.dto.LoginRequest;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
@@ -17,7 +17,7 @@ public class AuthService {
         this.repo = repo;
     }
 
-    public UtenteGenerico register(CreateUtenteRequest req) {
+    public UtenteGenerico register(CreateAziendaRequest req) {
         if (req.getRuolo() == Ruolo.UTENTE_GENERICO) {
             throw new BadRequestException("UtenteGenerico (guest) non può registrarsi: niente login");
         }

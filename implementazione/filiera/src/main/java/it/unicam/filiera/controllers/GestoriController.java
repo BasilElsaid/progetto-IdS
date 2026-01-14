@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/gestori")
-@Tag(name = "Gestore Piattaforma", description = "Gestione amministrativa piattaforma (demo)")
+@Tag(name = "Gestore Piattaforma", description = "Gestione Specifica di admin piattaforma (demo)")
 public class GestoriController {
 
     private final GestorePiattaformaRepository repo;

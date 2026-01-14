@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "curatori")
 @DiscriminatorValue("CURATORE")
 @PrimaryKeyJoinColumn(name = "id") // PK = FK verso utenti.id
-public class Curatore extends UtenteGenerico {
+public class Curatore extends Personale {
 
     private String ente;
 

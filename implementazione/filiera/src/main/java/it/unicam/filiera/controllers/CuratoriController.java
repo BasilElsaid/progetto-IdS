@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/curatori")
-@Tag(name = "Curatori", description = "Gestione Curatori (approvazione contenuti, certificazioni, ecc.)")
+@Tag(name = "Curatori", description = "Gestione Specifica di Curatori (approvazione contenuti, certificazioni, ecc.)")
 public class CuratoriController {
 
     private final CuratoreRepository repo;
