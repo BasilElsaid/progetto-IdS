@@ -5,13 +5,11 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "trasformatori")
-public class Trasformatore extends UtenteGenerico {
+public class Trasformatore extends Azienda {
 
     private String laboratorio;
 
-    public Trasformatore() {
-        setRuolo(Ruolo.TRASFORMATORE);
-    }
+    public Trasformatore() {}
 
     public String getLaboratorio() { return laboratorio; }
     public void setLaboratorio(String laboratorio) { this.laboratorio = laboratorio; }

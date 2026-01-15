@@ -3,18 +3,16 @@ package it.unicam.filiera.services;
 import it.unicam.filiera.builder.DistributoreTipicitaBuilder;
 import it.unicam.filiera.builder.ProduttoreBuilder;
 import it.unicam.filiera.builder.TrasformatoreBuilder;
+import it.unicam.filiera.controllers.dto.CoordinateDTO;
 import it.unicam.filiera.controllers.dto.CreateAziendaRequest;
 import it.unicam.filiera.controllers.dto.UtenteResponse;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
-import it.unicam.filiera.models.DistributoreTipicita;
-import it.unicam.filiera.models.Produttore;
-import it.unicam.filiera.models.Trasformatore;
-import it.unicam.filiera.models.UtenteGenerico;
-import it.unicam.filiera.models.Ruolo;
+import it.unicam.filiera.models.*;
 import it.unicam.filiera.repositories.DistributoreTipicitaRepository;
 import it.unicam.filiera.repositories.ProduttoreRepository;
 import it.unicam.filiera.repositories.TrasformatoreRepository;
+import it.unicam.filiera.utilities.CoordinateOSM;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,37 +35,51 @@ public class AziendeService {
         this.distributoreRepo = distributoreRepo;
     }
 
-    public UtenteGenerico creaAzienda(CreateAziendaRequest request) {
+    // ================= CREATE =================
+    public Azienda creaAzienda(CreateAziendaRequest request) {
         Ruolo ruolo = request.getRuolo();
         switch (ruolo) {
-            case PRODUTTORE:
+            case PRODUTTORE -> {
                 Produttore p = (Produttore) new ProduttoreBuilder()
                         .setUsername(request.getUsername())
                         .setPassword(request.getPassword())
                         .setEmail(request.getEmail())
+                        .setNomeAzienda(request.getNomeAzienda())
+                        .setPartitaIva(request.getPartitaIva())
+                        .setCoordinate(toCoordinate(request.getCoordinate()))
                         .build();
                 return produttoreRepo.save(p);
-
-            case TRASFORMATORE:
+            }
+            case TRASFORMATORE -> {
                 Trasformatore t = (Trasformatore) new TrasformatoreBuilder()
                         .setUsername(request.getUsername())
                         .setPassword(request.getPassword())
                         .setEmail(request.getEmail())
+                        .setNomeAzienda(request.getNomeAzienda())
+                        .setPartitaIva(request.getPartitaIva())
+                        .setLaboratorio(request.getLaboratorio())
+                        .setCoordinate(toCoordinate(request.getCoordinate()))
                         .build();
                 return trasformatoreRepo.save(t);
-
-            case DISTRIBUTORE_TIPICITA:
+            }
+            case DISTRIBUTORE_TIPICITA -> {
                 DistributoreTipicita d = (DistributoreTipicita) new DistributoreTipicitaBuilder()
                         .setUsername(request.getUsername())
                         .setPassword(request.getPassword())
                         .setEmail(request.getEmail())
+                        .setNomeAzienda(request.getNomeAzienda())
+                        .setPartitaIva(request.getPartitaIva())
+                        .setSede(request.getSede())
+                        .setAreaDistribuzione(request.getAreaDistribuzione())
+                        .setCoordinate(toCoordinate(request.getCoordinate()))
                         .build();
                 return distributoreRepo.save(d);
-
-            default:
-                throw new BadRequestException("Ruolo non gestito dal sistema");
+            }
+            default -> throw new BadRequestException("Ruolo non gestito dal sistema");
         }
     }
+
+    // ================= READ =================
     public List<UtenteResponse> listaAziende() {
         List<UtenteResponse> out = new ArrayList<>();
         produttoreRepo.findAll().forEach(u -> out.add(UtenteResponse.from(u)));
@@ -83,6 +95,29 @@ public class AziendeService {
                 .orElseThrow(() -> new NotFoundException("Azienda non trovata"));
     }
 
+    // ================= PATCH =================
+    public UtenteResponse patchAzienda(Long id, CreateAziendaRequest request) {
+        if (produttoreRepo.existsById(id)) {
+            Produttore p = produttoreRepo.findById(id).get();
+            updateBaseFields(p, request);
+            return UtenteResponse.from(produttoreRepo.save(p));
+        }
+        if (trasformatoreRepo.existsById(id)) {
+            Trasformatore t = trasformatoreRepo.findById(id).get();
+            updateBaseFields(t, request);
+            if (request.getLaboratorio() != null) t.setLaboratorio(request.getLaboratorio());
+            return UtenteResponse.from(trasformatoreRepo.save(t));
+        }
+        if (distributoreRepo.existsById(id)) {
+            DistributoreTipicita d = distributoreRepo.findById(id).get();
+            updateBaseFields(d, request);
+            if (request.getAreaDistribuzione() != null) d.setAreaDistribuzione(request.getAreaDistribuzione());
+            return UtenteResponse.from(distributoreRepo.save(d));
+        }
+        throw new NotFoundException("Azienda non trovata");
+    }
+
+    // ================= DELETE =================
     public void deleteAzienda(Long id) {
         if (produttoreRepo.existsById(id)) {
             produttoreRepo.deleteById(id);
@@ -99,25 +134,16 @@ public class AziendeService {
         throw new NotFoundException("Azienda non trovata");
     }
 
-    public UtenteResponse patchAzienda(Long id, CreateAziendaRequest request) {
-        if (produttoreRepo.existsById(id)) {
-            Produttore p = produttoreRepo.findById(id).get();
-            if(request.getEmail() != null) p.setEmail(request.getEmail());
-            if(request.getPassword() != null) p.setPassword(request.getPassword());
-            return UtenteResponse.from(produttoreRepo.save(p));
-        }
-        if (trasformatoreRepo.existsById(id)) {
-            Trasformatore t = trasformatoreRepo.findById(id).get();
-            if(request.getEmail() != null) t.setEmail(request.getEmail());
-            if(request.getPassword() != null) t.setPassword(request.getPassword());
-            return UtenteResponse.from(trasformatoreRepo.save(t));
-        }
-        if (distributoreRepo.existsById(id)) {
-            DistributoreTipicita d = distributoreRepo.findById(id).get();
-            if(request.getEmail() != null) d.setEmail(request.getEmail());
-            if(request.getPassword() != null) d.setPassword(request.getPassword());
-            return UtenteResponse.from(distributoreRepo.save(d));
-        }
-        throw new NotFoundException("Azienda non trovata");
+    // ================= HELPERS =================
+    private CoordinateOSM toCoordinate(CoordinateDTO dto) {
+        return dto == null ? null : new CoordinateOSM(dto.lat, dto.lon);
+    }
+
+    private void updateBaseFields(Azienda a, CreateAziendaRequest request) {
+        if (request.getEmail() != null) a.setEmail(request.getEmail());
+        if (request.getPassword() != null) a.setPassword(request.getPassword());
+        if (request.getNomeAzienda() != null) a.setNomeAzienda(request.getNomeAzienda());
+        if (request.getPartitaIva() != null) a.setPartitaIva(request.getPartitaIva());
+        if (request.getCoordinate() != null) a.setCoordinate(toCoordinate(request.getCoordinate()));
     }
 }

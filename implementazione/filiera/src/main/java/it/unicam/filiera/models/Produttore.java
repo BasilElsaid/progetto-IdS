@@ -5,18 +5,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "produttori")
-public class Produttore extends UtenteGenerico {
+public class Produttore extends Azienda {
 
-    private String nomeAzienda;
-    private String partitaIva;
+    public Produttore() {}
 
-    public Produttore() {
-        setRuolo(Ruolo.PRODUTTORE);
-    }
-
-    public String getNomeAzienda() { return nomeAzienda; }
-    public void setNomeAzienda(String nomeAzienda) { this.nomeAzienda = nomeAzienda; }
-
-    public String getPartitaIva() { return partitaIva; }
-    public void setPartitaIva(String partitaIva) { this.partitaIva = partitaIva; }
 }
