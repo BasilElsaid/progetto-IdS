@@ -1,5 +1,6 @@
 package it.unicam.filiera.controllers;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import it.unicam.filiera.domain.Prodotto;
@@ -7,6 +8,7 @@ import it.unicam.filiera.services.ProdottiService;
 
 @RestController
 @RequestMapping("/api/prodotti")
+@PreAuthorize("hasRole('PRODUTTORE')")
 public class ProdottiController {
 
     private final ProdottiService service;

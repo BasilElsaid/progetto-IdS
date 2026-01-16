@@ -26,7 +26,6 @@ public class ProdottiService {
         this.repo = repo;
     }
 
-    @PreAuthorize("hasRole('PRODUTTORE')")
     public Prodotto crea(Prodotto p) {
         // prendi l'utente loggato dal SecurityContext
         UsernamePasswordAuthenticationToken auth =
@@ -41,16 +40,19 @@ public class ProdottiService {
     }
 
     public Prodotto get(Long id) {
-        return repo.findById(id).orElseThrow();
+        Prodotto prodotto = repo.findById(id).orElseThrow();
+        Produttore produttore = (Produttore) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!prodotto.getProduttore().getId().equals(produttore.getId())) {
+            throw new SecurityException("Non puoi vedere prodotti di altri produttori");
+        }
+        return prodotto;
     }
 
-    @PreAuthorize("hasRole('PRODUTTORE')")
     public List<Prodotto> all() {
         Produttore produttore = (Produttore) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return repo.findByProduttore(produttore);
     }
 
-    @PreAuthorize("hasRole('PRODUTTORE')")
     public Prodotto update(Long id, Prodotto p) {
         Prodotto existing = get(id);
         Produttore produttore = (Produttore) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -63,7 +65,6 @@ public class ProdottiService {
         return repo.save(existing);
     }
 
-    @PreAuthorize("hasRole('PRODUTTORE')")
     public void delete(Long id) {
         Prodotto existing = get(id);
         Produttore produttore = (Produttore) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
