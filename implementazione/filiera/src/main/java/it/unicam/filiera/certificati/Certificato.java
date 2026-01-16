@@ -1,7 +1,7 @@
 package it.unicam.filiera.certificati;
 
-import it.unicam.filiera.models.Prodotto;
-import it.unicam.filiera.models.TipoCertificatore;
+import it.unicam.filiera.domain.Prodotto;
+import it.unicam.filiera.enums.TipoCertificatore;
 import jakarta.persistence.*;
 
 @Entity

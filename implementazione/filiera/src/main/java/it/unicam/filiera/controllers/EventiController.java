@@ -1,7 +1,7 @@
 package it.unicam.filiera.controllers;
 
 import it.unicam.filiera.controllers.dto.EventoCreateDTO;
-import it.unicam.filiera.evento.*;
+import it.unicam.filiera.domain.Evento;
 import it.unicam.filiera.services.EventiService;
 import org.springframework.web.bind.annotation.*;
 

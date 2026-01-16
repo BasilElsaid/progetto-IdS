@@ -1,4 +1,4 @@
-package it.unicam.filiera.prodotto;
+package it.unicam.filiera.domain;
 
 import jakarta.persistence.*;
 

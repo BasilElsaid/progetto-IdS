@@ -1,7 +1,7 @@
-package it.unicam.filiera.ordine;
+package it.unicam.filiera.domain;
 
 import it.unicam.filiera.models.Acquirente;
-import it.unicam.filiera.prodotto.Pacchetto;
+import it.unicam.filiera.enums.StatoOrdine;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

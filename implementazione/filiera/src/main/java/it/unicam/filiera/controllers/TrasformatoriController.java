@@ -1,8 +1,6 @@
 package it.unicam.filiera.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.unicam.filiera.controllers.dto.CreateAcquirenteRequest;
-import it.unicam.filiera.models.Ruolo;
 import it.unicam.filiera.models.Trasformatore;
 import it.unicam.filiera.repositories.TrasformatoreRepository;
 import org.springframework.web.bind.annotation.*;

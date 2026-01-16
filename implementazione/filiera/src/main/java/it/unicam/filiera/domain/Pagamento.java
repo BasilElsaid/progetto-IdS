@@ -1,4 +1,4 @@
-package it.unicam.filiera.ordine;
+package it.unicam.filiera.domain;
 
 public class Pagamento {
 

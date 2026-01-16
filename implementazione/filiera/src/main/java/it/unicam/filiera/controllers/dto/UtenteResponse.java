@@ -1,6 +1,6 @@
 package it.unicam.filiera.controllers.dto;
 
-import it.unicam.filiera.models.Ruolo;
+import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.models.UtenteGenerico;
 
 public class UtenteResponse {

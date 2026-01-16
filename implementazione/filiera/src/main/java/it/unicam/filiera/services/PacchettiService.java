@@ -1,7 +1,7 @@
 package it.unicam.filiera.services;
 
 import it.unicam.filiera.controllers.dto.CreatePacchettoRequest;
-import it.unicam.filiera.prodotto.Pacchetto;
+import it.unicam.filiera.domain.Pacchetto;
 import it.unicam.filiera.repositories.PacchettoRepository;
 import org.springframework.stereotype.Service;
 

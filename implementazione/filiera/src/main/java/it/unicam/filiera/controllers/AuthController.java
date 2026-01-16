@@ -1,30 +1,30 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.CreateAziendaRequest;
 import it.unicam.filiera.controllers.dto.LoginRequest;
-import it.unicam.filiera.controllers.dto.UtenteResponse;
+import it.unicam.filiera.controllers.dto.LoginResponse;
+import it.unicam.filiera.models.UtenteGenerico;
 import it.unicam.filiera.services.AuthService;
-import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
+import it.unicam.filiera.services.JwtService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthService service;
+    private final AuthService authService;
+    private final JwtService jwtService;
 
-    public AuthController(AuthService service) {
-        this.service = service;
-    }
-
-    @PostMapping("/register")
-    public UtenteResponse register(@RequestBody @Valid CreateAziendaRequest request) {
-        return UtenteResponse.from(service.register(request));
+    public AuthController(AuthService authService,
+                                   JwtService jwtService) {
+        this.authService = authService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid LoginRequest request) {
-        return ResponseEntity.ok(service.login(request));
+    public LoginResponse login(@RequestBody LoginRequest request) {
+        UtenteGenerico user =
+                authService.authenticate(request.getUsername(), request.getPassword());
+
+        return new LoginResponse(jwtService.generateToken(user));
     }
 }

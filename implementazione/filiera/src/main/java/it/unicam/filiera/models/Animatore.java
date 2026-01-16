@@ -1,6 +1,6 @@
 package it.unicam.filiera.models;
 
-import it.unicam.filiera.evento.Evento;
+import it.unicam.filiera.domain.Evento;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

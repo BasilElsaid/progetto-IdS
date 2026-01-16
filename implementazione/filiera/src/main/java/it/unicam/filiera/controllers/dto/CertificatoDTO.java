@@ -1,6 +1,6 @@
 package it.unicam.filiera.controllers.dto;
 
-import it.unicam.filiera.models.TipoCertificatore;
+import it.unicam.filiera.enums.TipoCertificatore;
 
 import jakarta.validation.constraints.NotNull;
 

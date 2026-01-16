@@ -1,6 +1,6 @@
 package it.unicam.filiera.certificati;
 
-import it.unicam.filiera.models.TipoCertificatore;
+import it.unicam.filiera.enums.TipoCertificatore;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

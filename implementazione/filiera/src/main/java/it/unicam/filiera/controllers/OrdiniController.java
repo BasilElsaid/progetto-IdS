@@ -1,7 +1,7 @@
 package it.unicam.filiera.controllers;
 
 import it.unicam.filiera.controllers.dto.CreateOrdineRequest;
-import it.unicam.filiera.ordine.Ordine;
+import it.unicam.filiera.domain.Ordine;
 import it.unicam.filiera.services.OrdiniService;
 import org.springframework.web.bind.annotation.*;
 

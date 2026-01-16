@@ -8,11 +8,16 @@ import it.unicam.filiera.controllers.dto.CreateAziendaRequest;
 import it.unicam.filiera.controllers.dto.UtenteResponse;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
-import it.unicam.filiera.models.*;
+import it.unicam.filiera.models.Azienda;
+import it.unicam.filiera.models.DistributoreTipicita;
+import it.unicam.filiera.models.Produttore;
+import it.unicam.filiera.models.Trasformatore;
+import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.repositories.DistributoreTipicitaRepository;
 import it.unicam.filiera.repositories.ProduttoreRepository;
 import it.unicam.filiera.repositories.TrasformatoreRepository;
 import it.unicam.filiera.utilities.CoordinateOSM;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,15 +29,18 @@ public class AziendeService {
     private final ProduttoreRepository produttoreRepo;
     private final TrasformatoreRepository trasformatoreRepo;
     private final DistributoreTipicitaRepository distributoreRepo;
+    private final PasswordEncoder passwordEncoder;
 
     public AziendeService(
             ProduttoreRepository produttoreRepo,
             TrasformatoreRepository trasformatoreRepo,
-            DistributoreTipicitaRepository distributoreRepo
+            DistributoreTipicitaRepository distributoreRepo,
+            PasswordEncoder passwordEncoder
     ) {
         this.produttoreRepo = produttoreRepo;
         this.trasformatoreRepo = trasformatoreRepo;
         this.distributoreRepo = distributoreRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // ================= CREATE =================
@@ -42,8 +50,7 @@ public class AziendeService {
             case PRODUTTORE -> {
                 Produttore p = (Produttore) new ProduttoreBuilder()
                         .setUsername(request.getUsername())
-                        .setPassword(request.getPassword())
-                        .setEmail(request.getEmail())
+                        .setPassword(passwordEncoder.encode(request.getPassword()))                        .setEmail(request.getEmail())
                         .setNomeAzienda(request.getNomeAzienda())
                         .setPartitaIva(request.getPartitaIva())
                         .setCoordinate(toCoordinate(request.getCoordinate()))
@@ -53,8 +60,7 @@ public class AziendeService {
             case TRASFORMATORE -> {
                 Trasformatore t = (Trasformatore) new TrasformatoreBuilder()
                         .setUsername(request.getUsername())
-                        .setPassword(request.getPassword())
-                        .setEmail(request.getEmail())
+                        .setPassword(passwordEncoder.encode(request.getPassword()))                        .setEmail(request.getEmail())
                         .setNomeAzienda(request.getNomeAzienda())
                         .setPartitaIva(request.getPartitaIva())
                         .setLaboratorio(request.getLaboratorio())
@@ -65,8 +71,7 @@ public class AziendeService {
             case DISTRIBUTORE_TIPICITA -> {
                 DistributoreTipicita d = (DistributoreTipicita) new DistributoreTipicitaBuilder()
                         .setUsername(request.getUsername())
-                        .setPassword(request.getPassword())
-                        .setEmail(request.getEmail())
+                        .setPassword(passwordEncoder.encode(request.getPassword()))                        .setEmail(request.getEmail())
                         .setNomeAzienda(request.getNomeAzienda())
                         .setPartitaIva(request.getPartitaIva())
                         .setSede(request.getSede())

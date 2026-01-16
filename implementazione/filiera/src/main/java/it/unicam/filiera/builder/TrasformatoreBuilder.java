@@ -1,6 +1,6 @@
 package it.unicam.filiera.builder;
 
-import it.unicam.filiera.models.Ruolo;
+import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.models.Trasformatore;
 import it.unicam.filiera.utilities.CoordinateOSM;
 

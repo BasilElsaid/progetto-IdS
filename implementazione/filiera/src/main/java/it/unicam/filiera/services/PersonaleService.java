@@ -7,7 +7,7 @@ import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Animatore;
 import it.unicam.filiera.models.Curatore;
 import it.unicam.filiera.models.GestorePiattaforma;
-import it.unicam.filiera.models.Ruolo;
+import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.repositories.AnimatoreRepository;
 import it.unicam.filiera.repositories.CuratoreRepository;
 import it.unicam.filiera.repositories.GestorePiattaformaRepository;

@@ -1,7 +1,7 @@
 package it.unicam.filiera.controllers;
 
 import it.unicam.filiera.controllers.dto.CreatePacchettoRequest;
-import it.unicam.filiera.prodotto.Pacchetto;
+import it.unicam.filiera.domain.Pacchetto;
 import it.unicam.filiera.services.PacchettiService;
 import org.springframework.web.bind.annotation.*;
 

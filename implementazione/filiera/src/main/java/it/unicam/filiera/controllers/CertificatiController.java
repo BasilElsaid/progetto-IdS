@@ -1,7 +1,7 @@
 package it.unicam.filiera.controllers;
 
 import it.unicam.filiera.controllers.dto.CertificatoDTO;
-import it.unicam.filiera.models.TipoCertificatore;
+import it.unicam.filiera.enums.TipoCertificatore;
 import it.unicam.filiera.certificati.Certificato;
 import it.unicam.filiera.services.CertificatiService;
 import org.springframework.web.bind.annotation.*;

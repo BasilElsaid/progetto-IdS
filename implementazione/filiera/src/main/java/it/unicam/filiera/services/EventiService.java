@@ -1,17 +1,14 @@
 package it.unicam.filiera.services;
 
 import it.unicam.filiera.controllers.dto.EventoCreateDTO;
-import it.unicam.filiera.evento.*;
+import it.unicam.filiera.domain.Evento;
 import it.unicam.filiera.exceptions.NotFoundException;
-import it.unicam.filiera.models.Acquirente;
-import it.unicam.filiera.models.Animatore;
 import it.unicam.filiera.repositories.EventiRepository;
-import it.unicam.filiera.repositories.TicketEventoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+
 @Service
 @Transactional
 public class EventiService {

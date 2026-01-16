@@ -1,6 +1,6 @@
 package it.unicam.filiera.repositories;
 
-import it.unicam.filiera.ordine.Ordine;
+import it.unicam.filiera.domain.Ordine;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

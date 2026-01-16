@@ -1,4 +1,4 @@
-package it.unicam.filiera.evento;
+package it.unicam.filiera.domain;
 
 import it.unicam.filiera.models.*;
 import jakarta.persistence.*;

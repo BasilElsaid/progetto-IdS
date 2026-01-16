@@ -1,7 +1,7 @@
 package it.unicam.filiera.builder;
 
 import it.unicam.filiera.models.Produttore;
-import it.unicam.filiera.models.Ruolo;
+import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.utilities.CoordinateOSM;
 
 public class ProduttoreBuilder implements UtenteBuilder, AziendeBuilder {

@@ -2,7 +2,7 @@ package it.unicam.filiera.controllers;
 
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import it.unicam.filiera.models.Prodotto;
+import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.services.ProdottiService;
 
 @RestController

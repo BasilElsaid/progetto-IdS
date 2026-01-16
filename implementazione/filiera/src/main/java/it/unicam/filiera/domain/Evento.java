@@ -1,6 +1,6 @@
-package it.unicam.filiera.evento;
+package it.unicam.filiera.domain;
 
-import it.unicam.filiera.models.*;
+import it.unicam.filiera.models.Animatore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

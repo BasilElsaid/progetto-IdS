@@ -1,4 +1,4 @@
-package it.unicam.filiera.models;
+package it.unicam.filiera.enums;
 
 public enum CategoriaProdotto {
     ORTOFRUTTA,

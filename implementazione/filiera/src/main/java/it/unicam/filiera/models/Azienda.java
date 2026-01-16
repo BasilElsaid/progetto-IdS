@@ -4,7 +4,7 @@ import it.unicam.filiera.utilities.CoordinateOSM;
 import jakarta.persistence.*;
 
 @Entity
-public class Azienda extends UtenteGenerico{
+public class Azienda extends UtenteGenerico {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

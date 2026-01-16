@@ -1,6 +1,6 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.models.Prodotto;
+import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.services.ProdottiService;
 import org.springframework.web.bind.annotation.*;
 

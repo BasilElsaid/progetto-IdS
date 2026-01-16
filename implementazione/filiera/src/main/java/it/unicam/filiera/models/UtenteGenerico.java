@@ -1,5 +1,6 @@
 package it.unicam.filiera.models;
 
+import it.unicam.filiera.enums.Ruolo;
 import jakarta.persistence.*;
 
 @Entity
