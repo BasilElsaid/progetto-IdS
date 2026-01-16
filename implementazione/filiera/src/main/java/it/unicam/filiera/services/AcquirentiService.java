@@ -6,6 +6,7 @@ import it.unicam.filiera.controllers.dto.UtenteResponse;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Acquirente;
 import it.unicam.filiera.repositories.AcquirenteRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,15 +16,17 @@ import java.util.stream.Collectors;
 public class AcquirentiService {
 
     private final AcquirenteRepository acquirenteRepo;
+    private final PasswordEncoder passwordEncoder;
 
-    public AcquirentiService(AcquirenteRepository acquirenteRepo) {
+    public AcquirentiService(AcquirenteRepository acquirenteRepo, PasswordEncoder passwordEncoder) {
         this.acquirenteRepo = acquirenteRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Acquirente creaAcquirente(CreateAcquirenteRequest request) {
         Acquirente a = (Acquirente) new AcquirenteBuilder()
                 .setUsername(request.getUsername())
-                .setPassword(request.getPassword())
+                .setPassword(passwordEncoder.encode(request.getPassword()))
                 .setEmail(request.getEmail())
                 .build();
         return acquirenteRepo.save(a);

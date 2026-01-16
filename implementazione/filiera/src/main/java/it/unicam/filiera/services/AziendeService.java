@@ -43,12 +43,11 @@ public class AziendeService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ================= CREATE =================
     public Azienda creaAzienda(CreateAziendaRequest request) {
         Ruolo ruolo = request.getRuolo();
         switch (ruolo) {
             case PRODUTTORE -> {
-                Produttore p = (Produttore) new ProduttoreBuilder()
+                Produttore p = new ProduttoreBuilder()
                         .setUsername(request.getUsername())
                         .setPassword(passwordEncoder.encode(request.getPassword()))                        .setEmail(request.getEmail())
                         .setNomeAzienda(request.getNomeAzienda())
@@ -58,7 +57,7 @@ public class AziendeService {
                 return produttoreRepo.save(p);
             }
             case TRASFORMATORE -> {
-                Trasformatore t = (Trasformatore) new TrasformatoreBuilder()
+                Trasformatore t = new TrasformatoreBuilder()
                         .setUsername(request.getUsername())
                         .setPassword(passwordEncoder.encode(request.getPassword()))                        .setEmail(request.getEmail())
                         .setNomeAzienda(request.getNomeAzienda())
@@ -69,7 +68,7 @@ public class AziendeService {
                 return trasformatoreRepo.save(t);
             }
             case DISTRIBUTORE_TIPICITA -> {
-                DistributoreTipicita d = (DistributoreTipicita) new DistributoreTipicitaBuilder()
+                DistributoreTipicita d = new DistributoreTipicitaBuilder()
                         .setUsername(request.getUsername())
                         .setPassword(passwordEncoder.encode(request.getPassword()))                        .setEmail(request.getEmail())
                         .setNomeAzienda(request.getNomeAzienda())
@@ -84,7 +83,6 @@ public class AziendeService {
         }
     }
 
-    // ================= READ =================
     public List<UtenteResponse> listaAziende() {
         List<UtenteResponse> out = new ArrayList<>();
         produttoreRepo.findAll().forEach(u -> out.add(UtenteResponse.from(u)));
@@ -94,49 +92,28 @@ public class AziendeService {
     }
 
     public UtenteResponse getAzienda(Long id) {
-        return produttoreRepo.findById(id).map(UtenteResponse::from)
-                .or(() -> trasformatoreRepo.findById(id).map(UtenteResponse::from))
-                .or(() -> distributoreRepo.findById(id).map(UtenteResponse::from))
-                .orElseThrow(() -> new NotFoundException("Azienda non trovata"));
+        return UtenteResponse.from(findAziendaById(id));
     }
 
-    // ================= PATCH =================
     public UtenteResponse patchAzienda(Long id, CreateAziendaRequest request) {
-        if (produttoreRepo.existsById(id)) {
-            Produttore p = produttoreRepo.findById(id).get();
-            updateBaseFields(p, request);
-            return UtenteResponse.from(produttoreRepo.save(p));
+        Azienda azienda = findAziendaById(id);
+
+        updateBaseFields(azienda, request);
+
+        if (azienda instanceof Trasformatore t && request.getLaboratorio() != null) {
+            t.setLaboratorio(request.getLaboratorio());
         }
-        if (trasformatoreRepo.existsById(id)) {
-            Trasformatore t = trasformatoreRepo.findById(id).get();
-            updateBaseFields(t, request);
-            if (request.getLaboratorio() != null) t.setLaboratorio(request.getLaboratorio());
-            return UtenteResponse.from(trasformatoreRepo.save(t));
+
+        if (azienda instanceof DistributoreTipicita d && request.getAreaDistribuzione() != null) {
+            d.setAreaDistribuzione(request.getAreaDistribuzione());
         }
-        if (distributoreRepo.existsById(id)) {
-            DistributoreTipicita d = distributoreRepo.findById(id).get();
-            updateBaseFields(d, request);
-            if (request.getAreaDistribuzione() != null) d.setAreaDistribuzione(request.getAreaDistribuzione());
-            return UtenteResponse.from(distributoreRepo.save(d));
-        }
-        throw new NotFoundException("Azienda non trovata");
+
+        return UtenteResponse.from(saveAzienda(azienda));
     }
 
-    // ================= DELETE =================
     public void deleteAzienda(Long id) {
-        if (produttoreRepo.existsById(id)) {
-            produttoreRepo.deleteById(id);
-            return;
-        }
-        if (trasformatoreRepo.existsById(id)) {
-            trasformatoreRepo.deleteById(id);
-            return;
-        }
-        if (distributoreRepo.existsById(id)) {
-            distributoreRepo.deleteById(id);
-            return;
-        }
-        throw new NotFoundException("Azienda non trovata");
+        Azienda azienda = findAziendaById(id);
+        deleteAziendaByTipo(azienda);
     }
 
     // ================= HELPERS =================
@@ -150,5 +127,25 @@ public class AziendeService {
         if (request.getNomeAzienda() != null) a.setNomeAzienda(request.getNomeAzienda());
         if (request.getPartitaIva() != null) a.setPartitaIva(request.getPartitaIva());
         if (request.getCoordinate() != null) a.setCoordinate(toCoordinate(request.getCoordinate()));
+    }
+
+    private Azienda findAziendaById(Long id) {
+        return produttoreRepo.findById(id).map(a -> (Azienda) a)
+                .or(() -> trasformatoreRepo.findById(id).map(a -> (Azienda) a))
+                .or(() -> distributoreRepo.findById(id).map(a -> (Azienda) a))
+                .orElseThrow(() -> new NotFoundException("Azienda non trovata"));
+    }
+
+    private Azienda saveAzienda(Azienda a) {
+        if (a instanceof Produttore p) return produttoreRepo.save(p);
+        if (a instanceof Trasformatore t) return trasformatoreRepo.save(t);
+        if (a instanceof DistributoreTipicita d) return distributoreRepo.save(d);
+        throw new IllegalStateException("Tipo di azienda non supportato");
+    }
+
+    private void deleteAziendaByTipo(Azienda a) {
+        if (a instanceof Produttore p) produttoreRepo.delete(p);
+        else if (a instanceof Trasformatore t) trasformatoreRepo.delete(t);
+        else if (a instanceof DistributoreTipicita d) distributoreRepo.delete(d);
     }
 }

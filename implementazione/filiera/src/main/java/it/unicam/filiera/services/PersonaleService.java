@@ -11,6 +11,7 @@ import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.repositories.AnimatoreRepository;
 import it.unicam.filiera.repositories.CuratoreRepository;
 import it.unicam.filiera.repositories.GestorePiattaformaRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,15 +23,18 @@ public class PersonaleService {
     private final CuratoreRepository curatoreRepository;
     private final AnimatoreRepository animatoreRepository;
     private final GestorePiattaformaRepository gestoreRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public PersonaleService(
             CuratoreRepository curatoreRepository,
             AnimatoreRepository animatoreRepository,
-            GestorePiattaformaRepository gestoreRepository
+            GestorePiattaformaRepository gestoreRepository,
+            PasswordEncoder passwordEncoder
     ) {
         this.curatoreRepository = curatoreRepository;
         this.animatoreRepository = animatoreRepository;
         this.gestoreRepository = gestoreRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UtenteResponse creaPersonale(CreatePersonaleRequest request) {
@@ -42,7 +46,7 @@ public class PersonaleService {
                 Curatore c = new Curatore();
                 c.setUsername(request.getUsername());
                 c.setEmail(request.getEmail());
-                c.setPassword(request.getPassword());
+                c.setPassword(passwordEncoder.encode(request.getPassword()));
                 c.setNome(request.getNome());
                 c.setCognome(request.getCognome());
                 c.setTelefono(request.getTelefono());
@@ -56,7 +60,7 @@ public class PersonaleService {
                 Animatore a = new Animatore();
                 a.setUsername(request.getUsername());
                 a.setEmail(request.getEmail());
-                a.setPassword(request.getPassword());
+                a.setPassword(passwordEncoder.encode(request.getPassword()));
                 a.setNome(request.getNome());
                 a.setCognome(request.getCognome());
                 a.setTelefono(request.getTelefono());
@@ -70,7 +74,7 @@ public class PersonaleService {
                 GestorePiattaforma g = new GestorePiattaforma();
                 g.setUsername(request.getUsername());
                 g.setEmail(request.getEmail());
-                g.setPassword(request.getPassword());
+                g.setPassword(passwordEncoder.encode(request.getPassword()));
                 g.setNome(request.getNome());
                 g.setCognome(request.getCognome());
                 g.setTelefono(request.getTelefono());
@@ -117,31 +121,42 @@ public class PersonaleService {
     public UtenteResponse patchPersonale(Long id, CreatePersonaleRequest request) {
         if (curatoreRepository.existsById(id)) {
             Curatore c = curatoreRepository.findById(id).get();
-            if(request.getEmail() != null) c.setEmail(request.getEmail());
-            if(request.getPassword() != null) c.setPassword(request.getPassword());
-            if(request.getNome() != null) c.setNome(request.getNome());
-            if(request.getCognome() != null) c.setCognome(request.getCognome());
-            if(request.getTelefono() != null) c.setTelefono(request.getTelefono());
+            updateUtente(c, request);
             return UtenteResponse.from(curatoreRepository.save(c));
         }
         if (animatoreRepository.existsById(id)) {
             Animatore a = animatoreRepository.findById(id).get();
-            if(request.getEmail() != null) a.setEmail(request.getEmail());
-            if(request.getPassword() != null) a.setPassword(request.getPassword());
-            if(request.getNome() != null) a.setNome(request.getNome());
-            if(request.getCognome() != null) a.setCognome(request.getCognome());
-            if(request.getTelefono() != null) a.setTelefono(request.getTelefono());
+            updateUtente(a, request);
             return UtenteResponse.from(animatoreRepository.save(a));
         }
         if (gestoreRepository.existsById(id)) {
             GestorePiattaforma g = gestoreRepository.findById(id).get();
-            if(request.getEmail() != null) g.setEmail(request.getEmail());
-            if(request.getPassword() != null) g.setPassword(request.getPassword());
-            if(request.getNome() != null) g.setNome(request.getNome());
-            if(request.getCognome() != null) g.setCognome(request.getCognome());
-            if(request.getTelefono() != null) g.setTelefono(request.getTelefono());
+            updateUtente(g, request);
             return UtenteResponse.from(gestoreRepository.save(g));
         }
         throw new NotFoundException("Personale non trovato");
+    }
+
+    // =================== Helper ===================
+    private void updateUtente(Object utente, CreatePersonaleRequest request) {
+        if(utente instanceof Curatore c) {
+            if(request.getEmail() != null) c.setEmail(request.getEmail());
+            if(request.getPassword() != null) c.setPassword(passwordEncoder.encode(request.getPassword()));
+            if(request.getNome() != null) c.setNome(request.getNome());
+            if(request.getCognome() != null) c.setCognome(request.getCognome());
+            if(request.getTelefono() != null) c.setTelefono(request.getTelefono());
+        } else if(utente instanceof Animatore a) {
+            if(request.getEmail() != null) a.setEmail(request.getEmail());
+            if(request.getPassword() != null) a.setPassword(passwordEncoder.encode(request.getPassword()));
+            if(request.getNome() != null) a.setNome(request.getNome());
+            if(request.getCognome() != null) a.setCognome(request.getCognome());
+            if(request.getTelefono() != null) a.setTelefono(request.getTelefono());
+        } else if(utente instanceof GestorePiattaforma g) {
+            if(request.getEmail() != null) g.setEmail(request.getEmail());
+            if(request.getPassword() != null) g.setPassword(passwordEncoder.encode(request.getPassword()));
+            if(request.getNome() != null) g.setNome(request.getNome());
+            if(request.getCognome() != null) g.setCognome(request.getCognome());
+            if(request.getTelefono() != null) g.setTelefono(request.getTelefono());
+        }
     }
 }

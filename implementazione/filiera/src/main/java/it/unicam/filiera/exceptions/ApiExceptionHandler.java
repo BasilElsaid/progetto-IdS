@@ -27,4 +27,10 @@ public class ApiExceptionHandler {
         pd.setDetail("Validazione fallita: controlla i campi richiesti.");
         return pd;
     }
+
+    @ExceptionHandler(ForbiddenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ProblemDetail forbidden(ForbiddenException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
+    }
 }

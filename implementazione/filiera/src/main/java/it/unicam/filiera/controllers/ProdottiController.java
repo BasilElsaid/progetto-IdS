@@ -31,4 +31,10 @@ public class ProdottiController {
     public List<Prodotto> all() {
         return service.all();
     }
+
+    @PutMapping("/{id}")
+    public Prodotto update(@PathVariable Long id, @RequestBody Prodotto p) { return service.update(id, p); }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) { service.delete(id); }
 }

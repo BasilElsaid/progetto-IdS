@@ -34,14 +34,14 @@ public class SecurityConfig {
                                 "/auth/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/api/aziende",
-                                "/api/personale",
-                                "/api/acquirenti"
+                                "/api/aziende/**",
+                                "/api/personale/**",
+                                "/api/acquirenti/**",
+                                "/h2-console/**"
                         ).permitAll()
-                        // tutto il resto richiede JWT
                         .anyRequest().authenticated()
                 )
-                // aggiungi il filtro JWT
+                .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
