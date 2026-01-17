@@ -22,9 +22,10 @@ public abstract class UtenteGenerico {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(name = "ruolo", insertable = false, updatable = false)
     @Enumerated(EnumType.STRING)
-    @Column(name = "ruolo", nullable = false)
     private Ruolo ruolo;
+
 
     public Long getId() { return id; }
 
