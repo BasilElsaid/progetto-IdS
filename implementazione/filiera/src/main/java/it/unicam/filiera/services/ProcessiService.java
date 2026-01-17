@@ -2,9 +2,9 @@ package it.unicam.filiera.services;
 
 import it.unicam.filiera.controllers.dto.CreateProcessoRequest;
 import it.unicam.filiera.exceptions.NotFoundException;
-import it.unicam.filiera.models.Prodotto;
+import it.unicam.filiera.models.Produttore;
 import it.unicam.filiera.models.Trasformatore;
-import it.unicam.filiera.prodotto.ProcessoTrasformazione;
+import it.unicam.filiera.domain.ProcessoTrasformazione;
 import it.unicam.filiera.repositories.ProdottoRepository;
 import it.unicam.filiera.repositories.ProcessoTrasformazioneRepository;
 import it.unicam.filiera.repositories.TrasformatoreRepository;
