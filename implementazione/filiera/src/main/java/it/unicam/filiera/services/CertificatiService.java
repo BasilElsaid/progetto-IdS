@@ -105,19 +105,19 @@ public class CertificatiService {
                 if(c instanceof CertificazioneProduttore cp) {
                     cp.setAzienda(dto.azienda);
                     cp.setOrigineMateriaPrima(dto.origineMateriaPrima);
-                } else throw new BadRequestException("Tipo certificatore non corrisponde all'entitÃ ");
+                } else throw new BadRequestException("Tipo certificatore non corrisponde all'entitÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ");
             }
             case TRASFORMATORE -> {
                 if(c instanceof CertificatoTrasformatore ct) {
                     ct.setProcesso(dto.processo);
                     ct.setImpianto(dto.impianto);
-                } else throw new BadRequestException("Tipo certificatore non corrisponde all'entitÃ ");
+                } else throw new BadRequestException("Tipo certificatore non corrisponde all'entitÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ");
             }
             case CURATORE -> {
                 if(c instanceof CertificatoCuratore cc) {
                     cc.setApprovato(dto.approvato);
                     cc.setCommento(dto.commento);
-                } else throw new BadRequestException("Tipo certificatore non corrisponde all'entitÃ ");
+                } else throw new BadRequestException("Tipo certificatore non corrisponde all'entitÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ");
             }
         }
 

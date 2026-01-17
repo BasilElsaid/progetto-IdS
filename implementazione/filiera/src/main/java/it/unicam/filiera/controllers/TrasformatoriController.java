@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/aziende/trasformatori")
-@Tag(name = "Trasformatori", description = "Gestione Specifica di Trasformatori (processi di trasformazione e tracciabilitÃ )")
+@Tag(name = "Trasformatori", description = "Gestione Specifica di Trasformatori (processi di trasformazione e tracciabilitÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â )")
 public class TrasformatoriController {
 
     private final TrasformatoreRepository repo;

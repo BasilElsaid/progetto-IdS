@@ -1,54 +1,33 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.controllers.dto.CreateProcessoRequest;
 import it.unicam.filiera.domain.ProcessoTrasformazione;
-import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.repositories.ProcessoTrasformazioneRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 public class ProcessiService {
 
-    private final ProcessoTrasformazioneRepository repo;
+    private final ProcessoTrasformazioneRepository processoRepo;
 
-    public ProcessiService(ProcessoTrasformazioneRepository repo) {
-        this.repo = repo;
+    public ProcessiService(ProcessoTrasformazioneRepository processoRepo) {
+        this.processoRepo = processoRepo;
+    }
+
+    public ProcessoTrasformazione crea(String descrizione) {
+        if (descrizione == null || descrizione.isBlank()) throw new IllegalArgumentException("descrizione obbligatoria");
+        return processoRepo.save(new ProcessoTrasformazione(descrizione));
     }
 
     public List<ProcessoTrasformazione> lista() {
-        return repo.findAll();
+        return processoRepo.findAll();
     }
 
-    public ProcessoTrasformazione get(Long id) {
-        return repo.findById(id).orElseThrow(() ->
-                new NotFoundException("Processo non trovato: " + id)
-        );
-    }
-
-    /**
-     * NB: ProcessoTrasformazione nel tuo progetto ha solo:
-     * - descrizione
-     * - chiuso
-     * e NON contiene collegamenti a Trasformatore/Prodotti.
-     * Questi collegamenti si fanno tramite TrasformazioneProdotto (entity separata).
-     */
-    @Transactional
-    public ProcessoTrasformazione crea(CreateProcessoRequest req) {
-        String descrizione = (req != null) ? req.getDescrizione() : null;
-        if (descrizione == null || descrizione.trim().isEmpty()) {
-            descrizione = "Processo senza descrizione";
-        }
-        ProcessoTrasformazione p = new ProcessoTrasformazione(descrizione);
-        return repo.save(p);
-    }
-
-    @Transactional
     public ProcessoTrasformazione chiudi(Long id) {
-        ProcessoTrasformazione p = get(id);
+        ProcessoTrasformazione p = processoRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Processo non trovato: " + id));
         p.chiudi();
-        return repo.save(p);
+        return processoRepo.save(p);
     }
 }

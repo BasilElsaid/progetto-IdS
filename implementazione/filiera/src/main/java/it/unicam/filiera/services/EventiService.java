@@ -1,130 +1,84 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.domain.Evento;
-import it.unicam.filiera.domain.TicketEvento;
-import it.unicam.filiera.exceptions.NotFoundException;
-import it.unicam.filiera.models.Acquirente;
-import it.unicam.filiera.repositories.AcquirenteRepository;
-import it.unicam.filiera.repositories.EventiRepository;
-import it.unicam.filiera.repositories.TicketEventoRepository;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import it.unicam.filiera.domain.Evento;
+import it.unicam.filiera.domain.TicketEvento;
+import it.unicam.filiera.models.Acquirente;
+
+import it.unicam.filiera.repositories.EventiRepository;
+import it.unicam.filiera.repositories.TicketEventoRepository;
+import it.unicam.filiera.repositories.AcquirenteRepository;
 
 @Service
 public class EventiService {
 
     private final EventiRepository eventiRepository;
-    private final TicketEventoRepository ticketEventoRepository;
+    private final TicketEventoRepository ticketRepository;
     private final AcquirenteRepository acquirenteRepository;
 
-    public EventiService(
-            EventiRepository eventiRepository,
-            TicketEventoRepository ticketEventoRepository,
-            AcquirenteRepository acquirenteRepository
-    ) {
+    public EventiService(EventiRepository eventiRepository,
+                         TicketEventoRepository ticketRepository,
+                         AcquirenteRepository acquirenteRepository) {
         this.eventiRepository = eventiRepository;
-        this.ticketEventoRepository = ticketEventoRepository;
+        this.ticketRepository = ticketRepository;
         this.acquirenteRepository = acquirenteRepository;
     }
 
-    // ---- metodi giÃƒÂ  usati internamente ----
-
-    public List<Evento> getTuttiEventi() {
+    @Transactional(readOnly = true)
+    public List<Evento> lista() {
         return eventiRepository.findAll();
     }
 
-    public Evento getEvento(Long id) {
-        return eventiRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Evento non trovato: " + id));
-    }
-
-    @Transactional
-    public Evento creaEvento(Evento evento) {
-        return eventiRepository.save(evento);
-    }
-
-    @Transactional
-    public Evento aggiornaEvento(Long id, Evento eventoAggiornato) {
-        Evento evento = getEvento(id);
-
-        evento.setNome(eventoAggiornato.getNome());
-        evento.setTipo(eventoAggiornato.getTipo());
-        evento.setDataOra(eventoAggiornato.getDataOra());
-        evento.setPrezzo(eventoAggiornato.getPrezzo());
-        evento.setPosti(eventoAggiornato.getPosti());
-
-        return eventiRepository.save(evento);
-    }
-
-    @Transactional
-    public void eliminaEvento(Long id) {
-        Evento evento = getEvento(id);
-        eventiRepository.delete(evento);
-    }
-
-    // ---- metodi che il tuo EventiController chiama (alias) ----
-
-    public List<Evento> lista() {
-        return getTuttiEventi();
-    }
-
+    @Transactional(readOnly = true)
     public Evento get(Long id) {
-        return getEvento(id);
+        return eventiRepository.findById(id).orElseThrow();
     }
 
     @Transactional
-    public Evento crea(Evento evento) {
-        return creaEvento(evento);
+    public Evento crea(Evento e) {
+        return eventiRepository.save(e);
     }
 
     @Transactional
-    public Evento aggiorna(Long id, Evento eventoAggiornato) {
-        return aggiornaEvento(id, eventoAggiornato);
+    public Evento aggiorna(Long id, Evento update) {
+        Evento e = eventiRepository.findById(id).orElseThrow();
+        e.setNome(update.getNome());
+        e.setTipo(update.getTipo());
+        e.setPrezzo(update.getPrezzo());
+        e.setPosti(update.getPosti());
+        e.setDataOra(update.getDataOra());
+        return eventiRepository.save(e);
     }
 
     @Transactional
     public void elimina(Long id) {
-        eliminaEvento(id);
+        eventiRepository.deleteById(id);
     }
-
-    // ---- ticket avanzati ----
 
     @Transactional
     public TicketEvento acquistaTicket(Long eventoId, Long acquirenteId, int quantita) {
-        if (quantita <= 0) {
-            throw new IllegalArgumentException("QuantitÃƒÂ  ticket non valida");
+        Evento evento = eventiRepository.findById(eventoId).orElseThrow();
+        Acquirente acquirente = acquirenteRepository.findById(acquirenteId).orElseThrow();
+
+        if (evento.getPosti() < quantita) {
+            throw new IllegalArgumentException("Posti insufficienti");
         }
 
-        Evento evento = getEvento(eventoId);
-        Acquirente acquirente = acquirenteRepository.findById(acquirenteId)
-                .orElseThrow(() -> new NotFoundException("Acquirente non trovato: " + acquirenteId));
-
-        Integer posti = evento.getPosti();
-        if (posti != null && posti < quantita) {
-            throw new IllegalArgumentException("Posti insufficienti. Disponibili: " + posti);
-        }
-
-        // crea un ticket "aggregato" (numeroTicket = quantita)
         TicketEvento ticket = new TicketEvento(evento, acquirente);
         ticket.setNumeroTicket(quantita);
 
+        evento.setPosti(evento.getPosti() - quantita);
+        eventiRepository.save(evento);
 
-
-        TicketEvento salvato = ticketEventoRepository.save(ticket);
-
-        if (posti != null) {
-            evento.setPosti(posti - quantita);
-            eventiRepository.save(evento);
-        }
-
-        return salvato;
+        return ticketRepository.save(ticket);
     }
 
+    @Transactional(readOnly = true)
     public List<TicketEvento> listaTicketEvento(Long eventoId) {
-        // query derivata Spring Data: findByEventoId(...) 
-        return ticketEventoRepository.findByEventoId(eventoId);
+        return ticketRepository.findByEventoId(eventoId);
     }
 }
-

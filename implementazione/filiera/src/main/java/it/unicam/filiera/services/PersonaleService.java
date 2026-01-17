@@ -41,7 +41,7 @@ public class PersonaleService {
         switch (request.getRuolo()) {
             case CURATORE:
                 if (curatoreRepository.count() > 0) {
-                    throw new BadRequestException("Curatore giÃ  presente");
+                    throw new BadRequestException("Curatore giÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â  presente");
                 }
                 Curatore c = new Curatore();
                 c.setUsername(request.getUsername());
@@ -55,7 +55,7 @@ public class PersonaleService {
 
             case ANIMATORE:
                 if (animatoreRepository.count() > 0) {
-                    throw new BadRequestException("Animatore giÃ  presente");
+                    throw new BadRequestException("Animatore giÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â  presente");
                 }
                 Animatore a = new Animatore();
                 a.setUsername(request.getUsername());
@@ -69,7 +69,7 @@ public class PersonaleService {
 
             case GESTORE_PIATTAFORMA:
                 if (gestoreRepository.count() > 0) {
-                    throw new BadRequestException("Gestore piattaforma giÃ  presente");
+                    throw new BadRequestException("Gestore piattaforma giÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â  presente");
                 }
                 GestorePiattaforma g = new GestorePiattaforma();
                 g.setUsername(request.getUsername());

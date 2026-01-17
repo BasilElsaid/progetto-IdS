@@ -1,11 +1,13 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.CreateTrasformazioneRequest;
-import it.unicam.filiera.controllers.dto.TrasformazioneResponse;
-import it.unicam.filiera.services.TrasformazioniService;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import it.unicam.filiera.services.TrasformazioniService;
+import it.unicam.filiera.controllers.dto.CreateTrasformazioneRequest;
+import it.unicam.filiera.controllers.dto.TrasformazioneResponse;
 
 @RestController
 @RequestMapping("/api/trasformazioni")
@@ -21,30 +23,23 @@ public class TrasformazioniController {
     public TrasformazioneResponse crea(@RequestBody CreateTrasformazioneRequest req) {
         return TrasformazioneResponse.from(
                 service.creaTrasformazione(
-                        req.getProcessoId(),
-                        req.getTrasformatoreId(),
-                        req.getInputId(),
-                        req.getOutputId(),
-                        req.getQuantitaInput(),
-                        req.getQuantitaOutput(),
-                        req.getNote()
+                        req.processoId, req.trasformatoreId, req.inputId, req.outputId,
+                        req.quantitaInput, req.quantitaOutput, req.note
                 )
         );
     }
 
     @GetMapping("/processo/{processoId}")
     public List<TrasformazioneResponse> listaPerProcesso(@PathVariable Long processoId) {
-        return service.listaPerProcesso(processoId)
-                .stream()
+        return service.listaPerProcesso(processoId).stream()
                 .map(TrasformazioneResponse::from)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/trasformatore/{trasformatoreId}")
     public List<TrasformazioneResponse> listaPerTrasformatore(@PathVariable Long trasformatoreId) {
-        return service.listaPerTrasformatore(trasformatoreId)
-                .stream()
+        return service.listaPerTrasformatore(trasformatoreId).stream()
                 .map(TrasformazioneResponse::from)
-                .toList();
+                .collect(Collectors.toList());
     }
 }
