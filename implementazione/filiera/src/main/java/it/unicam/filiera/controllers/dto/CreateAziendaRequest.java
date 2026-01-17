@@ -24,7 +24,7 @@ public class CreateAziendaRequest {
     private String sede;                 // NUOVO
     private String areaDistribuzione;    // per distributore
     private String laboratorio;          // per trasformatore
-    private CoordinateDTO coordinate;    // già presente
+    private CoordinateDTO coordinate;    // giÃ  presente
 
     // ===== GETTERS =====
     public Ruolo getRuolo() { return ruolo; }

@@ -11,7 +11,7 @@ public class CertificatoCuratore extends Certificato implements StrategieCertifi
 
 	@Override
 	public boolean verifica(Prodotto p) {
-		// ritorna true solo se approvato è true
+		// ritorna true solo se approvato Ã¨ true
 		return approvato;
 	}
 

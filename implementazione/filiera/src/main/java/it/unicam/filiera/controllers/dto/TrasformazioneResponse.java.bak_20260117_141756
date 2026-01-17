@@ -1,0 +1,68 @@
+package it.unicam.filiera.controllers.dto;
+
+import it.unicam.filiera.domain.TrasformazioneProdotto;
+
+import java.time.LocalDateTime;
+
+public class TrasformazioneResponse {
+
+    private Long id;
+    private Long processoId;
+    private Long trasformatoreId;
+    private Long prodottoInputId;
+    private Long prodottoOutputId;
+    private Double quantitaInput;
+    private Double quantitaOutput;
+    private String note;
+    private LocalDateTime dataOra;
+
+    public static TrasformazioneResponse from(TrasformazioneProdotto t) {
+        TrasformazioneResponse r = new TrasformazioneResponse();
+        r.id = t.getId();
+        r.processoId = (t.getProcesso() != null) ? t.getProcesso().getId() : null;
+        r.trasformatoreId = (t.getTrasformatore() != null) ? t.getTrasformatore().getId() : null;
+        r.prodottoInputId = (t.getProdottoInput() != null) ? t.getProdottoInput().getId() : null;
+        r.prodottoOutputId = (t.getProdottoOutput() != null) ? t.getProdottoOutput().getId() : null;
+        r.quantitaInput = t.getQuantitaInput();
+        r.quantitaOutput = t.getQuantitaOutput();
+        r.note = t.getNote();
+        r.dataOra = t.getDataOra();
+        return r;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Long getProcessoId() {
+        return processoId;
+    }
+
+    public Long getTrasformatoreId() {
+        return trasformatoreId;
+    }
+
+    public Long getProdottoInputId() {
+        return prodottoInputId;
+    }
+
+    public Long getProdottoOutputId() {
+        return prodottoOutputId;
+    }
+
+    public Double getQuantitaInput() {
+        return quantitaInput;
+    }
+
+    public Double getQuantitaOutput() {
+        return quantitaOutput;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public LocalDateTime getDataOra() {
+        return dataOra;
+    }
+}

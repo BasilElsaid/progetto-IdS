@@ -29,7 +29,7 @@ public class Evento {
 	@Column
 	protected int posti;
 
-	@ManyToOne(optional = true) // ora può essere null
+	@ManyToOne(optional = true) // ora puÃ² essere null
 	@JoinColumn(name = "animatore_id") // rimosso unique
 	protected Animatore animatore;
 

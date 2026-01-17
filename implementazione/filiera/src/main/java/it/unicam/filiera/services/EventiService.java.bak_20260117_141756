@@ -1,4 +1,4 @@
-package it.unicam.filiera.services;
+﻿package it.unicam.filiera.services;
 
 import it.unicam.filiera.domain.Evento;
 import it.unicam.filiera.domain.TicketEvento;
@@ -29,7 +29,7 @@ public class EventiService {
         this.acquirenteRepository = acquirenteRepository;
     }
 
-    // ---- metodi giÃƒÂ  usati internamente ----
+    // ---- metodi giÃ  usati internamente ----
 
     public List<Evento> getTuttiEventi() {
         return eventiRepository.findAll();
@@ -94,7 +94,7 @@ public class EventiService {
     @Transactional
     public TicketEvento acquistaTicket(Long eventoId, Long acquirenteId, int quantita) {
         if (quantita <= 0) {
-            throw new IllegalArgumentException("QuantitÃƒÂ  ticket non valida");
+            throw new IllegalArgumentException("QuantitÃ  ticket non valida");
         }
 
         Evento evento = getEvento(eventoId);
@@ -107,10 +107,10 @@ public class EventiService {
         }
 
         // crea un ticket "aggregato" (numeroTicket = quantita)
-        TicketEvento ticket = new TicketEvento(evento, acquirente);
+        TicketEvento ticket = new TicketEvento();
+        ticket.setEvento(evento);
+        ticket.setAcquirente(acquirente);
         ticket.setNumeroTicket(quantita);
-
-
 
         TicketEvento salvato = ticketEventoRepository.save(ticket);
 
@@ -127,4 +127,3 @@ public class EventiService {
         return ticketEventoRepository.findByEventoId(eventoId);
     }
 }
-

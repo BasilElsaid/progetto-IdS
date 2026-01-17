@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UtenteGenerico user = utenteRepository.findByUsername(username).orElse(null);
             if (user != null && jwtService.isTokenValid(token, user)) {
-                // ✅ setta l’autenticazione nel SecurityContext
+                // âœ… setta lâ€™autenticazione nel SecurityContext
                 String role = jwtService.extractRole(token); // es. "PRODUTTORE"
                 List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
 

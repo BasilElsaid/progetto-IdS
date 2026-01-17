@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/aziende")
-@Tag(name = "Aziende", description = "Gestione Produttori, Trasformatori e Distributori di tipicità")
+@Tag(name = "Aziende", description = "Gestione Produttori, Trasformatori e Distributori di tipicitÃ ")
 public class AziendeController {
 
     private final AziendeService service;

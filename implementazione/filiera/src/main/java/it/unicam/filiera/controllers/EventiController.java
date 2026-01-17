@@ -20,7 +20,7 @@ public class EventiController {
         this.service = service;
     }
 
-    // ===== CRUD BASE (come già avevi in Swagger) =====
+    // ===== CRUD BASE (come giÃ  avevi in Swagger) =====
 
     @GetMapping
     @Operation(summary = "Lista eventi")
