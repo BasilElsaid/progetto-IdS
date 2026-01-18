@@ -1,6 +1,0 @@
-2026-01-16 20:33:15.552030+01:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DELETE [*](SELECT * FROM PRODUTTORI )"; expected "identifier"; SQL statement:
-DELETE (SELECT * FROM PRODUTTORI ) [42001-224]
-2026-01-16 20:33:45.319007+01:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PRODUTTORE" not found; SQL statement:
-DELETE FROM produttore WHERE id = 1 [42102-224]
