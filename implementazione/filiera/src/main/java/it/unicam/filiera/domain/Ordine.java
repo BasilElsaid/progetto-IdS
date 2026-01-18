@@ -1,43 +1,101 @@
 package it.unicam.filiera.domain;
 
-import it.unicam.filiera.models.Acquirente;
 import it.unicam.filiera.enums.StatoOrdine;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "ordini")
 public class Ordine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime dataOra = LocalDateTime.now();
-
-    private double totale;
-
-    @ManyToOne
+    // chi compra
+    @ManyToOne(optional = false)
     private Acquirente acquirente;
 
-    @ManyToMany
-    private List<Pacchetto> pacchetti;
-
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private StatoOrdine stato = StatoOrdine.CREATO;
 
-    public Ordine() {} // richiesto da JPA/Hibernate :contentReference[oaicite:5]{index=5}
+    @Column(nullable = false)
+    private LocalDateTime dataOra = LocalDateTime.now();
 
-    public Long getId() { return id; }
-    public LocalDateTime getDataOra() { return dataOra; }
-    public double getTotale() { return totale; }
-    public Acquirente getAcquirente() { return acquirente; }
-    public List<Pacchetto> getPacchetti() { return pacchetti; }
-    public StatoOrdine getStato() { return stato; }
+    // totale ordine
+    @Column(nullable = false)
+    private double importoTotale = 0.0;
 
-    public void setTotale(double totale) { this.totale = totale; }
-    public void setAcquirente(Acquirente acquirente) { this.acquirente = acquirente; }
-    public void setPacchetti(List<Pacchetto> pacchetti) { this.pacchetti = pacchetti; }
-    public void setStato(StatoOrdine stato) { this.stato = stato; }
+    // prodotti comprati (semplice: senza riga ordine)
+    @ManyToMany
+    @JoinTable(
+            name = "ordine_prodotti",
+            joinColumns = @JoinColumn(name = "ordine_id"),
+            inverseJoinColumns = @JoinColumn(name = "prodotto_id")
+    )
+    private List<Prodotto> prodotti = new ArrayList<>();
+
+    public Ordine() {
+    }
+
+    public Ordine(Acquirente acquirente) {
+        this.acquirente = acquirente;
+        this.stato = StatoOrdine.CREATO;
+        this.dataOra = LocalDateTime.now();
+    }
+
+    // ===== GET/SET =====
+
+    public Long getId() {
+        return id;
+    }
+
+    public Acquirente getAcquirente() {
+        return acquirente;
+    }
+
+    public void setAcquirente(Acquirente acquirente) {
+        this.acquirente = acquirente;
+    }
+
+    public StatoOrdine getStato() {
+        return stato;
+    }
+
+    public void setStato(StatoOrdine stato) {
+        this.stato = stato;
+    }
+
+    public LocalDateTime getDataOra() {
+        return dataOra;
+    }
+
+    public void setDataOra(LocalDateTime dataOra) {
+        this.dataOra = dataOra;
+    }
+
+    public double getImportoTotale() {
+        return importoTotale;
+    }
+
+    public void setImportoTotale(double importoTotale) {
+        this.importoTotale = importoTotale;
+    }
+
+    public List<Prodotto> getProdotti() {
+        return prodotti;
+    }
+
+    public void setProdotti(List<Prodotto> prodotti) {
+        this.prodotti = prodotti;
+    }
+
+    // helper
+    public void aggiungiProdotto(Prodotto p) {
+        this.prodotti.add(p);
+    }
 }
