@@ -8,7 +8,7 @@ import it.unicam.filiera.services.ProdottiService;
 
 @RestController
 @RequestMapping("/api/prodotti")
-@PreAuthorize("hasRole('PRODUTTORE')")
+@PreAuthorize("hasAnyRole('PRODUTTORE', 'GESTORE_PIATTAFORMA')")
 public class ProdottiController {
 
     private final ProdottiService service;

@@ -2,7 +2,7 @@ package it.unicam.filiera.controllers.dto;
 
 import java.time.LocalDateTime;
 
-public class EventoCreateDTO {
+public class CreateEventoRequest {
 
     private String nome;
     private LocalDateTime dataOra;

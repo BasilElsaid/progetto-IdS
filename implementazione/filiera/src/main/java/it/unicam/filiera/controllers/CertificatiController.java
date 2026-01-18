@@ -4,12 +4,14 @@ import it.unicam.filiera.controllers.dto.CertificatoDTO;
 import it.unicam.filiera.enums.TipoCertificatore;
 import it.unicam.filiera.certificati.Certificato;
 import it.unicam.filiera.services.CertificatiService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/certificati")
+@PreAuthorize("hasAnyRole('CURATORE', 'PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
 public class CertificatiController {
 
     private final CertificatiService certificatiService;

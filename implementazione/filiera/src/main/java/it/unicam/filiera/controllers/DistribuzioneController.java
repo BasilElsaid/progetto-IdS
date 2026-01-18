@@ -4,12 +4,14 @@ import it.unicam.filiera.controllers.dto.CreateOffertaPacchettoRequest;
 import it.unicam.filiera.controllers.dto.OffertaPacchettoResponse;
 import it.unicam.filiera.controllers.dto.UpdateOffertaPacchettoStatoRequest;
 import it.unicam.filiera.services.DistribuzioneService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'GESTORE_PIATTAFORMA')")
 public class DistribuzioneController {
 
     private final DistribuzioneService service;

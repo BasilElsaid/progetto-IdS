@@ -2,6 +2,7 @@ package it.unicam.filiera.services;
 
 import java.util.List;
 
+import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Produttore;
@@ -25,61 +26,103 @@ public class ProdottiService {
         this.repo = repo;
     }
 
-    public Prodotto crea(Prodotto p) {
-        Produttore produttore = getProduttoreLoggato();
-        p.setProduttore(produttore);
-        return repo.save(p);
-    }
-
-    public Prodotto get(Long id) {
-        Produttore produttore = getProduttoreLoggato();
-
-        return repo.findByIdAndProduttore(id, produttore)
-                .orElseThrow(() ->
-                        new NotFoundException("Prodotto con id " + id + " non trovato"));
-    }
-
+    // ================= LIST =================
     public List<Prodotto> all() {
-        return repo.findByProduttore(getProduttoreLoggato());
-    }
+        UtenteGenerico u = getUtenteLoggato();
 
-    public Prodotto update(Long id, Prodotto p) {
-        Produttore produttore = getProduttoreLoggato();
-        Prodotto existing = repo.findByIdAndProduttore(id, produttore)
-                .orElseThrow(() ->
-                        new NotFoundException("Prodotto non trovato"));
-        existing.setNome(p.getNome());
-        existing.setCategoria(p.getCategoria());
-        existing.setPrezzo(p.getPrezzo());
-
-        return repo.save(existing);
-    }
-
-    public void delete(Long id) {
-        Produttore produttore = getProduttoreLoggato();
-        Prodotto existing = repo.findByIdAndProduttore(id, produttore)
-                .orElseThrow(() ->
-                        new NotFoundException("Prodotto non trovato"));
-
-        repo.delete(existing);
-    }
-
-    public Prodotto addProcesso(Long id, String descrizione) {
-        return get(id);
-    }
-
-    public Prodotto addCertificazione(Long id, String nome) {
-        return get(id);
-    }
-
-    private Produttore getProduttoreLoggato() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (auth == null || !(auth.getPrincipal() instanceof Produttore produttore)) {
-            throw new ForbiddenException("Utente non autenticato o non produttore");
+        if (isGestorePiattaforma(u)) {
+            return repo.findAll(); // vede tutti i prodotti
+        } else if (isProduttore(u)) {
+            return repo.findByProduttore((Produttore) u); // solo i suoi
         }
 
-        return produttore;
+        throw new ForbiddenException("Ruolo non autorizzato");
+    }
+
+    // ================= GET =================
+    public Prodotto get(Long id) {
+        UtenteGenerico u = getUtenteLoggato();
+
+        if (isGestorePiattaforma(u)) {
+            return repo.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
+        } else if (isProduttore(u)) {
+            return repo.findByIdAndProduttore(id, (Produttore) u)
+                    .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
+        }
+
+        throw new ForbiddenException("Ruolo non autorizzato");
+    }
+
+    // ================= CREATE =================
+    public Prodotto crea(Prodotto p) {
+        UtenteGenerico u = getUtenteLoggato();
+
+        if (isProduttore(u)) {
+            p.setProduttore((Produttore) u);
+            return repo.save(p);
+        }
+
+        throw new ForbiddenException("Solo produttori possono creare prodotti");
+    }
+
+    // ================= UPDATE =================
+    public Prodotto update(Long id, Prodotto p) {
+        UtenteGenerico u = getUtenteLoggato();
+
+        if (isGestorePiattaforma(u)) {
+            Prodotto existing = repo.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
+            existing.setNome(p.getNome());
+            existing.setCategoria(p.getCategoria());
+            existing.setPrezzo(p.getPrezzo());
+            return repo.save(existing);
+        } else if (isProduttore(u)) {
+            Prodotto existing = repo.findByIdAndProduttore(id, (Produttore) u)
+                    .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
+            existing.setNome(p.getNome());
+            existing.setCategoria(p.getCategoria());
+            existing.setPrezzo(p.getPrezzo());
+            return repo.save(existing);
+        }
+
+        throw new ForbiddenException("Ruolo non autorizzato");
+    }
+
+    // ================= DELETE =================
+    public void delete(Long id) {
+        UtenteGenerico u = getUtenteLoggato();
+
+        if (isGestorePiattaforma(u)) {
+            Prodotto existing = repo.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
+            repo.delete(existing);
+            return;
+        } else if (isProduttore(u)) {
+            Prodotto existing = repo.findByIdAndProduttore(id, (Produttore) u)
+                    .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
+            repo.delete(existing);
+            return;
+        }
+
+        throw new ForbiddenException("Ruolo non autorizzato");
+    }
+
+    // ================= HELPERS =================
+    private UtenteGenerico getUtenteLoggato() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !(auth.getPrincipal() instanceof UtenteGenerico user)) {
+            throw new ForbiddenException("Utente non autenticato");
+        }
+        return user;
+    }
+
+    private boolean isGestorePiattaforma(UtenteGenerico u) {
+        return u.getRuolo() == Ruolo.GESTORE_PIATTAFORMA;
+    }
+
+    private boolean isProduttore(UtenteGenerico u) {
+        return u instanceof Produttore;
     }
 
 }

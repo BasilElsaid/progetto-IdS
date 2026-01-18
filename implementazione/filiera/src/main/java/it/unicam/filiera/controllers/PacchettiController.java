@@ -3,12 +3,14 @@ package it.unicam.filiera.controllers;
 import it.unicam.filiera.controllers.dto.CreatePacchettoRequest;
 import it.unicam.filiera.domain.Pacchetto;
 import it.unicam.filiera.services.PacchettiService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/pacchetti")
+@PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'GESTORE_PIATTAFORMA')")
 public class PacchettiController {
 
     private final PacchettiService service;

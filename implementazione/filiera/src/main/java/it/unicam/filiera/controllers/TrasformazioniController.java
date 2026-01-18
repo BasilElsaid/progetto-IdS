@@ -3,12 +3,14 @@ package it.unicam.filiera.controllers;
 import it.unicam.filiera.controllers.dto.CreateTrasformazioneRequest;
 import it.unicam.filiera.controllers.dto.TrasformazioneResponse;
 import it.unicam.filiera.services.TrasformazioniService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/trasformazioni")
+@PreAuthorize("hasAnyRole('TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
 public class TrasformazioniController {
 
     private final TrasformazioniService service;

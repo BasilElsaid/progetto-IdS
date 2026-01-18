@@ -1,6 +1,6 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.controllers.dto.EventoCreateDTO;
+import it.unicam.filiera.controllers.dto.CreateEventoRequest;
 import it.unicam.filiera.domain.Evento;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.repositories.EventiRepository;
@@ -20,7 +20,7 @@ public class EventiService {
     }
 
     // CREATE
-    public Evento creaEvento(EventoCreateDTO dto) {
+    public Evento creaEvento(CreateEventoRequest dto) {
         Evento evento = new Evento();
         evento.setNome(dto.getNome());
         evento.setDataOra(dto.getDataOra());
@@ -41,7 +41,7 @@ public class EventiService {
     }
 
     // PATCH
-    public Evento aggiornaEvento(Long id, EventoCreateDTO dto) {
+    public Evento aggiornaEvento(Long id, CreateEventoRequest dto) {
         Evento e = eventoRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Evento non trovato:"));
 

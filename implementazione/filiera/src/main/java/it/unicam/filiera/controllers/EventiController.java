@@ -1,14 +1,16 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.EventoCreateDTO;
+import it.unicam.filiera.controllers.dto.CreateEventoRequest;
 import it.unicam.filiera.domain.Evento;
 import it.unicam.filiera.services.EventiService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/eventi")
+@PreAuthorize("hasAnyRole('ANIMATORE', 'GESTORE_PIATTAFORMA')")
 public class EventiController {
 
 	private final EventiService eventiService;
@@ -18,7 +20,7 @@ public class EventiController {
 	}
 
 	@PostMapping
-	public Evento aggiungiEvento(@RequestBody EventoCreateDTO dto) {
+	public Evento aggiungiEvento(@RequestBody CreateEventoRequest dto) {
 		return eventiService.creaEvento(dto);
 	}
 
@@ -35,7 +37,7 @@ public class EventiController {
 	@PatchMapping("/{id}")
 	public Evento aggiornaEvento(
 			@PathVariable Long id,
-			@RequestBody EventoCreateDTO dto
+			@RequestBody CreateEventoRequest dto
 	) {
 		return eventiService.aggiornaEvento(id, dto);
 	}

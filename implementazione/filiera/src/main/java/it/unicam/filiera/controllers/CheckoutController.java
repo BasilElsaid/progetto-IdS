@@ -4,10 +4,12 @@ import it.unicam.filiera.controllers.dto.*;
 import it.unicam.filiera.domain.Ordine;
 import it.unicam.filiera.domain.PagamentoOrdine;
 import it.unicam.filiera.services.CheckoutService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/checkout")
+@PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
 public class CheckoutController {
 
     private final CheckoutService service;

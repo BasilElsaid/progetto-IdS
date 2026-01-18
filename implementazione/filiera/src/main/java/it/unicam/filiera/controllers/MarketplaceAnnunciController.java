@@ -4,12 +4,14 @@ import it.unicam.filiera.controllers.dto.*;
 import it.unicam.filiera.enums.CategoriaProdotto;
 import it.unicam.filiera.services.MarketplaceService;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/marketplace/annunci")
+@PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE', 'DISTRIBUTORE_TIPICITA', 'GESTORE_PIATTAFORMA')")
 public class MarketplaceAnnunciController {
 
     private final MarketplaceService marketplaceService;
