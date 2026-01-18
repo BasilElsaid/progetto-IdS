@@ -21,6 +21,7 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -31,6 +32,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // endpoints pubblici
                         .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/css/**",
+                                "/js/**",
+                                "/images/**",
+                                "/favicon.ico",
                                 "/auth/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
@@ -46,6 +53,20 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    /*
+    // PER PROVE SENZA SICUREZZA
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll()
+                );
+        return http.build();
+    }
+
+     */
 
     @Bean
     public PasswordEncoder passwordEncoder() {
