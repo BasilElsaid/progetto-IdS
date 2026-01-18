@@ -7,10 +7,12 @@ import it.unicam.filiera.enums.StatoPagamento;
 import java.time.LocalDateTime;
 
 public class PagamentoResponse {
+
     public Long id;
     public Long ordineId;
     public MetodoPagamento metodo;
     public StatoPagamento stato;
+    public String transactionId;
     public double importo;
     public LocalDateTime pagatoIl;
 
@@ -20,6 +22,7 @@ public class PagamentoResponse {
         r.ordineId = p.getOrdine().getId();
         r.metodo = p.getMetodo();
         r.stato = p.getStato();
+        r.transactionId = p.getTransactionId();
         r.importo = p.getImporto();
         r.pagatoIl = p.getPagatoIl();
         return r;

@@ -2,57 +2,61 @@ package it.unicam.filiera.services;
 
 import it.unicam.filiera.controllers.dto.CreateOffertaPacchettoRequest;
 import it.unicam.filiera.controllers.dto.OffertaPacchettoResponse;
-import it.unicam.filiera.controllers.dto.UpdateOffertaPacchettoRequest;
+import it.unicam.filiera.controllers.dto.UpdateOffertaPacchettoStatoRequest;
 import it.unicam.filiera.domain.OffertaPacchetto;
 import it.unicam.filiera.domain.Pacchetto;
 import it.unicam.filiera.models.DistributoreTipicita;
-import it.unicam.filiera.repositories.DistributoreRepository;
+import it.unicam.filiera.repositories.DistributoreTipicitaRepository;
 import it.unicam.filiera.repositories.OffertaPacchettoRepository;
 import it.unicam.filiera.repositories.PacchettoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DistribuzioneService {
 
-    private final OffertaPacchettoRepository offertaRepo;
-    private final DistributoreRepository distributoreRepo;
+    private final DistributoreTipicitaRepository distributoreRepo;
     private final PacchettoRepository pacchettoRepo;
+    private final OffertaPacchettoRepository offertaRepo;
 
-    public DistribuzioneService(OffertaPacchettoRepository offertaRepo,
-                                DistributoreRepository distributoreRepo,
-                                PacchettoRepository pacchettoRepo) {
-        this.offertaRepo = offertaRepo;
+    public DistribuzioneService(DistributoreTipicitaRepository distributoreRepo,
+                                PacchettoRepository pacchettoRepo,
+                                OffertaPacchettoRepository offertaRepo) {
         this.distributoreRepo = distributoreRepo;
         this.pacchettoRepo = pacchettoRepo;
+        this.offertaRepo = offertaRepo;
     }
 
     public OffertaPacchettoResponse creaOfferta(Long distributoreId, CreateOffertaPacchettoRequest req) {
         DistributoreTipicita d = distributoreRepo.findById(distributoreId).orElseThrow();
         Pacchetto p = pacchettoRepo.findById(req.getPacchettoId()).orElseThrow();
 
-        OffertaPacchetto offerta = new OffertaPacchetto(
-                d,
-                p,
-                req.getPrezzoVendita(),
-                req.getDisponibilita()
-        );
-        offerta.setAttiva(req.isAttiva());
+        OffertaPacchetto offerta = new OffertaPacchetto(d, p, req.getPrezzoVendita(), req.getDisponibilita(), req.isAttiva());
+        offertaRepo.save(offerta);
 
-        return OffertaPacchettoResponse.from(offertaRepo.save(offerta));
+        return OffertaPacchettoResponse.from(offerta);
     }
 
     public List<OffertaPacchettoResponse> listaOfferte(Long distributoreId) {
-        return offertaRepo.findByDistributoreId(distributoreId).stream().map(OffertaPacchettoResponse::from).toList();
+        return offertaRepo.findByDistributoreId(distributoreId)
+                .stream()
+                .map(OffertaPacchettoResponse::from)
+                .collect(Collectors.toList());
     }
 
-    public OffertaPacchettoResponse aggiornaStatoStock(Long offertaId, UpdateOffertaPacchettoRequest req) {
+    public OffertaPacchettoResponse aggiornaStatoStock(Long offertaId, UpdateOffertaPacchettoStatoRequest req) {
         OffertaPacchetto offerta = offertaRepo.findById(offertaId).orElseThrow();
 
-        if (req.getAttiva() != null) offerta.setAttiva(req.getAttiva());
-        if (req.getDisponibilita() != null) offerta.setDisponibilita(req.getDisponibilita());
+        if (req.getAttiva() != null) {
+            offerta.setAttiva(req.getAttiva());
+        }
+        if (req.getDisponibilita() != null) {
+            offerta.setDisponibilita(req.getDisponibilita());
+        }
 
-        return OffertaPacchettoResponse.from(offertaRepo.save(offerta));
+        offertaRepo.save(offerta);
+        return OffertaPacchettoResponse.from(offerta);
     }
 }

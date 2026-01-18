@@ -23,7 +23,8 @@ public class AnnuncioMarketplace {
     private int stock;
     private boolean attivo;
 
-    private LocalDateTime creatoIl;
+    private LocalDateTime creatoIl = LocalDateTime.now();
+
 
     public AnnuncioMarketplace() {
         this.creatoIl = LocalDateTime.now();
@@ -37,6 +38,7 @@ public class AnnuncioMarketplace {
     public int getStock() { return stock; }
     public boolean isAttivo() { return attivo; }
     public LocalDateTime getCreatoIl() { return creatoIl; }
+
 
     public void setAzienda(Azienda azienda) { this.azienda = azienda; }
     public void setProdotto(Prodotto prodotto) { this.prodotto = prodotto; }

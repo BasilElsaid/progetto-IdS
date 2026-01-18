@@ -3,6 +3,7 @@ package it.unicam.filiera.controllers;
 import it.unicam.filiera.controllers.dto.*;
 import it.unicam.filiera.enums.CategoriaProdotto;
 import it.unicam.filiera.services.MarketplaceService;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +29,9 @@ public class MarketplaceAnnunciController {
             @RequestParam(required = false) CategoriaProdotto categoria,
             @RequestParam(required = false) Boolean attivo
     ) {
-        return marketplaceService.listaAnnunci(aziendaId, categoria, attivo);
+        String categoriaStr = (categoria == null) ? null : categoria.name();
+        return marketplaceService.listaAnnunci(aziendaId, categoriaStr, attivo);
+
     }
 
     @GetMapping("/{id}")
@@ -41,4 +44,5 @@ public class MarketplaceAnnunciController {
                                                 @RequestBody UpdateAnnuncioMarketplaceRequest req) {
         return marketplaceService.aggiornaAnnuncio(id, req);
     }
+
 }

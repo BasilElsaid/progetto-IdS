@@ -10,19 +10,21 @@ import it.unicam.filiera.repositories.AziendaRepository;
 import it.unicam.filiera.repositories.ProdottoRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MarketplaceService {
 
-    private final AnnuncioMarketplaceRepository annunciRepo;
+    private final AnnuncioMarketplaceRepository annuncioRepo;
     private final AziendaRepository aziendaRepo;
     private final ProdottoRepository prodottoRepo;
 
-    public MarketplaceService(AnnuncioMarketplaceRepository annunciRepo,
+    public MarketplaceService(AnnuncioMarketplaceRepository annuncioRepo,
                               AziendaRepository aziendaRepo,
                               ProdottoRepository prodottoRepo) {
-        this.annunciRepo = annunciRepo;
+        this.annuncioRepo = annuncioRepo;
         this.aziendaRepo = aziendaRepo;
         this.prodottoRepo = prodottoRepo;
     }
@@ -38,31 +40,31 @@ public class MarketplaceService {
         a.setStock(req.getStock());
         a.setAttivo(req.isAttivo());
 
-        return AnnuncioMarketplaceResponse.from(annunciRepo.save(a));
+        return AnnuncioMarketplaceResponse.from(annuncioRepo.save(a));
     }
 
     public List<AnnuncioMarketplaceResponse> listaAnnunci(Long aziendaId, String categoria, Boolean attivo) {
-        // versione semplice: filtra in memoria (per demo). Se vuoi, poi facciamo query repository.
-        return annunciRepo.findAll().stream()
+        return annuncioRepo.findAll().stream()
                 .filter(a -> aziendaId == null || a.getAzienda().getId().equals(aziendaId))
                 .filter(a -> attivo == null || a.isAttivo() == attivo)
-                .filter(a -> categoria == null || (a.getProdotto().getCategoria() != null
-                        && a.getProdotto().getCategoria().name().equalsIgnoreCase(categoria)))
+                .filter(a -> categoria == null || categoria.isBlank()
+                        || (a.getProdotto().getCategoria() != null
+                        && a.getProdotto().getCategoria().equalsIgnoreCase(categoria)))
                 .map(AnnuncioMarketplaceResponse::from)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public AnnuncioMarketplaceResponse getAnnuncio(Long id) {
-        return AnnuncioMarketplaceResponse.from(annunciRepo.findById(id).orElseThrow());
+        return AnnuncioMarketplaceResponse.from(annuncioRepo.findById(id).orElseThrow());
     }
 
     public AnnuncioMarketplaceResponse aggiornaAnnuncio(Long id, UpdateAnnuncioMarketplaceRequest req) {
-        AnnuncioMarketplace a = annunciRepo.findById(id).orElseThrow();
+        AnnuncioMarketplace a = annuncioRepo.findById(id).orElseThrow();
 
         if (req.getPrezzo() != null) a.setPrezzo(req.getPrezzo());
         if (req.getStock() != null) a.setStock(req.getStock());
         if (req.getAttivo() != null) a.setAttivo(req.getAttivo());
 
-        return AnnuncioMarketplaceResponse.from(annunciRepo.save(a));
+        return AnnuncioMarketplaceResponse.from(annuncioRepo.save(a));
     }
 }

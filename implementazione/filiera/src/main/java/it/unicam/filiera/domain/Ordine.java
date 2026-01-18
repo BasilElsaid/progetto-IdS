@@ -1,6 +1,7 @@
 package it.unicam.filiera.domain;
 
 import it.unicam.filiera.enums.StatoOrdine;
+import it.unicam.filiera.models.Acquirente;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,6 @@ public class Ordine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // chi compra
     @ManyToOne(optional = false)
     private Acquirente acquirente;
 
@@ -26,11 +26,9 @@ public class Ordine {
     @Column(nullable = false)
     private LocalDateTime dataOra = LocalDateTime.now();
 
-    // totale ordine
     @Column(nullable = false)
     private double importoTotale = 0.0;
 
-    // prodotti comprati (semplice: senza riga ordine)
     @ManyToMany
     @JoinTable(
             name = "ordine_prodotti",
@@ -38,6 +36,15 @@ public class Ordine {
             inverseJoinColumns = @JoinColumn(name = "prodotto_id")
     )
     private List<Prodotto> prodotti = new ArrayList<>();
+
+    // Per ordini basati su pacchetti (usato da OrdiniService)
+    @ManyToMany
+    @JoinTable(
+            name = "ordine_pacchetti",
+            joinColumns = @JoinColumn(name = "ordine_id"),
+            inverseJoinColumns = @JoinColumn(name = "pacchetto_id")
+    )
+    private List<Pacchetto> pacchetti = new ArrayList<>();
 
     public Ordine() {
     }
@@ -48,54 +55,29 @@ public class Ordine {
         this.dataOra = LocalDateTime.now();
     }
 
-    // ===== GET/SET =====
+    public Long getId() { return id; }
 
-    public Long getId() {
-        return id;
-    }
+    public Acquirente getAcquirente() { return acquirente; }
+    public void setAcquirente(Acquirente acquirente) { this.acquirente = acquirente; }
 
-    public Acquirente getAcquirente() {
-        return acquirente;
-    }
+    public StatoOrdine getStato() { return stato; }
+    public void setStato(StatoOrdine stato) { this.stato = stato; }
 
-    public void setAcquirente(Acquirente acquirente) {
-        this.acquirente = acquirente;
-    }
+    public LocalDateTime getDataOra() { return dataOra; }
+    public void setDataOra(LocalDateTime dataOra) { this.dataOra = dataOra; }
 
-    public StatoOrdine getStato() {
-        return stato;
-    }
+    public double getImportoTotale() { return importoTotale; }
+    public void setImportoTotale(double importoTotale) { this.importoTotale = importoTotale; }
 
-    public void setStato(StatoOrdine stato) {
-        this.stato = stato;
-    }
+    // Alias usati da servizi vecchi
+    public double getTotale() { return importoTotale; }
+    public void setTotale(double totale) { this.importoTotale = totale; }
 
-    public LocalDateTime getDataOra() {
-        return dataOra;
-    }
+    public List<Prodotto> getProdotti() { return prodotti; }
+    public void setProdotti(List<Prodotto> prodotti) { this.prodotti = prodotti; }
 
-    public void setDataOra(LocalDateTime dataOra) {
-        this.dataOra = dataOra;
-    }
+    public List<Pacchetto> getPacchetti() { return pacchetti; }
+    public void setPacchetti(List<Pacchetto> pacchetti) { this.pacchetti = pacchetti; }
 
-    public double getImportoTotale() {
-        return importoTotale;
-    }
-
-    public void setImportoTotale(double importoTotale) {
-        this.importoTotale = importoTotale;
-    }
-
-    public List<Prodotto> getProdotti() {
-        return prodotti;
-    }
-
-    public void setProdotti(List<Prodotto> prodotti) {
-        this.prodotti = prodotti;
-    }
-
-    // helper
-    public void aggiungiProdotto(Prodotto p) {
-        this.prodotti.add(p);
-    }
+    public void aggiungiProdotto(Prodotto p) { this.prodotti.add(p); }
 }

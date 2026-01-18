@@ -1,10 +1,14 @@
 package it.unicam.filiera.controllers.dto;
 
 public class CreateAnnuncioMarketplaceRequest {
+
     private Long aziendaId;
     private Long prodottoId;
     private double prezzo;
     private int stock;
+    private boolean attivo = true;
+
+    public CreateAnnuncioMarketplaceRequest() {}
 
     public Long getAziendaId() { return aziendaId; }
     public void setAziendaId(Long aziendaId) { this.aziendaId = aziendaId; }
@@ -17,4 +21,7 @@ public class CreateAnnuncioMarketplaceRequest {
 
     public int getStock() { return stock; }
     public void setStock(int stock) { this.stock = stock; }
+
+    public boolean isAttivo() { return attivo; }
+    public void setAttivo(boolean attivo) { this.attivo = attivo; }
 }

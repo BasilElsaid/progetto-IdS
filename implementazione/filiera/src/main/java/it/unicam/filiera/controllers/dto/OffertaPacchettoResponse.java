@@ -2,16 +2,16 @@ package it.unicam.filiera.controllers.dto;
 
 import it.unicam.filiera.domain.OffertaPacchetto;
 
-import java.time.LocalDateTime;
-
 public class OffertaPacchettoResponse {
-    public Long id;
-    public Long distributoreId;
-    public Long pacchettoId;
-    public double prezzoVendita;
-    public int disponibilita;
-    public boolean attiva;
-    public LocalDateTime creatoIl;
+
+    private Long id;
+    private Long distributoreId;
+    private Long pacchettoId;
+    private double prezzoVendita;
+    private int disponibilita;
+    private boolean attiva;
+
+    public OffertaPacchettoResponse() {}
 
     public static OffertaPacchettoResponse from(OffertaPacchetto o) {
         OffertaPacchettoResponse r = new OffertaPacchettoResponse();
@@ -21,7 +21,13 @@ public class OffertaPacchettoResponse {
         r.prezzoVendita = o.getPrezzoVendita();
         r.disponibilita = o.getDisponibilita();
         r.attiva = o.isAttiva();
-        r.creatoIl = o.getCreatoIl();
         return r;
     }
+
+    public Long getId() { return id; }
+    public Long getDistributoreId() { return distributoreId; }
+    public Long getPacchettoId() { return pacchettoId; }
+    public double getPrezzoVendita() { return prezzoVendita; }
+    public int getDisponibilita() { return disponibilita; }
+    public boolean isAttiva() { return attiva; }
 }

@@ -5,7 +5,6 @@ import it.unicam.filiera.enums.StatoPagamento;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "pagamenti_ordine")
@@ -15,37 +14,51 @@ public class PagamentoOrdine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private Ordine ordine;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private MetodoPagamento metodo;
 
     @Enumerated(EnumType.STRING)
-    private StatoPagamento stato;
+    @Column(nullable = false)
+    private StatoPagamento stato = StatoPagamento.IN_ATTESA;
 
-    private String transactionId;
+    @Column(nullable = false)
     private double importo;
-    private LocalDateTime dataOra;
 
-    protected PagamentoOrdine() {}
+    private LocalDateTime pagatoIl;
+    private String transactionId;
+
+    protected PagamentoOrdine() {
+    }
 
     public PagamentoOrdine(Ordine ordine, MetodoPagamento metodo, double importo) {
         this.ordine = ordine;
         this.metodo = metodo;
         this.importo = importo;
         this.stato = StatoPagamento.IN_ATTESA;
-        this.transactionId = UUID.randomUUID().toString();
-        this.dataOra = LocalDateTime.now();
     }
 
     public Long getId() { return id; }
-    public Ordine getOrdine() { return ordine; }
-    public MetodoPagamento getMetodo() { return metodo; }
-    public StatoPagamento getStato() { return stato; }
     public String getTransactionId() { return transactionId; }
-    public double getImporto() { return importo; }
-    public LocalDateTime getDataOra() { return dataOra; }
+    public void setTransactionId(String transactionId) { this.transactionId = transactionId; }
 
+
+
+    public Ordine getOrdine() { return ordine; }
+    public void setOrdine(Ordine ordine) { this.ordine = ordine; }
+
+    public MetodoPagamento getMetodo() { return metodo; }
+    public void setMetodo(MetodoPagamento metodo) { this.metodo = metodo; }
+
+    public StatoPagamento getStato() { return stato; }
     public void setStato(StatoPagamento stato) { this.stato = stato; }
+
+    public double getImporto() { return importo; }
+    public void setImporto(double importo) { this.importo = importo; }
+
+    public LocalDateTime getPagatoIl() { return pagatoIl; }
+    public void setPagatoIl(LocalDateTime pagatoIl) { this.pagatoIl = pagatoIl; }
 }
