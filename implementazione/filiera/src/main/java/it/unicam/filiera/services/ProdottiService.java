@@ -26,7 +26,6 @@ public class ProdottiService {
         this.repo = repo;
     }
 
-    // ================= LIST =================
     public List<Prodotto> all() {
         UtenteGenerico u = getUtenteLoggato();
 
@@ -39,7 +38,6 @@ public class ProdottiService {
         throw new ForbiddenException("Ruolo non autorizzato");
     }
 
-    // ================= GET =================
     public Prodotto get(Long id) {
         UtenteGenerico u = getUtenteLoggato();
 
@@ -54,7 +52,6 @@ public class ProdottiService {
         throw new ForbiddenException("Ruolo non autorizzato");
     }
 
-    // ================= CREATE =================
     public Prodotto crea(Prodotto p) {
         UtenteGenerico u = getUtenteLoggato();
 
@@ -66,7 +63,6 @@ public class ProdottiService {
         throw new ForbiddenException("Solo produttori possono creare prodotti");
     }
 
-    // ================= UPDATE =================
     public Prodotto update(Long id, Prodotto p) {
         UtenteGenerico u = getUtenteLoggato();
 
@@ -89,7 +85,6 @@ public class ProdottiService {
         throw new ForbiddenException("Ruolo non autorizzato");
     }
 
-    // ================= DELETE =================
     public void delete(Long id) {
         UtenteGenerico u = getUtenteLoggato();
 

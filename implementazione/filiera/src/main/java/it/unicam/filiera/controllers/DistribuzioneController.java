@@ -20,20 +20,16 @@ public class DistribuzioneController {
         this.service = service;
     }
 
-    // POST /api/distributori/{id}/offerte
-    @PostMapping("/distributori/{id}/offerte")
-    public OffertaPacchettoResponse creaOfferta(@PathVariable("id") Long distributoreId,
-                                                @RequestBody CreateOffertaPacchettoRequest req) {
-        return service.creaOfferta(distributoreId, req);
+    @PostMapping("/offerte")
+    public OffertaPacchettoResponse creaOfferta(@RequestBody CreateOffertaPacchettoRequest req) {
+        return service.creaOfferta(req);
     }
 
-    // GET /api/distributori/{id}/offerte
-    @GetMapping("/distributori/{id}/offerte")
-    public List<OffertaPacchettoResponse> listaOfferte(@PathVariable("id") Long distributoreId) {
-        return service.listaOfferte(distributoreId);
+    @GetMapping("/offerte")
+    public List<OffertaPacchettoResponse> listaOfferte() {
+        return service.listaOfferte();
     }
 
-    // PATCH /api/offerte/{offertaId}/stato
     @PatchMapping("/offerte/{offertaId}/stato")
     public OffertaPacchettoResponse aggiornaStatoStock(@PathVariable Long offertaId,
                                                        @RequestBody UpdateOffertaPacchettoStatoRequest req) {

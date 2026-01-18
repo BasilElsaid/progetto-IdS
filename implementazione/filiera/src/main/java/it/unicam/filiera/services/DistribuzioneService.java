@@ -5,10 +5,16 @@ import it.unicam.filiera.controllers.dto.OffertaPacchettoResponse;
 import it.unicam.filiera.controllers.dto.UpdateOffertaPacchettoStatoRequest;
 import it.unicam.filiera.domain.OffertaPacchetto;
 import it.unicam.filiera.domain.Pacchetto;
+import it.unicam.filiera.enums.Ruolo;
+import it.unicam.filiera.exceptions.BadRequestException;
+import it.unicam.filiera.exceptions.ForbiddenException;
+import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.DistributoreTipicita;
+import it.unicam.filiera.models.UtenteGenerico;
 import it.unicam.filiera.repositories.DistributoreTipicitaRepository;
 import it.unicam.filiera.repositories.OffertaPacchettoRepository;
 import it.unicam.filiera.repositories.PacchettoRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,26 +35,61 @@ public class DistribuzioneService {
         this.offertaRepo = offertaRepo;
     }
 
-    public OffertaPacchettoResponse creaOfferta(Long distributoreId, CreateOffertaPacchettoRequest req) {
-        DistributoreTipicita d = distributoreRepo.findById(distributoreId).orElseThrow();
-        Pacchetto p = pacchettoRepo.findById(req.getPacchettoId()).orElseThrow();
+    public OffertaPacchettoResponse creaOfferta(CreateOffertaPacchettoRequest req) {
 
-        OffertaPacchetto offerta = new OffertaPacchetto(d, p, req.getPrezzoVendita(), req.getDisponibilita(), req.isAttiva());
-        offertaRepo.save(offerta);
+        UtenteGenerico utente = getUtenteLoggato();
 
-        return OffertaPacchettoResponse.from(offerta);
+        DistributoreTipicita distributore;
+
+        if (isDistributore(utente)) {
+            distributore = (DistributoreTipicita) utente;
+        } else if (isGestorePiattaforma(utente)) {
+            throw new BadRequestException("Gestore piattaforma deve specificare il distributore separatamente");
+            // oppure possiamo decidere di creare offerte per un distributore fisso
+        } else {
+            throw new ForbiddenException("Ruolo non autorizzato");
+        }
+
+        Pacchetto pacchetto = pacchettoRepo.findById(req.getPacchettoId())
+                .orElseThrow(() -> new NotFoundException("Pacchetto non trovato"));
+
+        OffertaPacchetto offerta = new OffertaPacchetto(
+                distributore,
+                pacchetto,
+                req.getPrezzoVendita(),
+                req.getDisponibilita(),
+                req.isAttiva()
+        );
+
+        return OffertaPacchettoResponse.from(offertaRepo.save(offerta));
     }
 
-    public List<OffertaPacchettoResponse> listaOfferte(Long distributoreId) {
-        return offertaRepo.findByDistributoreId(distributoreId)
-                .stream()
-                .map(OffertaPacchettoResponse::from)
-                .collect(Collectors.toList());
+    public List<OffertaPacchettoResponse> listaOfferte() {
+        UtenteGenerico utente = getUtenteLoggato();
+
+        if (isDistributore(utente)) {
+            return offertaRepo.findByDistributoreId(((DistributoreTipicita) utente).getId())
+                    .stream().map(OffertaPacchettoResponse::from).collect(Collectors.toList());
+        } else if (isGestorePiattaforma(utente)) {
+            return offertaRepo.findAll()
+                    .stream().map(OffertaPacchettoResponse::from).collect(Collectors.toList());
+        } else {
+            throw new ForbiddenException("Ruolo non autorizzato");
+        }
     }
 
     public OffertaPacchettoResponse aggiornaStatoStock(Long offertaId, UpdateOffertaPacchettoStatoRequest req) {
-        OffertaPacchetto offerta = offertaRepo.findById(offertaId).orElseThrow();
+        UtenteGenerico utente = getUtenteLoggato();
+        OffertaPacchetto offerta = offertaRepo.findById(offertaId)
+                .orElseThrow(() -> new NotFoundException("Offerta non trovata"));
 
+        // Controllo accesso: distributore può modificare solo le proprie offerte
+        if (isDistributore(utente) &&
+                !offerta.getDistributore().getId().equals(((DistributoreTipicita) utente).getId())) {
+            throw new ForbiddenException("Non puoi modificare offerte di altri distributori");
+        }
+
+        // Aggiornamento campi se presenti
         if (req.getAttiva() != null) {
             offerta.setAttiva(req.getAttiva());
         }
@@ -56,7 +97,23 @@ public class DistribuzioneService {
             offerta.setDisponibilita(req.getDisponibilita());
         }
 
-        offertaRepo.save(offerta);
-        return OffertaPacchettoResponse.from(offerta);
+        return OffertaPacchettoResponse.from(offertaRepo.save(offerta));
+    }
+
+    // ================= HELPERS =================
+    private UtenteGenerico getUtenteLoggato() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !(auth.getPrincipal() instanceof UtenteGenerico u)) {
+            throw new ForbiddenException("Utente non autenticato");
+        }
+        return u;
+    }
+
+    private boolean isGestorePiattaforma(UtenteGenerico u) {
+        return u.getRuolo() == Ruolo.GESTORE_PIATTAFORMA;
+    }
+
+    private boolean isDistributore(UtenteGenerico u) {
+        return u instanceof DistributoreTipicita;
     }
 }

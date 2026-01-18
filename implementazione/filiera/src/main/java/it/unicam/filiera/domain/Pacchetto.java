@@ -1,5 +1,6 @@
 package it.unicam.filiera.domain;
 
+import it.unicam.filiera.models.DistributoreTipicita;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,10 @@ public class Pacchetto {
     private String descrizione;
 
     private double prezzo;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "distributore_id")
+    private DistributoreTipicita distributore;
 
     @ManyToMany
     @JoinTable(
@@ -44,5 +49,12 @@ public class Pacchetto {
 
     public void setProdotti(List<Prodotto> prodotti) {
         this.prodotti = (prodotti == null) ? new ArrayList<>() : prodotti;
+    }
+
+    public DistributoreTipicita getDistributore() {
+        return distributore;
+    }
+    public void setDistributore(DistributoreTipicita distributore) {
+        this.distributore = distributore;
     }
 }
