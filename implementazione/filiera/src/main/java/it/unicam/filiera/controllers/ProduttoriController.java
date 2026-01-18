@@ -3,6 +3,7 @@ package it.unicam.filiera.controllers;
 import it.unicam.filiera.models.Produttore;
 import it.unicam.filiera.repositories.ProduttoreRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/aziende/produttori")
 @Tag(name = "Produttori", description = "Gestione Specifica di Produttori")
+@PreAuthorize("hasAnyRole('PRODUTTORE', 'GESTORE_PIATTAFORMA')")
 public class ProduttoriController {
 
     private final ProduttoreRepository repo;

@@ -23,13 +23,14 @@ public class AcquirentiService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Acquirente creaAcquirente(CreateAcquirenteRequest request) {
+    public UtenteResponse creaAcquirente(CreateAcquirenteRequest request) {
         Acquirente a = (Acquirente) new AcquirenteBuilder()
                 .setUsername(request.getUsername())
                 .setPassword(passwordEncoder.encode(request.getPassword()))
                 .setEmail(request.getEmail())
                 .build();
-        return acquirenteRepo.save(a);
+        Acquirente saved = acquirenteRepo.save(a);
+        return UtenteResponse.from(saved);
     }
 
     public List<UtenteResponse> listaAcquirenti() {

@@ -3,6 +3,7 @@ package it.unicam.filiera.controllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.unicam.filiera.models.Trasformatore;
 import it.unicam.filiera.repositories.TrasformatoreRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/aziende/trasformatori")
 @Tag(name = "Trasformatori", description = "Gestione Specifica di Trasformatori (processi di trasformazione e tracciabilità)")
+@PreAuthorize("hasAnyRole('TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
 public class TrasformatoriController {
 
     private final TrasformatoreRepository repo;

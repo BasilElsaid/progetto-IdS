@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import it.unicam.filiera.controllers.dto.CreateAziendaRequest;
 import it.unicam.filiera.controllers.dto.UtenteResponse;
 import it.unicam.filiera.services.AziendeService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,21 +26,25 @@ public class AziendeController {
         return service.creaAzienda(request);
     }
 
+    @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
     @GetMapping
     public List<UtenteResponse> listaTutti() {
         return service.listaAziende();
     }
 
+    @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/{id}")
     public UtenteResponse get(@PathVariable Long id) {
         return service.getAzienda(id);
     }
 
+    @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         service.deleteAzienda(id);
     }
 
+    @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
     @PatchMapping("/{id}")
     public UtenteResponse patch(@PathVariable Long id, @RequestBody CreateAziendaRequest request) {
         return service.patchAzienda(id, request);

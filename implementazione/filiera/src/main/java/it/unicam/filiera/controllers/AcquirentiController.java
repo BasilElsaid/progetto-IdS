@@ -5,6 +5,7 @@ import it.unicam.filiera.controllers.dto.CreateAcquirenteRequest;
 import it.unicam.filiera.controllers.dto.UtenteResponse;
 import it.unicam.filiera.models.Acquirente;
 import it.unicam.filiera.services.AcquirentiService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,25 +22,29 @@ public class AcquirentiController {
     }
 
     @PostMapping
-    public Acquirente crea(@RequestBody CreateAcquirenteRequest request) {
-        return service.creaAcquirente(request);
+    public UtenteResponse crea(@RequestBody CreateAcquirenteRequest request) {
+        return service.creaAcquirente(request); // UtenteResponse, non Acquirente
     }
 
+    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
     @GetMapping
     public List<UtenteResponse> lista() {
         return service.listaAcquirenti();
     }
 
+    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/{id}")
     public UtenteResponse get(@PathVariable Long id) {
         return service.getAcquirente(id);
     }
 
+    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         service.deleteAcquirente(id);
     }
 
+    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
     @PatchMapping("/{id}")
     public UtenteResponse patch(@PathVariable Long id, @RequestBody CreateAcquirenteRequest request) {
         return service.patchAcquirente(id, request);

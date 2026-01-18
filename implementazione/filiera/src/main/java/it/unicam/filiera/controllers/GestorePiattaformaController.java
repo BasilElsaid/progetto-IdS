@@ -3,6 +3,7 @@ package it.unicam.filiera.controllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.unicam.filiera.models.GestorePiattaforma;
 import it.unicam.filiera.repositories.GestorePiattaformaRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/personale/gestore")
 @Tag(name = "Gestore Piattaforma", description = "Gestione Specifica di admin piattaforma (demo)")
+@PreAuthorize("hasAnyRole('GESTORE_PIATTAFORMA')")
 public class GestorePiattaformaController {
 
     private final GestorePiattaformaRepository repo;

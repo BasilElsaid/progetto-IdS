@@ -43,44 +43,50 @@ public class AziendeService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Azienda creaAzienda(CreateAziendaRequest request) {
+    public UtenteResponse creaAzienda(CreateAziendaRequest request) {
         Ruolo ruolo = request.getRuolo();
+        Azienda a;
         switch (ruolo) {
             case PRODUTTORE -> {
-                Produttore p = new ProduttoreBuilder()
+                a = new ProduttoreBuilder()
                         .setUsername(request.getUsername())
-                        .setPassword(passwordEncoder.encode(request.getPassword()))                        .setEmail(request.getEmail())
+                        .setPassword(passwordEncoder.encode(request.getPassword()))
+                        .setEmail(request.getEmail())
                         .setNomeAzienda(request.getNomeAzienda())
                         .setPartitaIva(request.getPartitaIva())
                         .setCoordinate(toCoordinate(request.getCoordinate()))
                         .build();
-                return produttoreRepo.save(p);
+                a = produttoreRepo.save((Produttore) a);
             }
             case TRASFORMATORE -> {
-                Trasformatore t = new TrasformatoreBuilder()
+                a = new TrasformatoreBuilder()
                         .setUsername(request.getUsername())
-                        .setPassword(passwordEncoder.encode(request.getPassword()))                        .setEmail(request.getEmail())
+                        .setPassword(passwordEncoder.encode(request.getPassword()))
+                        .setEmail(request.getEmail())
                         .setNomeAzienda(request.getNomeAzienda())
                         .setPartitaIva(request.getPartitaIva())
                         .setLaboratorio(request.getLaboratorio())
                         .setCoordinate(toCoordinate(request.getCoordinate()))
                         .build();
-                return trasformatoreRepo.save(t);
+                a = trasformatoreRepo.save((Trasformatore) a);
             }
             case DISTRIBUTORE_TIPICITA -> {
-                DistributoreTipicita d = new DistributoreTipicitaBuilder()
+                a = new DistributoreTipicitaBuilder()
                         .setUsername(request.getUsername())
-                        .setPassword(passwordEncoder.encode(request.getPassword()))                        .setEmail(request.getEmail())
+                        .setPassword(passwordEncoder.encode(request.getPassword()))
+                        .setEmail(request.getEmail())
                         .setNomeAzienda(request.getNomeAzienda())
                         .setPartitaIva(request.getPartitaIva())
                         .setSede(request.getSede())
                         .setAreaDistribuzione(request.getAreaDistribuzione())
                         .setCoordinate(toCoordinate(request.getCoordinate()))
                         .build();
-                return distributoreRepo.save(d);
+                a = distributoreRepo.save((DistributoreTipicita) a);
             }
             default -> throw new BadRequestException("Ruolo non gestito dal sistema");
         }
+
+        return UtenteResponse.from(a); // <-- sempre trasformo in DTO
     }
 
     public List<UtenteResponse> listaAziende() {
