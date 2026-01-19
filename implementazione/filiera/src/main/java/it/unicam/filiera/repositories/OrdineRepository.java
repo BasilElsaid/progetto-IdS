@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface OrdineRepository extends CrudRepository<Ordine, Long> {
     List<Ordine> findByAcquirenteId(Long acquirenteId);
+
+    List<Ordine> findDistinctByProdotti_IdOrderByDataOraAsc(Long prodottoId);
 }

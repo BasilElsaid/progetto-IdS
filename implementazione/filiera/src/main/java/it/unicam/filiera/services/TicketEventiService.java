@@ -19,6 +19,7 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -52,7 +53,11 @@ public class TicketEventiService {
         for (int i = 0; i < quantita; i++) {
             TicketEvento t = new TicketEvento(evento, acquirente);
             t.setNumeroTicket(generaNumeroTicketUnico());
-            evento.aggiungiBiglietto(t); // scala 1 posto (se il tuo Evento lo fa)
+
+            // QR (stringa) - utile per /checkin
+            t.setQrCode("TCK-" + UUID.randomUUID().toString().replace("-", ""));
+
+            evento.aggiungiBiglietto(t); // scala 1 posto
             ticketRepository.save(t);
             result.add(toResponse(t));
         }
@@ -61,9 +66,7 @@ public class TicketEventiService {
 
     public List<TicketEventoResponse> listaMieiTicket() {
         Acquirente acquirente = getAcquirenteLoggato();
-        return ticketRepository.findByAcquirenteId(acquirente.getId()).stream()
-                .map(this::toResponse)
-                .toList();
+        return ticketRepository.findByAcquirenteId(acquirente.getId()).stream().map(this::toResponse).toList();
     }
 
     public List<TicketEventoResponse> listaTicketEvento(Long eventoId) {
@@ -71,14 +74,10 @@ public class TicketEventiService {
         if (u.getRuolo() != Ruolo.ANIMATORE && u.getRuolo() != Ruolo.GESTORE_PIATTAFORMA) {
             throw new ForbiddenException("Ruolo non autorizzato");
         }
-
         if (!eventiRepository.existsById(eventoId)) {
             throw new NotFoundException("Evento non trovato");
         }
-
-        return ticketRepository.findByEventoId(eventoId).stream()
-                .map(this::toResponse)
-                .toList();
+        return ticketRepository.findByEventoId(eventoId).stream().map(this::toResponse).toList();
     }
 
     public TicketEventoResponse usaTicket(int numeroTicket) {
@@ -96,6 +95,27 @@ public class TicketEventiService {
 
         ticket.setUsato(true);
         ticket.setUsatoIl(LocalDateTime.now());
+        return toResponse(ticket);
+    }
+
+    // ✅ NUOVO: check-in che registra operatore + ora (usa ticket)
+    public TicketEventoResponse checkIn(int numeroTicket) {
+        UtenteGenerico operatore = getUtenteLoggato();
+        if (operatore.getRuolo() != Ruolo.ANIMATORE && operatore.getRuolo() != Ruolo.GESTORE_PIATTAFORMA) {
+            throw new ForbiddenException("Ruolo non autorizzato");
+        }
+
+        TicketEvento ticket = ticketRepository.findByNumeroTicket(numeroTicket)
+                .orElseThrow(() -> new NotFoundException("Ticket non trovato"));
+
+        if (ticket.isUsato()) {
+            throw new BadRequestException("Ticket gia utilizzato");
+        }
+
+        ticket.setUsato(true);
+        ticket.setUsatoIl(LocalDateTime.now());
+        ticket.setCheckInDa(operatore);
+
         return toResponse(ticket);
     }
 
@@ -118,24 +138,20 @@ public class TicketEventiService {
         // ripristina posti
         Evento evento = ticket.getEvento();
         evento.setPosti(evento.getPosti() + 1);
-
         ticketRepository.delete(ticket);
     }
 
     // ================== HELPERS ==================
 
     private int generaNumeroTicketUnico() {
-        // 6 cifre: 100000-999999
         for (int i = 0; i < 20; i++) {
             int candidate = 100_000 + random.nextInt(900_000);
             if (!ticketRepository.existsByNumeroTicket(candidate)) {
                 return candidate;
             }
         }
-        // fallback
         int candidate = (int) (System.currentTimeMillis() % 1_000_000);
         if (candidate < 100_000) candidate += 100_000;
-
         while (ticketRepository.existsByNumeroTicket(candidate)) {
             candidate = (candidate + 1) % 1_000_000;
             if (candidate < 100_000) candidate = 100_000;
@@ -154,6 +170,12 @@ public class TicketEventiService {
         r.setAcquistatoIl(t.getAcquistatoIl());
         r.setUsato(t.isUsato());
         r.setUsatoIl(t.getUsatoIl());
+
+        // extra (non rompe nulla se il client non li usa)
+        r.setQrCode(t.getQrCode());
+        if (t.getCheckInDa() != null) {
+            r.setCheckInDaUsername(t.getCheckInDa().getUsername());
+        }
         return r;
     }
 

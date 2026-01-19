@@ -22,7 +22,6 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -31,12 +30,16 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(form -> form.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // POST aperti a tutti per registrazione
+
+
                         .requestMatchers(HttpMethod.POST, "/api/aziende").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/personale").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/acquirenti").permitAll()
 
-                        // risorse statiche e swagger
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/public/**").permitAll()
+
+
                         .requestMatchers(
                                 "/",
                                 "/index.html",
@@ -44,14 +47,20 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/images/**",
                                 "/favicon.ico",
-                                "/auth/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/h2-console/**"
                         ).permitAll()
+
+                        // =========================
+                        // ACTUATOR
+                        // =========================
                         .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                         .requestMatchers("/actuator/**").hasRole("GESTORE_PIATTAFORMA")
 
+                        // =========================
+                        // TUTTO IL RESTO
+                        // =========================
                         .anyRequest().authenticated()
                 )
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
@@ -59,20 +68,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-    /*
-    // PER PROVE SENZA SICUREZZA
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
-                );
-        return http.build();
-    }
-
-     */
 
     @Bean
     public PasswordEncoder passwordEncoder() {

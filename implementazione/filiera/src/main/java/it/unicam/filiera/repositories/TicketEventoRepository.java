@@ -15,4 +15,8 @@ public interface TicketEventoRepository extends JpaRepository<TicketEvento, Long
     List<TicketEvento> findByAcquirenteId(Long acquirenteId);
 
     List<TicketEvento> findByEventoId(Long eventoId);
+
+    long countByEventoId(Long eventoId);
+
+    long countByEventoIdAndUsatoTrue(Long eventoId);
 }

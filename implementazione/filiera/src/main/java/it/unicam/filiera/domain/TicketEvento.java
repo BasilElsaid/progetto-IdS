@@ -1,7 +1,9 @@
 package it.unicam.filiera.domain;
 
 import it.unicam.filiera.models.Acquirente;
+import it.unicam.filiera.models.UtenteGenerico;
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,6 +15,9 @@ public class TicketEvento {
 
 	@Column(nullable = false, unique = true)
 	private int numeroTicket;
+
+	@Column(unique = true)
+	private String qrCode;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "evento_id")
@@ -31,6 +36,10 @@ public class TicketEvento {
 	@Column
 	private LocalDateTime usatoIl;
 
+	@ManyToOne
+	@JoinColumn(name = "checkin_operatore_id")
+	private UtenteGenerico checkInDa;
+
 	protected TicketEvento() {}
 
 	public TicketEvento(Evento evento, Acquirente acquirente) {
@@ -46,6 +55,9 @@ public class TicketEvento {
 	public int getNumeroTicket() { return numeroTicket; }
 	public void setNumeroTicket(int numeroTicket) { this.numeroTicket = numeroTicket; }
 
+	public String getQrCode() { return qrCode; }
+	public void setQrCode(String qrCode) { this.qrCode = qrCode; }
+
 	public Evento getEvento() { return evento; }
 	public void setEvento(Evento evento) { this.evento = evento; }
 
@@ -60,4 +72,7 @@ public class TicketEvento {
 
 	public LocalDateTime getUsatoIl() { return usatoIl; }
 	public void setUsatoIl(LocalDateTime usatoIl) { this.usatoIl = usatoIl; }
+
+	public UtenteGenerico getCheckInDa() { return checkInDa; }
+	public void setCheckInDa(UtenteGenerico checkInDa) { this.checkInDa = checkInDa; }
 }
