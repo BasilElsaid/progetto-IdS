@@ -1,6 +1,6 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.controllers.dto.TicketEventoResponse;
+import it.unicam.filiera.controllers.dto.response.TicketEventoResponse;
 import it.unicam.filiera.domain.Evento;
 import it.unicam.filiera.domain.TicketEvento;
 import it.unicam.filiera.enums.Ruolo;

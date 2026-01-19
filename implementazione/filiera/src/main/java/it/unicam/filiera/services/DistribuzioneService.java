@@ -1,8 +1,8 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.controllers.dto.CreateOffertaPacchettoRequest;
-import it.unicam.filiera.controllers.dto.OffertaPacchettoResponse;
-import it.unicam.filiera.controllers.dto.UpdateOffertaPacchettoStatoRequest;
+import it.unicam.filiera.controllers.dto.create.CreateOffertaPacchettoRequest;
+import it.unicam.filiera.controllers.dto.response.OffertaPacchettoResponse;
+import it.unicam.filiera.controllers.dto.update.UpdateOffertaPacchettoStatoRequest;
 import it.unicam.filiera.domain.OffertaPacchetto;
 import it.unicam.filiera.domain.Pacchetto;
 import it.unicam.filiera.enums.Ruolo;

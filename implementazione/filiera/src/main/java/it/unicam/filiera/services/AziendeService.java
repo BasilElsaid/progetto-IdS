@@ -4,8 +4,9 @@ import it.unicam.filiera.builder.DistributoreTipicitaBuilder;
 import it.unicam.filiera.builder.ProduttoreBuilder;
 import it.unicam.filiera.builder.TrasformatoreBuilder;
 import it.unicam.filiera.controllers.dto.CoordinateDTO;
-import it.unicam.filiera.controllers.dto.CreateAziendaRequest;
-import it.unicam.filiera.controllers.dto.UtenteResponse;
+import it.unicam.filiera.controllers.dto.create.CreateAziendaRequest;
+import it.unicam.filiera.controllers.dto.update.UpdateAziendaRequest;
+import it.unicam.filiera.controllers.dto.response.UtenteResponse;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Azienda;
@@ -54,6 +55,7 @@ public class AziendeService {
                         .setEmail(request.getEmail())
                         .setNomeAzienda(request.getNomeAzienda())
                         .setPartitaIva(request.getPartitaIva())
+                        .setSede(request.getSede())
                         .setCoordinate(toCoordinate(request.getCoordinate()))
                         .build();
                 a = produttoreRepo.save((Produttore) a);
@@ -66,6 +68,7 @@ public class AziendeService {
                         .setNomeAzienda(request.getNomeAzienda())
                         .setPartitaIva(request.getPartitaIva())
                         .setLaboratorio(request.getLaboratorio())
+                        .setSede(request.getSede())
                         .setCoordinate(toCoordinate(request.getCoordinate()))
                         .build();
                 a = trasformatoreRepo.save((Trasformatore) a);
@@ -101,7 +104,7 @@ public class AziendeService {
         return UtenteResponse.from(findAziendaById(id));
     }
 
-    public UtenteResponse patchAzienda(Long id, CreateAziendaRequest request) {
+    public UtenteResponse patchAzienda(Long id, UpdateAziendaRequest request) {
         Azienda azienda = findAziendaById(id);
 
         updateBaseFields(azienda, request);
@@ -127,11 +130,12 @@ public class AziendeService {
         return dto == null ? null : new CoordinateOSM(dto.lat, dto.lon);
     }
 
-    private void updateBaseFields(Azienda a, CreateAziendaRequest request) {
+    private void updateBaseFields(Azienda a, UpdateAziendaRequest request) {
         if (request.getEmail() != null) a.setEmail(request.getEmail());
-        if (request.getPassword() != null) a.setPassword(request.getPassword());
+        if (request.getPassword() != null) a.setPassword(passwordEncoder.encode(request.getPassword()));
         if (request.getNomeAzienda() != null) a.setNomeAzienda(request.getNomeAzienda());
         if (request.getPartitaIva() != null) a.setPartitaIva(request.getPartitaIva());
+        if (request.getSede() != null) a.setSede(request.getSede());
         if (request.getCoordinate() != null) a.setCoordinate(toCoordinate(request.getCoordinate()));
     }
 

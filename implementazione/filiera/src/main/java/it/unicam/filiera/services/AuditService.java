@@ -1,6 +1,6 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.controllers.dto.AuditLogResponse;
+import it.unicam.filiera.controllers.dto.response.AuditLogResponse;
 import it.unicam.filiera.domain.AuditLog;
 import it.unicam.filiera.enums.AuditAction;
 import it.unicam.filiera.exceptions.ForbiddenException;

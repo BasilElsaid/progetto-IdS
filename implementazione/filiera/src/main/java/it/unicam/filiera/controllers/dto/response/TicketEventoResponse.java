@@ -1,4 +1,4 @@
-package it.unicam.filiera.controllers.dto;
+package it.unicam.filiera.controllers.dto.response;
 
 import java.time.LocalDateTime;
 

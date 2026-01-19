@@ -1,4 +1,4 @@
-package it.unicam.filiera.controllers.dto;
+package it.unicam.filiera.controllers.dto.create;
 
 import it.unicam.filiera.enums.Ruolo;
 

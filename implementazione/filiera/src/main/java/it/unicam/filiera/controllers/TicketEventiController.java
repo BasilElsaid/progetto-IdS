@@ -1,7 +1,7 @@
 package it.unicam.filiera.controllers;
 
 import it.unicam.filiera.controllers.dto.AcquistaTicketRequest;
-import it.unicam.filiera.controllers.dto.TicketEventoResponse;
+import it.unicam.filiera.controllers.dto.response.TicketEventoResponse;
 import it.unicam.filiera.services.TicketEventiService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

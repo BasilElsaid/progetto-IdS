@@ -1,6 +1,6 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.CreateOrdineRequest;
+import it.unicam.filiera.controllers.dto.create.CreateOrdineRequest;
 import it.unicam.filiera.domain.Ordine;
 import it.unicam.filiera.services.OrdiniService;
 import org.springframework.security.access.prepost.PreAuthorize;

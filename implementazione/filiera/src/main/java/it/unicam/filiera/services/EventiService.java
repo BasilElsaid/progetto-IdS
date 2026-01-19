@@ -1,6 +1,6 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.controllers.dto.CreateEventoRequest;
+import it.unicam.filiera.controllers.dto.create.CreateEventoRequest;
 import it.unicam.filiera.domain.Evento;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.repositories.EventiRepository;

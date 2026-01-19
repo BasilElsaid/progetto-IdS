@@ -1,4 +1,4 @@
-package it.unicam.filiera.controllers.dto;
+package it.unicam.filiera.controllers.dto.create;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

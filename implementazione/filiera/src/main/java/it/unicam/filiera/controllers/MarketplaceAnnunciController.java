@@ -1,6 +1,8 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.*;
+import it.unicam.filiera.controllers.dto.create.CreateAnnuncioMarketplaceRequest;
+import it.unicam.filiera.controllers.dto.response.AnnuncioMarketplaceResponse;
+import it.unicam.filiera.controllers.dto.update.UpdateAnnuncioMarketplaceRequest;
 import it.unicam.filiera.enums.CategoriaProdotto;
 import it.unicam.filiera.services.MarketplaceService;
 

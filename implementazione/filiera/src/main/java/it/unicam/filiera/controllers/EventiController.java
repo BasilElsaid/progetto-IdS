@@ -1,6 +1,6 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.CreateEventoRequest;
+import it.unicam.filiera.controllers.dto.create.CreateEventoRequest;
 import it.unicam.filiera.domain.Evento;
 import it.unicam.filiera.services.EventiService;
 import org.springframework.security.access.prepost.PreAuthorize;

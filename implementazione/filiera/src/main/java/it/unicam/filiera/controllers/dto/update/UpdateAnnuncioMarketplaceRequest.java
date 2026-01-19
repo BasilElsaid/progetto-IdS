@@ -1,4 +1,4 @@
-package it.unicam.filiera.controllers.dto;
+package it.unicam.filiera.controllers.dto.update;
 
 public class UpdateAnnuncioMarketplaceRequest {
     private Double prezzo;

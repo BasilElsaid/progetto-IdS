@@ -1,7 +1,7 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.CreateTrasformazioneRequest;
-import it.unicam.filiera.controllers.dto.TrasformazioneResponse;
+import it.unicam.filiera.controllers.dto.create.CreateTrasformazioneRequest;
+import it.unicam.filiera.controllers.dto.response.TrasformazioneResponse;
 import it.unicam.filiera.services.TrasformazioniService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

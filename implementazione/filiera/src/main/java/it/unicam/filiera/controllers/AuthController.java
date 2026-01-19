@@ -1,7 +1,7 @@
 package it.unicam.filiera.controllers;
 
 import it.unicam.filiera.controllers.dto.LoginRequest;
-import it.unicam.filiera.controllers.dto.LoginResponse;
+import it.unicam.filiera.controllers.dto.response.LoginResponse;
 import it.unicam.filiera.models.UtenteGenerico;
 import it.unicam.filiera.services.AuthService;
 import it.unicam.filiera.services.JwtService;

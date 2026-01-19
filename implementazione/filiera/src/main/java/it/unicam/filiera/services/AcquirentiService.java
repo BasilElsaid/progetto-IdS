@@ -1,8 +1,9 @@
 package it.unicam.filiera.services;
 
 import it.unicam.filiera.builder.AcquirenteBuilder;
-import it.unicam.filiera.controllers.dto.CreateAcquirenteRequest;
-import it.unicam.filiera.controllers.dto.UtenteResponse;
+import it.unicam.filiera.controllers.dto.create.CreateAcquirenteRequest;
+import it.unicam.filiera.controllers.dto.response.UtenteResponse;
+import it.unicam.filiera.controllers.dto.update.UpdateAcquirenteRequest;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Acquirente;
 import it.unicam.filiera.repositories.AcquirenteRepository;
@@ -51,12 +52,12 @@ public class AcquirentiService {
         acquirenteRepo.deleteById(id);
     }
 
-    public UtenteResponse patchAcquirente(Long id, CreateAcquirenteRequest request) {
+    public UtenteResponse patchAcquirente(Long id, UpdateAcquirenteRequest request) {
         Acquirente a = acquirenteRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
 
         if (request.getEmail() != null) a.setEmail(request.getEmail());
-        if (request.getPassword() != null) a.setPassword(request.getPassword());
+        if (request.getPassword() != null) a.setPassword(passwordEncoder.encode(request.getPassword()));
 
         return UtenteResponse.from(acquirenteRepo.save(a));
     }

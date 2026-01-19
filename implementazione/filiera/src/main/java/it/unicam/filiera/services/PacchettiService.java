@@ -1,12 +1,11 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.controllers.dto.CreatePacchettoRequest;
+import it.unicam.filiera.controllers.dto.create.CreatePacchettoRequest;
 import it.unicam.filiera.domain.Pacchetto;
 import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.models.DistributoreTipicita;
-import it.unicam.filiera.models.Trasformatore;
 import it.unicam.filiera.models.UtenteGenerico;
 import it.unicam.filiera.repositories.PacchettoRepository;
 import it.unicam.filiera.repositories.ProdottoRepository;

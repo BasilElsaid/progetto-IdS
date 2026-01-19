@@ -1,7 +1,8 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.controllers.dto.CreatePersonaleRequest;
-import it.unicam.filiera.controllers.dto.UtenteResponse;
+import it.unicam.filiera.controllers.dto.create.CreatePersonaleRequest;
+import it.unicam.filiera.controllers.dto.update.UpdatePersonaleRequest;
+import it.unicam.filiera.controllers.dto.response.UtenteResponse;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Animatore;
@@ -118,7 +119,7 @@ public class PersonaleService {
         throw new NotFoundException("Personale non trovato");
     }
 
-    public UtenteResponse patchPersonale(Long id, CreatePersonaleRequest request) {
+    public UtenteResponse patchPersonale(Long id, UpdatePersonaleRequest request) {
         if (curatoreRepository.existsById(id)) {
             Curatore c = curatoreRepository.findById(id).get();
             updateUtente(c, request);
@@ -138,7 +139,7 @@ public class PersonaleService {
     }
 
     // =================== Helper ===================
-    private void updateUtente(Object utente, CreatePersonaleRequest request) {
+    private void updateUtente(Object utente, UpdatePersonaleRequest request) {
         if(utente instanceof Curatore c) {
             if(request.getEmail() != null) c.setEmail(request.getEmail());
             if(request.getPassword() != null) c.setPassword(passwordEncoder.encode(request.getPassword()));

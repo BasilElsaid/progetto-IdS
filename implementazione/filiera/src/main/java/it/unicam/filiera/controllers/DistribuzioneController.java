@@ -1,8 +1,8 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.CreateOffertaPacchettoRequest;
-import it.unicam.filiera.controllers.dto.OffertaPacchettoResponse;
-import it.unicam.filiera.controllers.dto.UpdateOffertaPacchettoStatoRequest;
+import it.unicam.filiera.controllers.dto.create.CreateOffertaPacchettoRequest;
+import it.unicam.filiera.controllers.dto.response.OffertaPacchettoResponse;
+import it.unicam.filiera.controllers.dto.update.UpdateOffertaPacchettoStatoRequest;
 import it.unicam.filiera.services.DistribuzioneService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

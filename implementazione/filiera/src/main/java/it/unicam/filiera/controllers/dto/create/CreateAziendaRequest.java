@@ -1,5 +1,6 @@
-package it.unicam.filiera.controllers.dto;
+package it.unicam.filiera.controllers.dto.create;
 
+import it.unicam.filiera.controllers.dto.CoordinateDTO;
 import it.unicam.filiera.enums.Ruolo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

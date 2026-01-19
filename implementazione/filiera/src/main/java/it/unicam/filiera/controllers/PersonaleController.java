@@ -1,8 +1,8 @@
 package it.unicam.filiera.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.unicam.filiera.controllers.dto.CreatePersonaleRequest;
-import it.unicam.filiera.controllers.dto.UtenteResponse;
+import it.unicam.filiera.controllers.dto.create.CreatePersonaleRequest;
+import it.unicam.filiera.controllers.dto.response.UtenteResponse;
 import it.unicam.filiera.services.PersonaleService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,8 @@
 package it.unicam.filiera.controllers;
 
 import it.unicam.filiera.controllers.dto.*;
+import it.unicam.filiera.controllers.dto.response.CheckoutResponse;
+import it.unicam.filiera.controllers.dto.response.PagamentoResponse;
 import it.unicam.filiera.domain.Ordine;
 import it.unicam.filiera.domain.PagamentoOrdine;
 import it.unicam.filiera.services.CheckoutService;
