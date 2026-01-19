@@ -9,6 +9,6 @@ import jakarta.persistence.Entity;
 public class GestorePiattaforma extends Personale {
 
     public GestorePiattaforma() {
-        setRuolo(Ruolo.GESTORE_PIATTAFORMA);
+
     }
 }

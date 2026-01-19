@@ -22,7 +22,7 @@ public class AziendeController {
     }
 
     @PostMapping
-    public Object crea(@RequestBody CreateAziendaRequest request) {
+    public UtenteResponse crea(@RequestBody CreateAziendaRequest request) {
         // switch interno per decidere il tipo di azienda
         return service.creaAzienda(request);
     }
