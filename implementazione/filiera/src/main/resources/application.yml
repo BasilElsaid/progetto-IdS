@@ -1,0 +1,28 @@
+spring:
+        application:
+                name: filiera
+
+management:
+        endpoints:
+                web:
+                        base-path: /actuator
+                        exposure:
+                                include: health,info,metrics,prometheus,loggers,threaddump,httpexchanges
+
+        endpoint:
+                health:
+                        show-details: when_authorized
+
+        metrics:
+                tags:
+                        application: ${spring.application.name}
+
+        tracing:
+                sampling:
+                        probability: 1.0
+
+        opentelemetry:
+                tracing:
+                        export:
+                                otlp:
+                                        endpoint: http://localhost:4317
