@@ -13,6 +13,4 @@ public interface TrasformazioneProdottoRepository extends JpaRepository<Trasform
 
     List<TrasformazioneProdotto> findByProcessoIdAndTrasformatoreId(Long processoId, Long trasformatoreId);
 
-    // usato da LottoService.timeline()
-    List<TrasformazioneProdotto> findByInputProdottoIdOrOutputProdottoIdOrderByCreatoIlAsc(Long inputProdottoId, Long outputProdottoId);
 }

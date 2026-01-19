@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@PreAuthorize("hasRole('ACQUIRENTE', 'PRODUTTORE', 'TRASFORMATORE', 'DISTRIBUTORE_TIPICITA', 'ACQUIRENTE','GESTORE_PIATTAFORMA')")
 public class TicketEventiController {
 
     private final TicketEventiService ticketEventiService;
@@ -22,7 +23,6 @@ public class TicketEventiController {
      * Ruolo richiesto: ACQUIRENTE
      */
     @PostMapping("/eventi/{eventoId}/tickets")
-    @PreAuthorize("hasRole('ACQUIRENTE')")
     public List<TicketEventoResponse> acquistaTicket(
             @PathVariable Long eventoId,
             @RequestBody(required = false) AcquistaTicketRequest req
@@ -36,7 +36,6 @@ public class TicketEventiController {
      * Ruolo richiesto: ACQUIRENTE
      */
     @GetMapping("/tickets/miei")
-    @PreAuthorize("hasRole('ACQUIRENTE')")
     public List<TicketEventoResponse> listaMieiTicket() {
         return ticketEventiService.listaMieiTicket();
     }
@@ -46,7 +45,6 @@ public class TicketEventiController {
      * Ruoli richiesti: ANIMATORE o GESTORE_PIATTAFORMA
      */
     @GetMapping("/eventi/{eventoId}/tickets")
-    @PreAuthorize("hasAnyRole('ANIMATORE','GESTORE_PIATTAFORMA')")
     public List<TicketEventoResponse> listaTicketEvento(@PathVariable Long eventoId) {
         return ticketEventiService.listaTicketEvento(eventoId);
     }
@@ -56,7 +54,6 @@ public class TicketEventiController {
      * Ruoli richiesti: ANIMATORE o GESTORE_PIATTAFORMA
      */
     @PatchMapping("/tickets/{numeroTicket}/usa")
-    @PreAuthorize("hasAnyRole('ANIMATORE','GESTORE_PIATTAFORMA')")
     public TicketEventoResponse usaTicket(@PathVariable int numeroTicket) {
         return ticketEventiService.usaTicket(numeroTicket);
     }
@@ -65,7 +62,6 @@ public class TicketEventiController {
      * Annulla un ticket (solo proprietario ACQUIRENTE o Gestore Piattaforma).
      */
     @DeleteMapping("/tickets/{ticketId}")
-    @PreAuthorize("hasAnyRole('ACQUIRENTE','GESTORE_PIATTAFORMA')")
     public void annullaTicket(@PathVariable Long ticketId) {
         ticketEventiService.annullaTicket(ticketId);
     }
