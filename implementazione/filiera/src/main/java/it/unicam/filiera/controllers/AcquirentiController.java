@@ -3,6 +3,7 @@ package it.unicam.filiera.controllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.unicam.filiera.controllers.dto.create.CreateAcquirenteRequest;
 import it.unicam.filiera.controllers.dto.response.UtenteResponse;
+import it.unicam.filiera.controllers.dto.update.UpdateAcquirenteRequest;
 import it.unicam.filiera.services.AcquirentiService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +46,7 @@ public class AcquirentiController {
 
     @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
     @PatchMapping("/{id}")
-    public UtenteResponse patch(@PathVariable Long id, @RequestBody CreateAcquirenteRequest request) {
+    public UtenteResponse patch(@PathVariable Long id, @RequestBody UpdateAcquirenteRequest request) {
         return service.patchAcquirente(id, request);
     }
 }

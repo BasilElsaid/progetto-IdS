@@ -3,6 +3,7 @@ package it.unicam.filiera.controllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.unicam.filiera.controllers.dto.create.CreateAziendaRequest;
 import it.unicam.filiera.controllers.dto.response.UtenteResponse;
+import it.unicam.filiera.controllers.dto.update.UpdateAziendaRequest;
 import it.unicam.filiera.services.AziendeService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,7 @@ public class AziendeController {
 
     @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
     @PatchMapping("/{id}")
-    public UtenteResponse patch(@PathVariable Long id, @RequestBody CreateAziendaRequest request) {
+    public UtenteResponse patch(@PathVariable Long id, @RequestBody UpdateAziendaRequest request) {
         return service.patchAzienda(id, request);
     }
 }
