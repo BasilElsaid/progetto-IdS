@@ -21,7 +21,7 @@ public class Ordine {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StatoOrdine stato = StatoOrdine.CREATO;
+    private StatoOrdine stato = StatoOrdine.IN_ATTESA_PAGAMENTO;
 
     @Column(nullable = false)
     private LocalDateTime dataOra = LocalDateTime.now();
@@ -29,6 +29,19 @@ public class Ordine {
     @Column(nullable = false)
     private double importoTotale = 0.0;
 
+    // Tracking / spedizione / consegna
+    private LocalDateTime dataStimataConsegnaDa;
+    private LocalDateTime dataStimataConsegnaA;
+    private LocalDateTime dataSpedizione;
+    private LocalDateTime dataConsegna;
+    @Column(length = 64)
+    private String trackingCode;
+
+    // Righe marketplace (con quantità)
+    @OneToMany(mappedBy = "ordine", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrdineItemMarketplace> itemsMarketplace = new ArrayList<>();
+
+    // Per ordini vecchi (mantengo compatibilità)
     @ManyToMany
     @JoinTable(
             name = "ordine_prodotti",
@@ -37,7 +50,6 @@ public class Ordine {
     )
     private List<Prodotto> prodotti = new ArrayList<>();
 
-    // Per ordini basati su pacchetti (usato da OrdiniService)
     @ManyToMany
     @JoinTable(
             name = "ordine_pacchetti",
@@ -46,13 +58,12 @@ public class Ordine {
     )
     private List<Pacchetto> pacchetti = new ArrayList<>();
 
-    public Ordine() {
-    }
+    public Ordine() { }
 
     public Ordine(Acquirente acquirente) {
         this.acquirente = acquirente;
-        this.stato = StatoOrdine.CREATO;
         this.dataOra = LocalDateTime.now();
+        this.stato = StatoOrdine.IN_ATTESA_PAGAMENTO;
     }
 
     public Long getId() { return id; }
@@ -69,9 +80,26 @@ public class Ordine {
     public double getImportoTotale() { return importoTotale; }
     public void setImportoTotale(double importoTotale) { this.importoTotale = importoTotale; }
 
-    // Alias usati da servizi vecchi
     public double getTotale() { return importoTotale; }
     public void setTotale(double totale) { this.importoTotale = totale; }
+
+    public LocalDateTime getDataStimataConsegnaDa() { return dataStimataConsegnaDa; }
+    public void setDataStimataConsegnaDa(LocalDateTime v) { this.dataStimataConsegnaDa = v; }
+
+    public LocalDateTime getDataStimataConsegnaA() { return dataStimataConsegnaA; }
+    public void setDataStimataConsegnaA(LocalDateTime v) { this.dataStimataConsegnaA = v; }
+
+    public LocalDateTime getDataSpedizione() { return dataSpedizione; }
+    public void setDataSpedizione(LocalDateTime v) { this.dataSpedizione = v; }
+
+    public LocalDateTime getDataConsegna() { return dataConsegna; }
+    public void setDataConsegna(LocalDateTime v) { this.dataConsegna = v; }
+
+    public String getTrackingCode() { return trackingCode; }
+    public void setTrackingCode(String trackingCode) { this.trackingCode = trackingCode; }
+
+    public List<OrdineItemMarketplace> getItemsMarketplace() { return itemsMarketplace; }
+    public void setItemsMarketplace(List<OrdineItemMarketplace> itemsMarketplace) { this.itemsMarketplace = itemsMarketplace; }
 
     public List<Prodotto> getProdotti() { return prodotti; }
     public void setProdotti(List<Prodotto> prodotti) { this.prodotti = prodotti; }
@@ -79,5 +107,8 @@ public class Ordine {
     public List<Pacchetto> getPacchetti() { return pacchetti; }
     public void setPacchetti(List<Pacchetto> pacchetti) { this.pacchetti = pacchetti; }
 
-    public void aggiungiProdotto(Prodotto p) { this.prodotti.add(p); }
+    public void aggiungiItemMarketplace(OrdineItemMarketplace item) {
+        item.setOrdine(this);
+        this.itemsMarketplace.add(item);
+    }
 }

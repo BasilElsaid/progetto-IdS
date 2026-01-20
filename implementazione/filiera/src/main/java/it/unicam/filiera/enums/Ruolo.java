@@ -8,5 +8,6 @@ public enum Ruolo {
     CURATORE,
     ANIMATORE,
     DISTRIBUTORE_TIPICITA,
+    CORRIERE,
     GESTORE_PIATTAFORMA
 }

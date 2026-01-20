@@ -1,17 +1,19 @@
 package it.unicam.filiera.services;
 
+import it.unicam.filiera.domain.Ordine;
+import it.unicam.filiera.domain.Pacchetto;
+import it.unicam.filiera.enums.StatoOrdine;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Acquirente;
-import it.unicam.filiera.domain.Ordine;
-import it.unicam.filiera.enums.StatoOrdine;
-import it.unicam.filiera.domain.Pacchetto;
 import it.unicam.filiera.repositories.AcquirenteRepository;
 import it.unicam.filiera.repositories.OrdineRepository;
 import it.unicam.filiera.repositories.PacchettoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -46,13 +48,13 @@ public class OrdiniService {
                 .mapToDouble(this::estraiPrezzoPacchetto)
                 .sum();
 
-        Ordine ordine = new Ordine(); // JPA vuole costruttore no-args :contentReference[oaicite:3]{index=3}
+        Ordine ordine = new Ordine();
         ordine.setAcquirente(acquirente);
         ordine.setPacchetti(pacchetti);
         ordine.setTotale(totale);
         ordine.setStato(StatoOrdine.CREATO);
 
-        return ordineRepository.save(ordine); // CrudRepository#save :contentReference[oaicite:4]{index=4}
+        return ordineRepository.save(ordine);
     }
 
     public Ordine getById(Long id) {
@@ -68,10 +70,52 @@ public class OrdiniService {
         return ordineRepository.findByAcquirenteId(acquirenteId);
     }
 
-    /**
-     * Prova a leggere il "prezzo" del pacchetto anche se il getter nel tuo progetto
-     * si chiama diversamente (es: getCostoTotale, getPrezzoTotale, getTotale, ...).
-     */
+
+    @Transactional
+    public Ordine aggiornaStato(Long ordineId, StatoOrdine nuovoStato, String trackingCode) {
+        if (ordineId == null) throw new BadRequestException("ordineId mancante");
+        if (nuovoStato == null) throw new BadRequestException("stato mancante");
+
+        Ordine ordine = ordineRepository.findById(ordineId)
+                .orElseThrow(() -> new NotFoundException("Ordine non trovato"));
+
+        if (nuovoStato == StatoOrdine.SPEDITO && ordine.getStato() != StatoOrdine.PAGATO) {
+            throw new BadRequestException("Puoi spedire solo ordini PAGATI");
+        }
+        if (nuovoStato == StatoOrdine.CONSEGNATO && ordine.getStato() != StatoOrdine.SPEDITO) {
+            throw new BadRequestException("Puoi consegnare solo ordini SPEDITI");
+        }
+
+        ordine.setStato(nuovoStato);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        if (nuovoStato == StatoOrdine.SPEDITO) {
+            invocaSetterSeEsiste(ordine, "setDataSpedizione", LocalDateTime.class, now);
+            invocaSetterSeEsiste(ordine, "setDataStimataConsegnaDa", LocalDateTime.class, now.plusDays(3));
+            invocaSetterSeEsiste(ordine, "setDataStimataConsegnaA", LocalDateTime.class, now.plusDays(4));
+
+            if (trackingCode != null && !trackingCode.isBlank()) {
+                invocaSetterSeEsiste(ordine, "setTrackingCode", String.class, trackingCode.trim());
+            }
+        }
+
+        if (nuovoStato == StatoOrdine.CONSEGNATO) {
+            invocaSetterSeEsiste(ordine, "setDataConsegna", LocalDateTime.class, now);
+        }
+
+        return ordineRepository.save(ordine);
+    }
+
+    private void invocaSetterSeEsiste(Object target, String methodName, Class<?> paramType, Object value) {
+        try {
+            Method m = target.getClass().getMethod(methodName, paramType);
+            m.invoke(target, value);
+        } catch (Exception ignored) {
+        }
+    }
+
+
     private double estraiPrezzoPacchetto(Pacchetto p) {
         for (String nomeMetodo : new String[]{"getPrezzo", "getCostoTotale", "getPrezzoTotale", "getTotale", "getCosto"}) {
             try {

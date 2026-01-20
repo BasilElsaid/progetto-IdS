@@ -2,6 +2,7 @@ package it.unicam.filiera.domain;
 
 import it.unicam.filiera.enums.MetodoPagamento;
 import it.unicam.filiera.enums.StatoPagamento;
+import it.unicam.filiera.enums.TipoTransazione;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -25,27 +26,33 @@ public class PagamentoOrdine {
     @Column(nullable = false)
     private StatoPagamento stato = StatoPagamento.IN_ATTESA;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoTransazione tipo = TipoTransazione.PAGAMENTO;
+
     @Column(nullable = false)
     private double importo;
 
     private LocalDateTime pagatoIl;
     private String transactionId;
 
-    protected PagamentoOrdine() {
-    }
+    protected PagamentoOrdine() { }
 
     public PagamentoOrdine(Ordine ordine, MetodoPagamento metodo, double importo) {
         this.ordine = ordine;
         this.metodo = metodo;
         this.importo = importo;
         this.stato = StatoPagamento.IN_ATTESA;
+        this.tipo = TipoTransazione.PAGAMENTO;
+    }
+
+    public static PagamentoOrdine creaRimborso(Ordine ordine, MetodoPagamento metodo, double importo) {
+        PagamentoOrdine p = new PagamentoOrdine(ordine, metodo, importo);
+        p.tipo = TipoTransazione.RIMBORSO;
+        return p;
     }
 
     public Long getId() { return id; }
-    public String getTransactionId() { return transactionId; }
-    public void setTransactionId(String transactionId) { this.transactionId = transactionId; }
-
-
 
     public Ordine getOrdine() { return ordine; }
     public void setOrdine(Ordine ordine) { this.ordine = ordine; }
@@ -56,9 +63,15 @@ public class PagamentoOrdine {
     public StatoPagamento getStato() { return stato; }
     public void setStato(StatoPagamento stato) { this.stato = stato; }
 
+    public TipoTransazione getTipo() { return tipo; }
+    public void setTipo(TipoTransazione tipo) { this.tipo = tipo; }
+
     public double getImporto() { return importo; }
     public void setImporto(double importo) { this.importo = importo; }
 
     public LocalDateTime getPagatoIl() { return pagatoIl; }
     public void setPagatoIl(LocalDateTime pagatoIl) { this.pagatoIl = pagatoIl; }
+
+    public String getTransactionId() { return transactionId; }
+    public void setTransactionId(String transactionId) { this.transactionId = transactionId; }
 }
