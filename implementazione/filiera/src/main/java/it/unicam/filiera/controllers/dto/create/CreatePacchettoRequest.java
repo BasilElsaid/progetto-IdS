@@ -1,10 +1,18 @@
 package it.unicam.filiera.controllers.dto.create;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 public class CreatePacchettoRequest {
+
+    @NotNull(message = "Il nome non può essere nullo")
     private String nome;
+
     private double prezzo;
+
+    @NotEmpty(message = "Il pacchetto deve contenere almeno un prodotto")
     private List<Long> prodottiIds;
 
     public CreatePacchettoRequest() {}
