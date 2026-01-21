@@ -66,4 +66,9 @@ public class TicketEventiController {
     public void annullaTicket(@PathVariable Long ticketId) {
         ticketEventiService.annullaTicket(ticketId);
     }
+
+    @PostMapping("/{numero}/checkin")
+    public TicketEventoResponse checkin(@PathVariable int numero) {
+        return ticketEventiService.checkIn(numero);
+    }
 }
