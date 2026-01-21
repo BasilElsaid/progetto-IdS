@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/tickets")
-@PreAuthorize("hasRole('ACQUIRENTE', 'PRODUTTORE', 'TRASFORMATORE', 'DISTRIBUTORE_TIPICITA', 'ACQUIRENTE','GESTORE_PIATTAFORMA')")
+@PreAuthorize("hasAnyRole('ACQUIRENTE', 'PRODUTTORE', 'TRASFORMATORE', 'DISTRIBUTORE_TIPICITA', 'GESTORE_PIATTAFORMA')")
 public class TicketCheckinController {
 
     private final TicketEventiService ticketService;

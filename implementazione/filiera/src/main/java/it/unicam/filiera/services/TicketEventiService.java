@@ -9,8 +9,7 @@ import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Acquirente;
 import it.unicam.filiera.models.UtenteGenerico;
-import it.unicam.filiera.repositories.EventiRepository;
-import it.unicam.filiera.repositories.TicketEventoRepository;
+import it.unicam.filiera.repositories.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,9 +29,21 @@ public class TicketEventiService {
 
     private final SecureRandom random = new SecureRandom();
 
-    public TicketEventiService(EventiRepository eventiRepository, TicketEventoRepository ticketRepository) {
+    private final AcquirenteRepository acquirenteRepository;
+    private final AziendaRepository aziendaRepository;
+    private final GestorePiattaformaRepository gestorePiattaformaRepository;
+
+    public TicketEventiService(
+            EventiRepository eventiRepository,
+            TicketEventoRepository ticketRepository,
+            AcquirenteRepository acquirenteRepository,
+            AziendaRepository aziendaRepository,
+            GestorePiattaformaRepository gestorePiattaformaRepository) {
         this.eventiRepository = eventiRepository;
         this.ticketRepository = ticketRepository;
+        this.acquirenteRepository = acquirenteRepository;
+        this.aziendaRepository = aziendaRepository;
+        this.gestorePiattaformaRepository = gestorePiattaformaRepository;
     }
 
     public List<TicketEventoResponse> acquistaTicket(Long eventoId, int quantita) {
@@ -40,7 +51,7 @@ public class TicketEventiService {
             throw new BadRequestException("La quantita deve essere maggiore di 0");
         }
 
-        Acquirente acquirente = getAcquirenteLoggato();
+        UtenteGenerico proprietario = getUtenteLoggato();
 
         Evento evento = eventiRepository.findById(eventoId)
                 .orElseThrow(() -> new NotFoundException("Evento non trovato"));
@@ -51,12 +62,9 @@ public class TicketEventiService {
 
         List<TicketEventoResponse> result = new ArrayList<>();
         for (int i = 0; i < quantita; i++) {
-            TicketEvento t = new TicketEvento(evento, acquirente);
+            TicketEvento t = new TicketEvento(evento, proprietario);
             t.setNumeroTicket(generaNumeroTicketUnico());
-
-            // QR (stringa) - utile per /checkin
             t.setQrCode("TCK-" + UUID.randomUUID().toString().replace("-", ""));
-
             evento.aggiungiBiglietto(t); // scala 1 posto
             ticketRepository.save(t);
             result.add(toResponse(t));
@@ -65,8 +73,8 @@ public class TicketEventiService {
     }
 
     public List<TicketEventoResponse> listaMieiTicket() {
-        Acquirente acquirente = getAcquirenteLoggato();
-        return ticketRepository.findByAcquirenteId(acquirente.getId()).stream().map(this::toResponse).toList();
+        UtenteGenerico utente = getUtenteLoggato();
+        return ticketRepository.findByProprietario_Id(utente.getId()).stream().map(this::toResponse).toList();
     }
 
     public List<TicketEventoResponse> listaTicketEvento(Long eventoId) {
@@ -126,18 +134,19 @@ public class TicketEventiService {
                 .orElseThrow(() -> new NotFoundException("Ticket non trovato"));
 
         boolean isGestore = u.getRuolo() == Ruolo.GESTORE_PIATTAFORMA;
-        boolean isOwner = (u instanceof Acquirente a) && a.getId().equals(ticket.getAcquirente().getId());
+        boolean isOwner = ticket.getProprietario().getId().equals(u.getId());
 
         if (!isGestore && !isOwner) {
             throw new ForbiddenException("Ruolo non autorizzato");
         }
+
         if (ticket.isUsato()) {
-            throw new BadRequestException("Non puoi annullare un ticket gia utilizzato");
+            throw new BadRequestException("Non puoi annullare un ticket già utilizzato");
         }
 
-        // ripristina posti
         Evento evento = ticket.getEvento();
         evento.setPosti(evento.getPosti() + 1);
+
         ticketRepository.delete(ticket);
     }
 
@@ -166,7 +175,7 @@ public class TicketEventiService {
         r.setEventoId(t.getEvento().getId());
         r.setEventoNome(t.getEvento().getNome());
         r.setEventoDataOra(t.getEvento().getDataOra());
-        r.setAcquirenteId(t.getAcquirente().getId());
+        r.setProprietarioId(t.getProprietario().getId());
         r.setAcquistatoIl(t.getAcquistatoIl());
         r.setUsato(t.isUsato());
         r.setUsatoIl(t.getUsatoIl());
@@ -184,14 +193,16 @@ public class TicketEventiService {
         if (auth == null || !(auth.getPrincipal() instanceof UtenteGenerico user)) {
             throw new ForbiddenException("Utente non autenticato");
         }
-        return user;
+
+        return switch (user.getRuolo()) {
+            case ACQUIRENTE -> acquirenteRepository.findById(user.getId())
+                    .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
+            case PRODUTTORE, TRASFORMATORE, DISTRIBUTORE_TIPICITA -> aziendaRepository.findById(user.getId())
+                    .orElseThrow(() -> new NotFoundException("Azienda non trovata"));
+            case GESTORE_PIATTAFORMA -> gestorePiattaformaRepository.findById(user.getId())
+                    .orElseThrow(() -> new NotFoundException("Personale non trovato"));
+            default -> throw new ForbiddenException("Ruolo non autorizzato");
+        };
     }
 
-    private Acquirente getAcquirenteLoggato() {
-        UtenteGenerico u = getUtenteLoggato();
-        if (!(u instanceof Acquirente a)) {
-            throw new ForbiddenException("Solo un ACQUIRENTE puo acquistare ticket");
-        }
-        return a;
-    }
 }

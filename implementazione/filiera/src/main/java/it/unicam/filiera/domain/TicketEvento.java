@@ -24,8 +24,8 @@ public class TicketEvento {
 	private Evento evento;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "acquirente_id")
-	private Acquirente acquirente;
+	@JoinColumn(name = "proprietario_id")
+	private UtenteGenerico proprietario;
 
 	@Column(nullable = false)
 	private LocalDateTime acquistatoIl;
@@ -42,9 +42,9 @@ public class TicketEvento {
 
 	protected TicketEvento() {}
 
-	public TicketEvento(Evento evento, Acquirente acquirente) {
+	public TicketEvento(Evento evento, UtenteGenerico proprietario) {
 		this.evento = evento;
-		this.acquirente = acquirente;
+		this.proprietario = proprietario;
 		this.acquistatoIl = LocalDateTime.now();
 		this.usato = false;
 	}
@@ -61,8 +61,8 @@ public class TicketEvento {
 	public Evento getEvento() { return evento; }
 	public void setEvento(Evento evento) { this.evento = evento; }
 
-	public Acquirente getAcquirente() { return acquirente; }
-	public void setAcquirente(Acquirente acquirente) { this.acquirente = acquirente; }
+	public UtenteGenerico getProprietario() { return proprietario; }
+	public void setProprietario(UtenteGenerico proprietario) { this.proprietario = proprietario; }
 
 	public LocalDateTime getAcquistatoIl() { return acquistatoIl; }
 	public void setAcquistatoIl(LocalDateTime acquistatoIl) { this.acquistatoIl = acquistatoIl; }

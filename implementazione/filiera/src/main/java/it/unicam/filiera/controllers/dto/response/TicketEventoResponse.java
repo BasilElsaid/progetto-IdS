@@ -11,7 +11,7 @@ public class TicketEventoResponse {
     private String qrCode;
 
     private Long eventoId;
-    private Long acquirenteId;
+    private Long proprietarioId;
 
     private LocalDateTime acquistatoIl;
     private boolean usato;
@@ -32,8 +32,8 @@ public class TicketEventoResponse {
     public Long getEventoId() { return eventoId; }
     public void setEventoId(Long eventoId) { this.eventoId = eventoId; }
 
-    public Long getAcquirenteId() { return acquirenteId; }
-    public void setAcquirenteId(Long acquirenteId) { this.acquirenteId = acquirenteId; }
+    public Long getProprietarioId() { return proprietarioId; }
+    public void setProprietarioId(Long proprietarioId) { this.proprietarioId = proprietarioId; }
 
     public LocalDateTime getAcquistatoIl() { return acquistatoIl; }
     public void setAcquistatoIl(LocalDateTime acquistatoIl) { this.acquistatoIl = acquistatoIl; }

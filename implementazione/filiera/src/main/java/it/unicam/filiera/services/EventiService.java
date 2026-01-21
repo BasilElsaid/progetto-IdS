@@ -1,6 +1,7 @@
 package it.unicam.filiera.services;
 
 import it.unicam.filiera.controllers.dto.create.CreateEventoRequest;
+import it.unicam.filiera.controllers.dto.response.EventoResponse;
 import it.unicam.filiera.domain.Evento;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.repositories.EventiRepository;
@@ -31,13 +32,31 @@ public class EventiService {
     }
 
     // READ
-    public List<Evento> getTuttiEventi() {
-        return eventoRepo.findAll();
+    public List<EventoResponse> getTuttiEventi() {
+        return eventoRepo.findAll().stream()
+                .map(e -> new EventoResponse(
+                        e.getId(),
+                        e.getNome(),
+                        e.getDataOra(),
+                        e.getPrezzo(),
+                        e.getTipo(),
+                        e.getPosti()
+                ))
+                .toList();
     }
 
-    public Evento getEvento(Long id) {
-        return eventoRepo.findById(id)
+    public EventoResponse getEvento(Long id) {
+        Evento e = eventoRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Evento non trovato"));
+
+        return new EventoResponse(
+                e.getId(),
+                e.getNome(),
+                e.getDataOra(),
+                e.getPrezzo(),
+                e.getTipo(),
+                e.getPosti()
+        );
     }
 
     // PATCH

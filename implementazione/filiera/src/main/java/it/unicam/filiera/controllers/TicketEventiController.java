@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@PreAuthorize("hasRole('ACQUIRENTE', 'PRODUTTORE', 'TRASFORMATORE', 'DISTRIBUTORE_TIPICITA', 'ACQUIRENTE','GESTORE_PIATTAFORMA')")
+@PreAuthorize("hasAnyRole('ACQUIRENTE', 'PRODUTTORE', 'TRASFORMATORE', 'DISTRIBUTORE_TIPICITA', 'GESTORE_PIATTAFORMA')")
 public class TicketEventiController {
 
     private final TicketEventiService ticketEventiService;
@@ -45,6 +45,7 @@ public class TicketEventiController {
      * Ruoli richiesti: ANIMATORE o GESTORE_PIATTAFORMA
      */
     @GetMapping("/eventi/{eventoId}/tickets")
+    @PreAuthorize("hasAnyRole('ANIMATORE', 'GESTORE_PIATTAFORMA')")
     public List<TicketEventoResponse> listaTicketEvento(@PathVariable Long eventoId) {
         return ticketEventiService.listaTicketEvento(eventoId);
     }

@@ -1,6 +1,7 @@
 package it.unicam.filiera.controllers;
 
 import it.unicam.filiera.controllers.dto.create.CreateEventoRequest;
+import it.unicam.filiera.controllers.dto.response.EventoResponse;
 import it.unicam.filiera.domain.Evento;
 import it.unicam.filiera.services.EventiService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,12 +26,12 @@ public class EventiController {
 	}
 
 	@GetMapping
-	public List<Evento> getTuttiEventi() {
+	public List<EventoResponse> getTuttiEventi() {
 		return eventiService.getTuttiEventi();
 	}
 
 	@GetMapping("/{id}")
-	public Evento getEvento(@PathVariable Long id) {
+	public EventoResponse getEvento(@PathVariable Long id) {
 		return eventiService.getEvento(id);
 	}
 

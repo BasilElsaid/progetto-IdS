@@ -12,7 +12,7 @@ public interface TicketEventoRepository extends JpaRepository<TicketEvento, Long
 
     Optional<TicketEvento> findByNumeroTicket(int numeroTicket);
 
-    List<TicketEvento> findByAcquirenteId(Long acquirenteId);
+    List<TicketEvento> findByProprietario_Id(Long proprietarioId);
 
     List<TicketEvento> findByEventoId(Long eventoId);
 
