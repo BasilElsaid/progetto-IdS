@@ -8,7 +8,9 @@ import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.repositories.AnnuncioMarketplaceRepository;
 import it.unicam.filiera.repositories.AziendaRepository;
 import it.unicam.filiera.repositories.ProdottoRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,8 +31,27 @@ public class MarketplaceService {
     }
 
     public AnnuncioMarketplaceResponse creaAnnuncio(CreateAnnuncioMarketplaceRequest req) {
-        var azienda = aziendaRepo.findById(req.getAziendaId()).orElseThrow();
-        Prodotto prodotto = prodottoRepo.findById(req.getProdottoId()).orElseThrow();
+        if (req == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Body mancante");
+        }
+        if (req.getAziendaId() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "aziendaId mancante");
+        }
+        if (req.getProdottoId() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "prodottoId mancante");
+        }
+
+        var azienda = aziendaRepo.findById(req.getAziendaId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Azienda non trovata: id=" + req.getAziendaId()
+                ));
+
+        Prodotto prodotto = prodottoRepo.findById(req.getProdottoId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Prodotto non trovato: id=" + req.getProdottoId()
+                ));
 
         AnnuncioMarketplace a = new AnnuncioMarketplace();
         a.setAzienda(azienda);
@@ -44,21 +65,41 @@ public class MarketplaceService {
 
     public List<AnnuncioMarketplaceResponse> listaAnnunci(Long aziendaId, String categoria, Boolean attivo) {
         return annuncioRepo.findAll().stream()
-                .filter(a -> aziendaId == null || a.getAzienda().getId().equals(aziendaId))
+                .filter(a -> aziendaId == null || (a.getAzienda() != null && a.getAzienda().getId().equals(aziendaId)))
                 .filter(a -> attivo == null || a.isAttivo() == attivo)
                 .filter(a -> categoria == null || categoria.isBlank()
-                        || (a.getProdotto().getCategoria() != null
+                        || (a.getProdotto() != null
+                        && a.getProdotto().getCategoria() != null
                         && a.getProdotto().getCategoria().equalsIgnoreCase(categoria)))
                 .map(AnnuncioMarketplaceResponse::from)
                 .collect(Collectors.toList());
     }
 
     public AnnuncioMarketplaceResponse getAnnuncio(Long id) {
-        return AnnuncioMarketplaceResponse.from(annuncioRepo.findById(id).orElseThrow());
+        if (id == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "id mancante");
+        }
+        AnnuncioMarketplace a = annuncioRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Annuncio non trovato: id=" + id
+                ));
+        return AnnuncioMarketplaceResponse.from(a);
     }
 
     public AnnuncioMarketplaceResponse aggiornaAnnuncio(Long id, UpdateAnnuncioMarketplaceRequest req) {
-        AnnuncioMarketplace a = annuncioRepo.findById(id).orElseThrow();
+        if (id == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "id mancante");
+        }
+        if (req == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Body mancante");
+        }
+
+        AnnuncioMarketplace a = annuncioRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Annuncio non trovato: id=" + id
+                ));
 
         if (req.getPrezzo() != null) a.setPrezzo(req.getPrezzo());
         if (req.getStock() != null) a.setStock(req.getStock());

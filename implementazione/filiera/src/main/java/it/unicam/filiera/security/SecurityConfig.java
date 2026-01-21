@@ -1,5 +1,7 @@
 package it.unicam.filiera.security;
 
+import jakarta.servlet.DispatcherType;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,6 +25,13 @@ public class SecurityConfig {
     }
 
     @Bean
+    public FilterRegistrationBean<JwtAuthenticationFilter> jwtFilterRegistration(JwtAuthenticationFilter filter) {
+        FilterRegistrationBean<JwtAuthenticationFilter> registration = new FilterRegistrationBean<>(filter);
+        registration.setEnabled(false);
+        return registration;
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
@@ -31,6 +40,8 @@ public class SecurityConfig {
                 .formLogin(form -> form.disable())
                 .authorizeHttpRequests(auth -> auth
 
+                        .dispatcherTypeMatchers(DispatcherType.ERROR, DispatcherType.FORWARD).permitAll()
+                        .requestMatchers("/error", "/error/**").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/api/aziende").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/personale").permitAll()
@@ -39,28 +50,30 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/public/**").permitAll()
 
-
                         .requestMatchers(
                                 "/",
                                 "/index.html",
+                                "/store.html",
+                                "/admin_pro.html",
+                                "/admin_pro.css",
+                                "/admin_pro.js",
+                                "/favicon.ico",
                                 "/css/**",
                                 "/js/**",
                                 "/images/**",
-                                "/favicon.ico",
+                                "/assets/**",
+                                "/webjars/**"
+                        ).permitAll()
+
+                        .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/h2-console/**"
                         ).permitAll()
 
-                        // =========================
-                        // ACTUATOR
-                        // =========================
                         .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                         .requestMatchers("/actuator/**").hasRole("GESTORE_PIATTAFORMA")
 
-                        // =========================
-                        // TUTTO IL RESTO
-                        // =========================
                         .anyRequest().authenticated()
                 )
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
