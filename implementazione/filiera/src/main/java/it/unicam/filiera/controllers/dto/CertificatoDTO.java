@@ -23,4 +23,5 @@ public class CertificatoDTO {
     // campi Curatore
     public Boolean approvato;
     public String commento;
+    public Long certificatoTargetId;
 }

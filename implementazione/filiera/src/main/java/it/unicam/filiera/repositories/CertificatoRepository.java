@@ -7,7 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CertificatoRepository extends JpaRepository<Certificato, Long> {
-
-    List<Certificato> findByProdottoIdAndTipo(Long prodottoId, TipoCertificatore tipo);
-
+    boolean existsByProdottoIdAndTipo(Long prodottoId, TipoCertificatore tipo);
 }

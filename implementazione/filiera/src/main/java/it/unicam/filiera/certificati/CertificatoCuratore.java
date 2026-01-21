@@ -2,6 +2,8 @@ package it.unicam.filiera.certificati;
 
 import it.unicam.filiera.domain.Prodotto;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class CertificatoCuratore extends Certificato implements StrategieCertificazioni {
@@ -9,10 +11,17 @@ public class CertificatoCuratore extends Certificato implements StrategieCertifi
 	private boolean approvato; // default false
 	private String commento;
 
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "certificato_target_id")
+	private Certificato certificatoTarget;
+
 	@Override
 	public boolean verifica(Prodotto p) {
-		// ritorna true solo se approvato è true
-		return approvato;
+		// Restituisce true solo se:
+		// - questo certificato curatore è approvato
+		// - il target è un certificato Produttore o Trasformatore
+		return approvato && (certificatoTarget instanceof CertificazioneProduttore
+				|| certificatoTarget instanceof CertificatoTrasformatore);
 	}
 
 	@Override
@@ -26,4 +35,9 @@ public class CertificatoCuratore extends Certificato implements StrategieCertifi
 
 	public String getCommento() { return commento; }
 	public void setCommento(String commento) { this.commento = commento; }
+
+	public Certificato getCertificatoTarget() { return certificatoTarget; }
+	public void setCertificatoTarget(Certificato certificatoTarget) {
+		this.certificatoTarget = certificatoTarget;
+	}
 }

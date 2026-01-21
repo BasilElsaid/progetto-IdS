@@ -1,14 +1,18 @@
 package it.unicam.filiera.services;
 
-
 import it.unicam.filiera.controllers.dto.CertificatoDTO;
 import it.unicam.filiera.certificati.*;
+import it.unicam.filiera.enums.Ruolo;
+import it.unicam.filiera.enums.TipoCertificatore;
 import it.unicam.filiera.exceptions.BadRequestException;
+import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.domain.Prodotto;
-import it.unicam.filiera.enums.TipoCertificatore;
+import it.unicam.filiera.models.UtenteGenerico;
+import it.unicam.filiera.repositories.CertificatoCuratoreRepository;
 import it.unicam.filiera.repositories.CertificatoRepository;
 import it.unicam.filiera.repositories.ProdottoRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,138 +24,112 @@ public class CertificatiService {
 
     private final CertificatoRepository certificatoRepo;
     private final ProdottoRepository prodottoRepo;
-    private final StrategieCertificazioniFactory strategieFactory;
+    private final CertificatoCuratoreRepository curatoreRepo;
 
     public CertificatiService(CertificatoRepository certificatoRepo,
-                              ProdottoRepository prodottoRepo,
-                              StrategieCertificazioniFactory strategieFactory) {
+                              CertificatoCuratoreRepository curatoreRepo,
+                              ProdottoRepository prodottoRepo) {
         this.certificatoRepo = certificatoRepo;
+        this.curatoreRepo = curatoreRepo;
         this.prodottoRepo = prodottoRepo;
-        this.strategieFactory = strategieFactory;
     }
 
     // --- CREATE ---
     public Certificato creaCertificato(CertificatoDTO dto) {
+        UtenteGenerico u = getUtenteLoggato();
+        TipoCertificatore consentito = tipoConsentito(u);
+
+        if (consentito != null && dto.tipo != consentito) {
+            throw new ForbiddenException("Non puoi creare certificati di tipo " + dto.tipo);
+        }
+
         Prodotto p = prodottoRepo.findById(dto.prodottoId)
                 .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
 
-        // Validazione strict dei campi
-        validaDto(dto);
-
-        // Creo certificato concreto basato sul tipo
-        Certificato c;
-        switch(dto.tipo) {
-            case PRODUTTORE -> {
-                CertificazioneProduttore cp = new CertificazioneProduttore();
-                cp.setProdotto(p);
-                cp.setAzienda(dto.azienda);
-                cp.setOrigineMateriaPrima(dto.origineMateriaPrima);
-                cp.setTipo(TipoCertificatore.PRODUTTORE);
-                c = cp;
-            }
-            case TRASFORMATORE -> {
-                CertificatoTrasformatore ct = new CertificatoTrasformatore();
-                ct.setProdotto(p);
-                ct.setProcesso(dto.processo);
-                ct.setImpianto(dto.impianto);
-                ct.setTipo(TipoCertificatore.TRASFORMATORE);
-                c = ct;
-            }
-            case CURATORE -> {
-                CertificatoCuratore cc = new CertificatoCuratore();
-                cc.setProdotto(p);
-                cc.setApprovato(dto.approvato);
-                cc.setCommento(dto.commento);
-                cc.setTipo(TipoCertificatore.CURATORE);
-                c = cc;
-            }
-            default -> throw new BadRequestException("Tipo certificatore non valido");
+        if (certificatoRepo.existsByProdottoIdAndTipo(dto.prodottoId, dto.tipo)) {
+            throw new BadRequestException("Esiste già un certificato di tipo " + dto.tipo + " per questo prodotto");
         }
 
-        return certificatoRepo.save(c);
-    }
+        validaDto(dto);
+        Certificato c = inizializzaCertificato(dto, p);
 
-    // --- Recupero Prodotto ---
-    public Prodotto getProdotto(Long prodottoId) {
-        return prodottoRepo.findById(prodottoId)
-                .orElseThrow(() -> new NotFoundException("Prodotto non trovato con id: " + prodottoId));
+        return certificatoRepo.save(c);
     }
 
     // --- READ ---
     public List<Certificato> getTuttiCertificati() {
-        return certificatoRepo.findAll();
+        UtenteGenerico u = getUtenteLoggato();
+        TipoCertificatore tipo = tipoConsentito(u);
+
+        if (u.getRuolo() == Ruolo.GESTORE_PIATTAFORMA || u.getRuolo() == Ruolo.CURATORE) {
+            return certificatoRepo.findAll();
+        }
+
+        return certificatoRepo.findAll().stream()
+                .filter(c -> puoVedereCertificato(u, c))
+                .toList();
     }
 
     public Certificato getCertificato(Long id) {
-        return certificatoRepo.findById(id)
-                .orElseThrow(() -> new NotFoundException("Certificato non trovato"));
-    }
-
-    // --- UPDATE ---
-    public Certificato aggiornaCertificato(Long id, CertificatoDTO dto) {
         Certificato c = certificatoRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Certificato non trovato"));
+        UtenteGenerico u = getUtenteLoggato();
 
-        Prodotto p = prodottoRepo.findById(dto.prodottoId)
-                .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
+        if (!puoVedereCertificato(u, c)) {
+            throw new ForbiddenException("Non puoi accedere a questo certificato");
+        }
+        return c;
+    }
 
-        c.setProdotto(p);
+    public Certificato aggiornaCertificato(Long id, CertificatoDTO dto) {
+        Certificato c = getCertificato(id);
+        checkOwnership(c);
 
-        // Validazione strict
-        validaDto(dto);
-
-        switch(dto.tipo) {
-            case PRODUTTORE -> {
-                if(c instanceof CertificazioneProduttore cp) {
-                    cp.setAzienda(dto.azienda);
-                    cp.setOrigineMateriaPrima(dto.origineMateriaPrima);
-                } else throw new BadRequestException("Tipo certificatore non corrisponde all'entità");
-            }
-            case TRASFORMATORE -> {
-                if(c instanceof CertificatoTrasformatore ct) {
-                    ct.setProcesso(dto.processo);
-                    ct.setImpianto(dto.impianto);
-                } else throw new BadRequestException("Tipo certificatore non corrisponde all'entità");
-            }
-            case CURATORE -> {
-                if(c instanceof CertificatoCuratore cc) {
-                    cc.setApprovato(dto.approvato);
-                    cc.setCommento(dto.commento);
-                } else throw new BadRequestException("Tipo certificatore non corrisponde all'entità");
-            }
+        if (!c.getProdotto().getId().equals(dto.prodottoId)) {
+            throw new BadRequestException("Non è consentito cambiare il prodotto del certificato");
         }
 
-        // Aggiorno tipo anche in caso di update
-        c.setTipo(dto.tipo);
+        c.setProdotto(prodottoRepo.findById(dto.prodottoId)
+                .orElseThrow(() -> new NotFoundException("Prodotto non trovato")));
+
+        validaDto(dto);
+        assegnaCampiCertificato(c, dto);
 
         return certificatoRepo.save(c);
     }
 
-    // --- DELETE ---
     public void eliminaCertificato(Long id) {
-        if (!certificatoRepo.existsById(id)) {
-            throw new NotFoundException("Certificato non trovato");
-        }
-        certificatoRepo.deleteById(id);
+        Certificato c = getCertificato(id);
+        checkOwnership(c);
+        certificatoRepo.delete(c);
     }
 
-    // --- VERIFICA STRATEGY ---
-    public boolean verificaCertificato(TipoCertificatore tipo, Long prodottoId) {
-        List<Certificato> certificati = certificatoRepo.findByProdottoIdAndTipo(prodottoId, tipo);
-        if(certificati.isEmpty()) return false; // Nessun certificato -> false
-
-        // Prendi il certificato salvato (ad esempio il primo)
-        Certificato c = certificati.get(0);
-
-        // Applica la verifica sul certificato effettivo
-        if(c instanceof StrategieCertificazioni sc) {
-            return sc.verifica(c.getProdotto());
+    // --- VERIFICA CERTIFICATO ---
+    public boolean verificaCertificato(Long certificatoId, Boolean approvato, String commento) {
+        UtenteGenerico u = getUtenteLoggato();
+        if (tipoConsentito(u) != TipoCertificatore.CURATORE) {
+            throw new ForbiddenException("Solo il curatore può verificare certificati");
         }
 
-        return false;
+        Certificato target = certificatoRepo.findById(certificatoId)
+                .orElseThrow(() -> new NotFoundException("Certificato target non trovato"));
+
+        if (target instanceof CertificatoCuratore) {
+            throw new BadRequestException("Non è possibile verificare un altro certificato curatore");
+        }
+
+        CertificatoCuratore cc = new CertificatoCuratore();
+        cc.setCertificatoTarget(target);
+        cc.setProdotto(target.getProdotto());
+        cc.setApprovato(approvato);
+        cc.setCommento(commento);
+        cc.setTipo(TipoCertificatore.CURATORE);
+
+        curatoreRepo.save(cc);
+        return cc.isApprovato();
     }
 
-    // --- VALIDAZIONE STRICT ---
+    // --- VALIDAZIONE ---
     private void validaDto(CertificatoDTO dto) {
         switch(dto.tipo) {
             case PRODUTTORE -> {
@@ -173,5 +151,107 @@ public class CertificatiService {
                     throw new BadRequestException("Campi non validi presenti per CURATORE");
             }
         }
+    }
+
+    // --- HELPERS ---
+    private UtenteGenerico getUtenteLoggato() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !(auth.getPrincipal() instanceof UtenteGenerico u)) {
+            throw new ForbiddenException("Utente non autenticato");
+        }
+        return (UtenteGenerico) auth.getPrincipal();
+    }
+
+    private TipoCertificatore tipoConsentito(UtenteGenerico u) {
+        return switch (u.getRuolo()) {
+            case PRODUTTORE -> TipoCertificatore.PRODUTTORE;
+            case TRASFORMATORE -> TipoCertificatore.TRASFORMATORE;
+            case CURATORE -> TipoCertificatore.CURATORE;
+            case GESTORE_PIATTAFORMA -> null;
+            default -> throw new ForbiddenException("Ruolo non autorizzato ai certificati");
+        };
+    }
+
+    private boolean puoVedereCertificato(UtenteGenerico u, Certificato c) {
+        if (u.getRuolo() == Ruolo.GESTORE_PIATTAFORMA || u.getRuolo() == Ruolo.CURATORE) return true;
+
+        TipoCertificatore tipo = tipoConsentito(u);
+        if (tipo != null && c.getTipo() != tipo) return false;
+
+        return (tipo == TipoCertificatore.PRODUTTORE || tipo == TipoCertificatore.TRASFORMATORE) &&
+                c.getProdotto().getProduttore().getId().equals(u.getId());
+    }
+
+    private void checkOwnership(Certificato c) {
+        UtenteGenerico u = getUtenteLoggato();
+        TipoCertificatore tipo = tipoConsentito(u);
+        if (tipo == TipoCertificatore.PRODUTTORE || tipo == TipoCertificatore.TRASFORMATORE) {
+            if (!c.getProdotto().getProduttore().getId().equals(u.getId())) {
+                throw new ForbiddenException("Non puoi modificare/eliminare questo certificato");
+            }
+        }
+    }
+
+    private Certificato inizializzaCertificato(CertificatoDTO dto, Prodotto p) {
+        switch (dto.tipo) {
+            case PRODUTTORE: {
+                CertificazioneProduttore cp = new CertificazioneProduttore();
+                cp.setProdotto(p);
+                cp.setAzienda(dto.azienda);
+                cp.setOrigineMateriaPrima(dto.origineMateriaPrima);
+                cp.setTipo(TipoCertificatore.PRODUTTORE);
+                return cp;
+            }
+            case TRASFORMATORE: {
+                CertificatoTrasformatore ct = new CertificatoTrasformatore();
+                ct.setProdotto(p);
+                ct.setProcesso(dto.processo);
+                ct.setImpianto(dto.impianto);
+                ct.setTipo(TipoCertificatore.TRASFORMATORE);
+                return ct;
+            }
+            case CURATORE: {
+                CertificatoCuratore cc = new CertificatoCuratore();
+                Certificato target = certificatoRepo.findById(dto.certificatoTargetId)
+                        .orElseThrow(() -> new NotFoundException("Certificato target non trovato"));
+
+                if (target.getTipo() == TipoCertificatore.CURATORE) {
+                    throw new BadRequestException("Un curatore non può approvare un altro curatore");
+                }
+
+                cc.setCertificatoTarget(target);
+                cc.setProdotto(target.getProdotto());
+                cc.setApprovato(dto.approvato);
+                cc.setCommento(dto.commento);
+                cc.setTipo(TipoCertificatore.CURATORE);
+                return cc;
+            }
+            default:
+                throw new BadRequestException("Tipo certificatore non valido");
+        }
+    }
+
+    private void assegnaCampiCertificato(Certificato c, CertificatoDTO dto) {
+        switch(dto.tipo) {
+            case PRODUTTORE -> {
+                if(c instanceof CertificazioneProduttore cp) {
+                    cp.setAzienda(dto.azienda);
+                    cp.setOrigineMateriaPrima(dto.origineMateriaPrima);
+                }
+            }
+            case TRASFORMATORE -> {
+                if(c instanceof CertificatoTrasformatore ct) {
+                    ct.setProcesso(dto.processo);
+                    ct.setImpianto(dto.impianto);
+                }
+            }
+            case CURATORE -> {
+                if(c instanceof CertificatoCuratore cc) {
+                    cc.setApprovato(dto.approvato);
+                    cc.setCommento(dto.commento);
+                }
+            }
+        }
+        c.setTipo(dto.tipo);
     }
 }
