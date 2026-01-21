@@ -5,6 +5,7 @@ import it.unicam.filiera.controllers.dto.create.CreateAziendaRequest;
 import it.unicam.filiera.controllers.dto.response.UtenteResponse;
 import it.unicam.filiera.controllers.dto.update.UpdateAziendaRequest;
 import it.unicam.filiera.services.AziendeService;
+import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class AziendeController {
     }
 
     @PostMapping
-    public UtenteResponse crea(@RequestBody CreateAziendaRequest request) {
+    public UtenteResponse crea(@Valid @RequestBody CreateAziendaRequest request) {
         // switch interno per decidere il tipo di azienda
         return service.creaAzienda(request);
     }

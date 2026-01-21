@@ -45,6 +45,16 @@ public class AziendeService {
     }
 
     public UtenteResponse creaAzienda(CreateAziendaRequest request) {
+        if (request.getNomeAzienda() == null || request.getNomeAzienda().isBlank()) {
+            throw new BadRequestException("Nome azienda obbligatorio");
+        }
+        if (request.getSede() == null || request.getSede().isBlank()) {
+            throw new BadRequestException("Sede obbligatoria");
+        }
+        if (request.getCoordinate() == null) {
+            throw new BadRequestException("Coordinate obbligatorie");
+        }
+
         Ruolo ruolo = request.getRuolo();
         Azienda a;
         switch (ruolo) {

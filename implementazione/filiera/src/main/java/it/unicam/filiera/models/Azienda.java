@@ -2,6 +2,8 @@ package it.unicam.filiera.models;
 
 import it.unicam.filiera.utilities.CoordinateOSM;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Azienda extends UtenteGenerico {
@@ -10,11 +12,13 @@ public class Azienda extends UtenteGenerico {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Nome azienda obbligatorio")
     private String nomeAzienda;
 
+    @NotBlank(message = "Sede obbligatoria")
     private String sede;
 
-    @Embedded
+    @NotNull(message = "Coordinate obbligatorie")
     private CoordinateOSM coordinate;
 
     private String partitaIva;
