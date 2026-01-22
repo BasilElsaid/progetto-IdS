@@ -1,7 +1,10 @@
 package it.unicam.filiera.services;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import it.unicam.filiera.controllers.dto.create.CreateProdottoRequest;
+import it.unicam.filiera.controllers.dto.response.ProdottoResponse;
 import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
@@ -26,63 +29,78 @@ public class ProdottiService {
         this.repo = repo;
     }
 
-    public List<Prodotto> all() {
+    public List<ProdottoResponse> all() {
         UtenteGenerico u = getUtenteLoggato();
+        List<Prodotto> prodotti;
 
         if (isGestorePiattaforma(u)) {
-            return repo.findAll(); // vede tutti i prodotti
+            prodotti = repo.findAll();
         } else if (isProduttore(u)) {
-            return repo.findByProduttore((Produttore) u); // solo i suoi
+            prodotti = repo.findByProduttore((Produttore) u);
+        } else {
+            throw new ForbiddenException("Ruolo non autorizzato");
         }
 
-        throw new ForbiddenException("Ruolo non autorizzato");
+        return prodotti.stream()
+                .map(this::toResponse)
+                .toList();
     }
 
-    public Prodotto get(Long id) {
+    public ProdottoResponse get(Long id) {
         UtenteGenerico u = getUtenteLoggato();
+        Prodotto p;
 
         if (isGestorePiattaforma(u)) {
-            return repo.findById(id)
+            p = repo.findById(id)
                     .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
         } else if (isProduttore(u)) {
-            return repo.findByIdAndProduttore(id, (Produttore) u)
+            p = repo.findByIdAndProduttore(id, (Produttore) u)
                     .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
+        } else {
+            throw new ForbiddenException("Ruolo non autorizzato");
         }
 
-        throw new ForbiddenException("Ruolo non autorizzato");
+        return toResponse(p);
     }
 
-    public Prodotto crea(Prodotto p) {
+    public ProdottoResponse crea(CreateProdottoRequest dto) {
         UtenteGenerico u = getUtenteLoggato();
 
         if (isProduttore(u)) {
+            Prodotto p = new Prodotto();
+            p.setNome(dto.nome());
+            p.setCategoria(dto.categoria());
+            p.setPrezzo((dto.prezzo()));
             p.setProduttore((Produttore) u);
-            return repo.save(p);
+
+            Prodotto saved = repo.save(p);
+            return toResponse(saved);
         }
+
 
         throw new ForbiddenException("Solo produttori possono creare prodotti");
     }
 
-    public Prodotto update(Long id, Prodotto p) {
+    public ProdottoResponse update(Long id, CreateProdottoRequest dto) {
         UtenteGenerico u = getUtenteLoggato();
+        Prodotto existing;
 
         if (isGestorePiattaforma(u)) {
-            Prodotto existing = repo.findById(id)
+            existing = repo.findById(id)
                     .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
-            existing.setNome(p.getNome());
-            existing.setCategoria(p.getCategoria());
-            existing.setPrezzo(p.getPrezzo());
-            return repo.save(existing);
         } else if (isProduttore(u)) {
-            Prodotto existing = repo.findByIdAndProduttore(id, (Produttore) u)
+            existing = repo.findByIdAndProduttore(id, (Produttore) u)
                     .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
-            existing.setNome(p.getNome());
-            existing.setCategoria(p.getCategoria());
-            existing.setPrezzo(p.getPrezzo());
-            return repo.save(existing);
+        } else {
+            throw new ForbiddenException("Ruolo non autorizzato");
         }
 
-        throw new ForbiddenException("Ruolo non autorizzato");
+        existing.setNome(dto.nome());
+        existing.setCategoria(dto.categoria());
+        existing.setPrezzo((dto.prezzo()));
+
+        Prodotto saved = repo.save(existing);
+        return toResponse(saved);
     }
 
     public void delete(Long id) {
@@ -118,6 +136,22 @@ public class ProdottiService {
 
     private boolean isProduttore(UtenteGenerico u) {
         return u instanceof Produttore;
+    }
+
+    private ProdottoResponse toResponse(Prodotto p) {
+        ProdottoResponse dto = new ProdottoResponse();
+
+        dto.setId(p.getId());
+        dto.setNome(p.getNome());
+        dto.setCategoria(p.getCategoria());
+        dto.setPrezzo(p.getPrezzo());
+
+        if (p.getProduttore() != null) {
+            dto.setProduttoreId(p.getProduttore().getId());
+            dto.setNomeAzienda(p.getProduttore().getNomeAzienda());
+        }
+
+        return dto;
     }
 
 }
