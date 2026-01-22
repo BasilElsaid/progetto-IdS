@@ -119,4 +119,11 @@ public class MarketplaceProdottiService {
                 ));
         annuncioRepo.delete(a);
     }
+
+    // PER ACQUIRENTI
+    public List<AnnuncioProdottoResponse> listaTuttiProdottiResponse() {
+        return annuncioRepo.findAll().stream()
+                .map(AnnuncioProdottoResponse::from) // usa il metodo statico dal DTO
+                .toList();
+    }
 }

@@ -49,6 +49,7 @@ public class SecurityConfig {
 
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/api/marketplace/**").permitAll()
 
                         .requestMatchers(
                                 "/",

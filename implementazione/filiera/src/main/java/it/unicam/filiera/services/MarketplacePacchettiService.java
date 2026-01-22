@@ -114,4 +114,11 @@ public class MarketplacePacchettiService {
                 ));
         annuncioPacchettoRepo.delete(a);
     }
+
+    // PER ACQUIRENTI
+    public List<AnnuncioPacchettoResponse> listaTuttiProdottiResponse() {
+        return annuncioPacchettoRepo.findAll().stream()
+                .map(AnnuncioPacchettoResponse::from)
+                .toList();
+    }
 }
