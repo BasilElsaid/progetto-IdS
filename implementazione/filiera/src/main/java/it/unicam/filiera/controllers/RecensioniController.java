@@ -20,12 +20,12 @@ public class RecensioniController {
     @PostMapping
     @PreAuthorize("hasRole('ACQUIRENTE')")
     public Recensione crea(@RequestBody CreaReq req) {
-        // Ora usiamo itemId invece di prodottoId
-        return service.crea(req.getAcquirenteId(), req.getOrdineId(), req.getItemId(), req.isPacchetto(), req.getVoto(), req.getTesto());    }
+        return service.crea(req.getAcquirenteId(), req.getOrdineId(), req.getVoto(), req.getTesto());
+    }
 
-    @GetMapping("/item/{itemId}")
-    public List<Recensione> byItem(@PathVariable Long itemId) {
-        return service.byItem(itemId);  // metodo nuovo nel service che cerca per itemId (prodotto o pacchetto)
+    @GetMapping("/ordine/{ordineId}")
+    public List<Recensione> byOrdine(@PathVariable Long ordineId) {
+        return service.byOrdine(ordineId);
     }
 
     @GetMapping("/acquirente/{acquirenteId}")
@@ -37,27 +37,39 @@ public class RecensioniController {
     public static class CreaReq {
         private Long acquirenteId;
         private Long ordineId;
-        private Long itemId;  // aggiornato da prodottoId a itemId
         private int voto;
         private String testo;
-        private boolean pacchetto;
 
-        public Long getAcquirenteId() { return acquirenteId; }
-        public void setAcquirenteId(Long acquirenteId) { this.acquirenteId = acquirenteId; }
+        public Long getAcquirenteId() {
+            return acquirenteId;
+        }
 
-        public Long getOrdineId() { return ordineId; }
-        public void setOrdineId(Long ordineId) { this.ordineId = ordineId; }
+        public void setAcquirenteId(Long acquirenteId) {
+            this.acquirenteId = acquirenteId;
+        }
 
-        public Long getItemId() { return itemId; }
-        public void setItemId(Long itemId) { this.itemId = itemId; }
+        public Long getOrdineId() {
+            return ordineId;
+        }
 
-        public int getVoto() { return voto; }
-        public void setVoto(int voto) { this.voto = voto; }
+        public void setOrdineId(Long ordineId) {
+            this.ordineId = ordineId;
+        }
 
-        public String getTesto() { return testo; }
-        public void setTesto(String testo) { this.testo = testo; }
+        public int getVoto() {
+            return voto;
+        }
 
-        public boolean isPacchetto() { return pacchetto; }
-        public void setPacchetto(boolean pacchetto) { this.pacchetto = pacchetto; }
+        public void setVoto(int voto) {
+            this.voto = voto;
+        }
+
+        public String getTesto() {
+            return testo;
+        }
+
+        public void setTesto(String testo) {
+            this.testo = testo;
+        }
     }
 }

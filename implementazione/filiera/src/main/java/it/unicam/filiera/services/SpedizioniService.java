@@ -2,7 +2,6 @@ package it.unicam.filiera.services;
 
 import it.unicam.filiera.domain.Ordine;
 import it.unicam.filiera.enums.StatoOrdine;
-import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.repositories.OrdineRepository;
 import org.springframework.stereotype.Service;
@@ -20,35 +19,36 @@ public class SpedizioniService {
     }
 
     @Transactional
-    public Ordine spedisci(Long ordineId, String trackingCode) {
+    public String spedisci(Long ordineId, String trackingCode) {
         Ordine ordine = ordiniRepo.findById(ordineId)
                 .orElseThrow(() -> new NotFoundException("Ordine non trovato"));
 
         if (ordine.getStato() != StatoOrdine.PAGATO) {
-            throw new BadRequestException("Puoi spedire solo ordini PAGATI");
+            return "Ordine " + ordineId + " non può essere spedito: stato non PAGATO";
         }
 
-        LocalDateTime now = LocalDateTime.now();
         ordine.setStato(StatoOrdine.SPEDITO);
-        ordine.setDataSpedizione(now);
+        ordine.setDataSpedizione(LocalDateTime.now());
         if (trackingCode != null && !trackingCode.isBlank()) {
             ordine.setTrackingCode(trackingCode.trim());
         }
 
-        return ordiniRepo.save(ordine);
+        ordiniRepo.save(ordine);
+        return "Ordine " + ordineId + " spedito con tracking: " + trackingCode;
     }
 
     @Transactional
-    public Ordine consegna(Long ordineId) {
+    public String consegna(Long ordineId) {
         Ordine ordine = ordiniRepo.findById(ordineId)
                 .orElseThrow(() -> new NotFoundException("Ordine non trovato"));
 
         if (ordine.getStato() != StatoOrdine.SPEDITO) {
-            throw new BadRequestException("Puoi consegnare solo ordini SPEDITI");
+            return "Ordine " + ordineId + " non può essere consegnato: stato non SPEDITO";
         }
 
         ordine.setStato(StatoOrdine.CONSEGNATO);
         ordine.setDataConsegna(LocalDateTime.now());
-        return ordiniRepo.save(ordine);
+        ordiniRepo.save(ordine);
+        return "Ordine " + ordineId + " consegnato";
     }
 }

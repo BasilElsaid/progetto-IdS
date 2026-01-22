@@ -1,6 +1,5 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.domain.Ordine;
 import it.unicam.filiera.services.SpedizioniService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +16,13 @@ public class SpedizioniController {
 
     @PostMapping("/{ordineId}/spedisci")
     @PreAuthorize("hasAnyRole('CORRIERE','GESTORE_PIATTAFORMA')")
-    public Ordine spedisci(@PathVariable Long ordineId, @RequestBody SpedisciReq req) {
+    public String spedisci(@PathVariable Long ordineId, @RequestBody SpedisciReq req) {
         return service.spedisci(ordineId, req.getTrackingCode());
     }
 
     @PostMapping("/{ordineId}/consegna")
     @PreAuthorize("hasAnyRole('CORRIERE','GESTORE_PIATTAFORMA')")
-    public Ordine consegna(@PathVariable Long ordineId) {
+    public String consegna(@PathVariable Long ordineId) {
         return service.consegna(ordineId);
     }
 
