@@ -28,8 +28,9 @@ public class OrdiniController {
     @PostMapping("/{id}/paga")
     public OrdineResponse paga(@PathVariable Long id,
                                @RequestParam Long acquirenteId,
+                               @RequestParam boolean pacchetto,
                                @RequestParam MetodoPagamento metodo) {
-        return service.pagaOrdine(acquirenteId, id, metodo);
+        return service.pagaOrdine(acquirenteId, id, pacchetto, metodo);
     }
 
     @GetMapping("/{id}")

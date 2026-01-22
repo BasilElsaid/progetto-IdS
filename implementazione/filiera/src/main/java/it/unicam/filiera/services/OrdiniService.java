@@ -87,7 +87,7 @@ public class OrdiniService {
     }
 
     @Transactional
-    public OrdineResponse pagaOrdine(Long acquirenteId, Long ordineId, MetodoPagamento metodo) {
+    public OrdineResponse pagaOrdine(Long acquirenteId, Long ordineId, boolean pacchetto, MetodoPagamento metodo) {
         Ordine ordine = ordineRepo.findById(ordineId)
                 .orElseThrow(() -> new NotFoundException("Ordine non trovato"));
 
@@ -96,6 +96,30 @@ public class OrdiniService {
 
         if (ordine.getStato() != StatoOrdine.IN_ATTESA_PAGAMENTO)
             throw new BadRequestException("Ordine non in attesa pagamento");
+
+        // Controllo disponibilità degli item in base al tipo
+        for (OrdineItem item : ordine.getItems()) {
+            if (item.isPacchetto() != pacchetto) continue; // ignora gli altri tipi
+
+            if (pacchetto) {
+                var pacchettoAnnuncio = pacchettiRepo.findById(item.getAnnuncioId())
+                        .orElseThrow(() -> new NotFoundException("Pacchetto non trovato"));
+                if (!pacchettoAnnuncio.isAttivo() || pacchettoAnnuncio.getStock() < item.getQuantita())
+                    throw new BadRequestException("Pacchetto non disponibile o stock insufficiente");
+
+                pacchettoAnnuncio.setStock(pacchettoAnnuncio.getStock() - item.getQuantita());
+                pacchettiRepo.save(pacchettoAnnuncio);
+
+            } else {
+                var prodotto = prodottiRepo.findById(item.getAnnuncioId())
+                        .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
+                if (!prodotto.isAttivo() || prodotto.getStock() < item.getQuantita())
+                    throw new BadRequestException("Prodotto non disponibile o stock insufficiente");
+
+                prodotto.setStock(prodotto.getStock() - item.getQuantita());
+                prodottiRepo.save(prodotto);
+            }
+        }
 
         ordine.setStato(StatoOrdine.PAGATO);
         ordine.setDataPagamento(LocalDateTime.now());
