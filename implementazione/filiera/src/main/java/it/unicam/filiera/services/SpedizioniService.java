@@ -31,10 +31,6 @@ public class SpedizioniService {
         LocalDateTime now = LocalDateTime.now();
         ordine.setStato(StatoOrdine.SPEDITO);
         ordine.setDataSpedizione(now);
-
-        ordine.setDataStimataConsegnaDa(now.plusDays(3));
-        ordine.setDataStimataConsegnaA(now.plusDays(4));
-
         if (trackingCode != null && !trackingCode.isBlank()) {
             ordine.setTrackingCode(trackingCode.trim());
         }

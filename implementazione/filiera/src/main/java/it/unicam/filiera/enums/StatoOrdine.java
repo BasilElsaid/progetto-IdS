@@ -1,6 +1,7 @@
 package it.unicam.filiera.enums;
 
 public enum StatoOrdine {
+    IN_CREAZIONE,
     CREATO,
     IN_ATTESA_PAGAMENTO,
     PAGATO,

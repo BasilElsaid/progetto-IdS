@@ -9,106 +9,113 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "ordini")
 public class Ordine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Acquirente acquirente;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordine", orphanRemoval = true)
+    private List<OrdineItem> items = new ArrayList<>();
+
+    private double totale;
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private StatoOrdine stato = StatoOrdine.IN_ATTESA_PAGAMENTO;
+    private StatoOrdine stato;
 
-    @Column(nullable = false)
-    private LocalDateTime dataOra = LocalDateTime.now();
-
-    @Column(nullable = false)
-    private double importoTotale = 0.0;
-
-    // Tracking / spedizione / consegna
-    private LocalDateTime dataStimataConsegnaDa;
-    private LocalDateTime dataStimataConsegnaA;
+    private LocalDateTime dataCreazione;
+    private LocalDateTime dataPagamento;
     private LocalDateTime dataSpedizione;
     private LocalDateTime dataConsegna;
-    @Column(length = 64)
+
     private String trackingCode;
 
-    // Righe marketplace (con quantità)
-    @OneToMany(mappedBy = "ordine", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrdineItemMarketplace> itemsMarketplace = new ArrayList<>();
-
-    // Per ordini vecchi (mantengo compatibilità)
-    @ManyToMany
-    @JoinTable(
-            name = "ordine_prodotti",
-            joinColumns = @JoinColumn(name = "ordine_id"),
-            inverseJoinColumns = @JoinColumn(name = "prodotto_id")
-    )
-    private List<Prodotto> prodotti = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "ordine_pacchetti",
-            joinColumns = @JoinColumn(name = "ordine_id"),
-            inverseJoinColumns = @JoinColumn(name = "pacchetto_id")
-    )
-    private List<Pacchetto> pacchetti = new ArrayList<>();
-
-    public Ordine() { }
-
-    public Ordine(Acquirente acquirente) {
-        this.acquirente = acquirente;
-        this.dataOra = LocalDateTime.now();
-        this.stato = StatoOrdine.IN_ATTESA_PAGAMENTO;
+    // --- Utility ---
+    public void aggiungiItem(OrdineItem item) {
+        item.setOrdine(this);
+        items.add(item);
     }
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Acquirente getAcquirente() { return acquirente; }
-    public void setAcquirente(Acquirente acquirente) { this.acquirente = acquirente; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public StatoOrdine getStato() { return stato; }
-    public void setStato(StatoOrdine stato) { this.stato = stato; }
+    public Acquirente getAcquirente() {
+        return acquirente;
+    }
 
-    public LocalDateTime getDataOra() { return dataOra; }
-    public void setDataOra(LocalDateTime dataOra) { this.dataOra = dataOra; }
+    public void setAcquirente(Acquirente acquirente) {
+        this.acquirente = acquirente;
+    }
 
-    public double getImportoTotale() { return importoTotale; }
-    public void setImportoTotale(double importoTotale) { this.importoTotale = importoTotale; }
+    public List<OrdineItem> getItems() {
+        return items;
+    }
 
-    public double getTotale() { return importoTotale; }
-    public void setTotale(double totale) { this.importoTotale = totale; }
+    public void setItems(List<OrdineItem> items) {
+        this.items = items;
+    }
 
-    public LocalDateTime getDataStimataConsegnaDa() { return dataStimataConsegnaDa; }
-    public void setDataStimataConsegnaDa(LocalDateTime v) { this.dataStimataConsegnaDa = v; }
+    public double getTotale() {
+        return totale;
+    }
 
-    public LocalDateTime getDataStimataConsegnaA() { return dataStimataConsegnaA; }
-    public void setDataStimataConsegnaA(LocalDateTime v) { this.dataStimataConsegnaA = v; }
+    public void setTotale(double totale) {
+        this.totale = totale;
+    }
 
-    public LocalDateTime getDataSpedizione() { return dataSpedizione; }
-    public void setDataSpedizione(LocalDateTime v) { this.dataSpedizione = v; }
+    public StatoOrdine getStato() {
+        return stato;
+    }
 
-    public LocalDateTime getDataConsegna() { return dataConsegna; }
-    public void setDataConsegna(LocalDateTime v) { this.dataConsegna = v; }
+    public void setStato(StatoOrdine stato) {
+        this.stato = stato;
+    }
 
-    public String getTrackingCode() { return trackingCode; }
-    public void setTrackingCode(String trackingCode) { this.trackingCode = trackingCode; }
+    public LocalDateTime getDataCreazione() {
+        return dataCreazione;
+    }
 
-    public List<OrdineItemMarketplace> getItemsMarketplace() { return itemsMarketplace; }
-    public void setItemsMarketplace(List<OrdineItemMarketplace> itemsMarketplace) { this.itemsMarketplace = itemsMarketplace; }
+    public void setDataCreazione(LocalDateTime dataCreazione) {
+        this.dataCreazione = dataCreazione;
+    }
 
-    public List<Prodotto> getProdotti() { return prodotti; }
-    public void setProdotti(List<Prodotto> prodotti) { this.prodotti = prodotti; }
+    public LocalDateTime getDataPagamento() {
+        return dataPagamento;
+    }
 
-    public List<Pacchetto> getPacchetti() { return pacchetti; }
-    public void setPacchetti(List<Pacchetto> pacchetti) { this.pacchetti = pacchetti; }
+    public void setDataPagamento(LocalDateTime dataPagamento) {
+        this.dataPagamento = dataPagamento;
+    }
 
-    public void aggiungiItemMarketplace(OrdineItemMarketplace item) {
-        item.setOrdine(this);
-        this.itemsMarketplace.add(item);
+    public LocalDateTime getDataSpedizione() {
+        return dataSpedizione;
+    }
+
+    public void setDataSpedizione(LocalDateTime dataSpedizione) {
+        this.dataSpedizione = dataSpedizione;
+    }
+
+    public LocalDateTime getDataConsegna() {
+        return dataConsegna;
+    }
+
+    public void setDataConsegna(LocalDateTime dataConsegna) {
+        this.dataConsegna = dataConsegna;
+    }
+
+    public String getTrackingCode() {
+        return trackingCode;
+    }
+
+    public void setTrackingCode(String trackingCode) {
+        this.trackingCode = trackingCode;
     }
 }

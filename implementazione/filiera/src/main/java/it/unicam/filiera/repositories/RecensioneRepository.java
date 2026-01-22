@@ -1,12 +1,15 @@
 package it.unicam.filiera.repositories;
 
 import it.unicam.filiera.domain.Recensione;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface RecensioneRepository extends JpaRepository<Recensione, Long> {
-    boolean existsByOrdineIdAndProdottoIdAndAcquirenteId(Long ordineId, Long prodottoId, Long acquirenteId);
-    List<Recensione> findByProdottoId(Long prodottoId);
+public interface RecensioneRepository extends CrudRepository<Recensione, Long> {
+
+    boolean existsByOrdineIdAndItemIdAndAcquirenteId(Long ordineId, Long itemId, Long acquirenteId);
+
+    List<Recensione> findByProdottoId(Long prodottoId);  // opzionale, rimane per prodotti
     List<Recensione> findByAcquirenteId(Long acquirenteId);
+    List<Recensione> findByItemId(Long itemId);
 }

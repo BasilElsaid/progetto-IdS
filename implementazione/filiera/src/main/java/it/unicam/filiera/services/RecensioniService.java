@@ -35,7 +35,7 @@ public class RecensioniService {
     }
 
     @Transactional
-    public Recensione crea(Long acquirenteId, Long ordineId, Long prodottoId, int voto, String testo) {
+    public Recensione crea(Long acquirenteId, Long ordineId, Long itemId, boolean pacchetto, int voto, String testo) {
         if (voto < 1 || voto > 5) throw new BadRequestException("Voto deve essere 1..5");
 
         Acquirente a = acquirentiRepo.findById(acquirenteId)
@@ -48,31 +48,34 @@ public class RecensioniService {
             throw new BadRequestException("Ordine non appartiene a questo acquirente");
         }
 
-        if (ordine.getStato() != StatoOrdine.CONSEGNATO && ordine.getStato() != StatoOrdine.RIMBORSO_RICHIESTO
-                && ordine.getStato() != StatoOrdine.RIMBORSATO && ordine.getStato() != StatoOrdine.RIMBORSO_RIFIUTATO) {
+        if (ordine.getStato() != StatoOrdine.CONSEGNATO &&
+                ordine.getStato() != StatoOrdine.RIMBORSO_RICHIESTO &&
+                ordine.getStato() != StatoOrdine.RIMBORSATO &&
+                ordine.getStato() != StatoOrdine.RIMBORSO_RIFIUTATO) {
             throw new BadRequestException("Puoi recensire solo dopo CONSEGNA");
         }
 
-        boolean prodottoInOrdine = ordine.getItemsMarketplace().stream()
-                .anyMatch(i -> i.getProdotto().getId().equals(prodottoId));
+        boolean itemInOrdine = ordine.getItems().stream()
+                .anyMatch(item -> item.getAnnuncioId().equals(itemId) && item.isPacchetto() == pacchetto);
 
-        if (!prodottoInOrdine) {
-            throw new BadRequestException("Questo prodotto non è presente nell'ordine");
+        if (!itemInOrdine) {
+            throw new BadRequestException("Questo item non è presente nell'ordine");
         }
 
-        if (repo.existsByOrdineIdAndProdottoIdAndAcquirenteId(ordineId, prodottoId, acquirenteId)) {
-            throw new BadRequestException("Recensione già inserita per questo prodotto in questo ordine");
+        if (repo.existsByOrdineIdAndItemIdAndAcquirenteId(ordineId, itemId, acquirenteId)) {
+            throw new BadRequestException("Recensione già inserita per questo item in questo ordine");
         }
 
-        Prodotto p = prodottiRepo.findById(prodottoId)
-                .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
+        // Creazione recensione
+        Recensione r = new Recensione(ordine, pacchetto ? null : prodottiRepo.findById(itemId).orElse(null), a, voto, testo);
+        r.setItemId(itemId);
+        r.setPacchetto(pacchetto);
 
-        Recensione r = new Recensione(ordine, p, a, voto, testo);
         return repo.save(r);
     }
 
-    public List<Recensione> byProdotto(Long prodottoId) {
-        return repo.findByProdottoId(prodottoId);
+    public List<Recensione> byItem(Long itemId) {
+        return repo.findByItemId(itemId);
     }
 
     public List<Recensione> byAcquirente(Long acquirenteId) {

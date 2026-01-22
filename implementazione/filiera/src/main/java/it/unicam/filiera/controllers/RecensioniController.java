@@ -20,12 +20,12 @@ public class RecensioniController {
     @PostMapping
     @PreAuthorize("hasRole('ACQUIRENTE')")
     public Recensione crea(@RequestBody CreaReq req) {
-        return service.crea(req.getAcquirenteId(), req.getOrdineId(), req.getProdottoId(), req.getVoto(), req.getTesto());
-    }
+        // Ora usiamo itemId invece di prodottoId
+        return service.crea(req.getAcquirenteId(), req.getOrdineId(), req.getItemId(), req.isPacchetto(), req.getVoto(), req.getTesto());    }
 
-    @GetMapping("/prodotto/{prodottoId}")
-    public List<Recensione> byProdotto(@PathVariable Long prodottoId) {
-        return service.byProdotto(prodottoId);
+    @GetMapping("/item/{itemId}")
+    public List<Recensione> byItem(@PathVariable Long itemId) {
+        return service.byItem(itemId);  // metodo nuovo nel service che cerca per itemId (prodotto o pacchetto)
     }
 
     @GetMapping("/acquirente/{acquirenteId}")
@@ -37,9 +37,10 @@ public class RecensioniController {
     public static class CreaReq {
         private Long acquirenteId;
         private Long ordineId;
-        private Long prodottoId;
+        private Long itemId;  // aggiornato da prodottoId a itemId
         private int voto;
         private String testo;
+        private boolean pacchetto;
 
         public Long getAcquirenteId() { return acquirenteId; }
         public void setAcquirenteId(Long acquirenteId) { this.acquirenteId = acquirenteId; }
@@ -47,13 +48,16 @@ public class RecensioniController {
         public Long getOrdineId() { return ordineId; }
         public void setOrdineId(Long ordineId) { this.ordineId = ordineId; }
 
-        public Long getProdottoId() { return prodottoId; }
-        public void setProdottoId(Long prodottoId) { this.prodottoId = prodottoId; }
+        public Long getItemId() { return itemId; }
+        public void setItemId(Long itemId) { this.itemId = itemId; }
 
         public int getVoto() { return voto; }
         public void setVoto(int voto) { this.voto = voto; }
 
         public String getTesto() { return testo; }
         public void setTesto(String testo) { this.testo = testo; }
+
+        public boolean isPacchetto() { return pacchetto; }
+        public void setPacchetto(boolean pacchetto) { this.pacchetto = pacchetto; }
     }
 }

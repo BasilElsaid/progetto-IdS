@@ -1,130 +1,137 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.domain.Ordine;
-import it.unicam.filiera.domain.Pacchetto;
+import it.unicam.filiera.controllers.dto.response.OrdineResponse;
+import it.unicam.filiera.domain.*;
 import it.unicam.filiera.enums.StatoOrdine;
+import it.unicam.filiera.enums.MetodoPagamento;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Acquirente;
-import it.unicam.filiera.repositories.AcquirenteRepository;
-import it.unicam.filiera.repositories.OrdineRepository;
-import it.unicam.filiera.repositories.PacchettoRepository;
+import it.unicam.filiera.repositories.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class OrdiniService {
 
-    private final OrdineRepository ordineRepository;
-    private final AcquirenteRepository acquirenteRepository;
-    private final PacchettoRepository pacchettiRepo;
+    private final OrdineRepository ordineRepo;
+    private final AcquirenteRepository acquirenteRepo;
+    private final AnnuncioProdottoRepository prodottiRepo;
+    private final AnnuncioPacchettoRepository pacchettiRepo;
 
-    public OrdiniService(OrdineRepository ordineRepository,
-                         AcquirenteRepository acquirenteRepository,
-                         PacchettoRepository pacchettiRepo) {
-        this.ordineRepository = ordineRepository;
-        this.acquirenteRepository = acquirenteRepository;
+    public OrdiniService(OrdineRepository ordineRepo,
+                         AcquirenteRepository acquirenteRepo,
+                         AnnuncioProdottoRepository prodottiRepo,
+                         AnnuncioPacchettoRepository pacchettiRepo) {
+        this.ordineRepo = ordineRepo;
+        this.acquirenteRepo = acquirenteRepo;
+        this.prodottiRepo = prodottiRepo;
         this.pacchettiRepo = pacchettiRepo;
     }
 
-    public Ordine creaOrdine(Long acquirenteId, List<Long> pacchettoIds) {
-        if (acquirenteId == null) {
-            throw new BadRequestException("acquirenteId mancante");
-        }
-        if (pacchettoIds == null || pacchettoIds.isEmpty()) {
-            throw new BadRequestException("pacchettoIds mancanti");
-        }
+    @Transactional
+    public OrdineResponse creaOrdine(Long acquirenteId, List<ItemRequest> items) {
+        if (acquirenteId == null) throw new BadRequestException("acquirenteId mancante");
+        if (items == null || items.isEmpty()) throw new BadRequestException("items mancanti");
 
-        Acquirente acquirente = acquirenteRepository.findById(acquirenteId)
+        Acquirente acquirente = acquirenteRepo.findById(acquirenteId)
                 .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
-
-        List<Pacchetto> pacchetti = (List<Pacchetto>) pacchettiRepo.findAllById(pacchettoIds);
-
-        double totale = pacchetti.stream()
-                .mapToDouble(this::estraiPrezzoPacchetto)
-                .sum();
 
         Ordine ordine = new Ordine();
         ordine.setAcquirente(acquirente);
-        ordine.setPacchetti(pacchetti);
+        ordine.setStato(StatoOrdine.IN_CREAZIONE);
+        ordine.setDataCreazione(LocalDateTime.now());
+
+        double totale = 0.0;
+
+        for (ItemRequest r : items) {
+            if (r.getQuantita() <= 0) throw new BadRequestException("Quantita non valida");
+
+            OrdineItem item = new OrdineItem();
+            item.setAnnuncioId(r.getAnnuncioId());
+            item.setPacchetto(r.isPacchetto());
+            item.setQuantita(r.getQuantita());
+
+            if (r.isPacchetto()) {
+                var annuncio = pacchettiRepo.findById(r.getAnnuncioId())
+                        .orElseThrow(() -> new NotFoundException("Pacchetto non trovato"));
+                if (!annuncio.isAttivo() || annuncio.getStock() < r.getQuantita())
+                    throw new BadRequestException("Pacchetto non disponibile");
+                annuncio.setStock(annuncio.getStock() - r.getQuantita());
+                pacchettiRepo.save(annuncio);
+                item.setPrezzoUnitario(annuncio.getPrezzo());
+            } else {
+                var annuncio = prodottiRepo.findById(r.getAnnuncioId())
+                        .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
+                if (!annuncio.isAttivo() || annuncio.getStock() < r.getQuantita())
+                    throw new BadRequestException("Prodotto non disponibile");
+                annuncio.setStock(annuncio.getStock() - r.getQuantita());
+                prodottiRepo.save(annuncio);
+                item.setPrezzoUnitario(annuncio.getPrezzo());
+            }
+
+            ordine.aggiungiItem(item);
+            totale += item.getTotaleRiga();
+        }
+
         ordine.setTotale(totale);
-        ordine.setStato(StatoOrdine.CREATO);
+        ordine.setStato(StatoOrdine.IN_ATTESA_PAGAMENTO);
 
-        return ordineRepository.save(ordine);
+        Ordine saved = ordineRepo.save(ordine);
+        return OrdineResponse.from(saved);
     }
-
-    public Ordine getById(Long id) {
-        return ordineRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Ordine non trovato"));
-    }
-
-    public List<Ordine> all() {
-        return (List<Ordine>) ordineRepository.findAll();
-    }
-
-    public List<Ordine> getByAcquirente(Long acquirenteId) {
-        return ordineRepository.findByAcquirenteId(acquirenteId);
-    }
-
 
     @Transactional
-    public Ordine aggiornaStato(Long ordineId, StatoOrdine nuovoStato, String trackingCode) {
-        if (ordineId == null) throw new BadRequestException("ordineId mancante");
-        if (nuovoStato == null) throw new BadRequestException("stato mancante");
-
-        Ordine ordine = ordineRepository.findById(ordineId)
+    public OrdineResponse pagaOrdine(Long acquirenteId, Long ordineId, MetodoPagamento metodo) {
+        Ordine ordine = ordineRepo.findById(ordineId)
                 .orElseThrow(() -> new NotFoundException("Ordine non trovato"));
 
-        if (nuovoStato == StatoOrdine.SPEDITO && ordine.getStato() != StatoOrdine.PAGATO) {
-            throw new BadRequestException("Puoi spedire solo ordini PAGATI");
-        }
-        if (nuovoStato == StatoOrdine.CONSEGNATO && ordine.getStato() != StatoOrdine.SPEDITO) {
-            throw new BadRequestException("Puoi consegnare solo ordini SPEDITI");
-        }
+        if (!ordine.getAcquirente().getId().equals(acquirenteId))
+            throw new BadRequestException("Ordine non appartiene a questo acquirente");
 
-        ordine.setStato(nuovoStato);
+        if (ordine.getStato() != StatoOrdine.IN_ATTESA_PAGAMENTO)
+            throw new BadRequestException("Ordine non in attesa pagamento");
 
-        LocalDateTime now = LocalDateTime.now();
+        ordine.setStato(StatoOrdine.PAGATO);
+        ordine.setDataPagamento(LocalDateTime.now());
 
-        if (nuovoStato == StatoOrdine.SPEDITO) {
-            invocaSetterSeEsiste(ordine, "setDataSpedizione", LocalDateTime.class, now);
-            invocaSetterSeEsiste(ordine, "setDataStimataConsegnaDa", LocalDateTime.class, now.plusDays(3));
-            invocaSetterSeEsiste(ordine, "setDataStimataConsegnaA", LocalDateTime.class, now.plusDays(4));
-
-            if (trackingCode != null && !trackingCode.isBlank()) {
-                invocaSetterSeEsiste(ordine, "setTrackingCode", String.class, trackingCode.trim());
-            }
-        }
-
-        if (nuovoStato == StatoOrdine.CONSEGNATO) {
-            invocaSetterSeEsiste(ordine, "setDataConsegna", LocalDateTime.class, now);
-        }
-
-        return ordineRepository.save(ordine);
+        return OrdineResponse.from(ordineRepo.save(ordine));
     }
 
-    private void invocaSetterSeEsiste(Object target, String methodName, Class<?> paramType, Object value) {
-        try {
-            Method m = target.getClass().getMethod(methodName, paramType);
-            m.invoke(target, value);
-        } catch (Exception ignored) {
-        }
+    public OrdineResponse getById(Long id) {
+        return OrdineResponse.from(
+                ordineRepo.findById(id).orElseThrow(() -> new NotFoundException("Ordine non trovato"))
+        );
     }
 
+    public List<OrdineResponse> all() {
+        return StreamSupport.stream(ordineRepo.findAll().spliterator(), false)
+                .map(OrdineResponse::from)
+                .collect(Collectors.toList());
+    }
 
-    private double estraiPrezzoPacchetto(Pacchetto p) {
-        for (String nomeMetodo : new String[]{"getPrezzo", "getCostoTotale", "getPrezzoTotale", "getTotale", "getCosto"}) {
-            try {
-                Method m = p.getClass().getMethod(nomeMetodo);
-                Object v = m.invoke(p);
-                if (v instanceof Number n) return n.doubleValue();
-            } catch (Exception ignored) {
-            }
-        }
-        throw new BadRequestException("Pacchetto: impossibile determinare il prezzo (manca un getter tipo getPrezzo/getCostoTotale/...)");
+    public List<OrdineResponse> getByAcquirente(Long acquirenteId) {
+        return ordineRepo.findByAcquirenteId(acquirenteId).stream()
+                .map(OrdineResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    // DTO interno per richiesta items
+    public static class ItemRequest {
+        private Long annuncioId;
+        private int quantita;
+        private boolean pacchetto;
+
+        public Long getAnnuncioId() { return annuncioId; }
+        public void setAnnuncioId(Long annuncioId) { this.annuncioId = annuncioId; }
+        public int getQuantita() { return quantita; }
+        public void setQuantita(int quantita) { this.quantita = quantita; }
+        public boolean isPacchetto() { return pacchetto; }
+        public void setPacchetto(boolean pacchetto) { this.pacchetto = pacchetto; }
     }
 }

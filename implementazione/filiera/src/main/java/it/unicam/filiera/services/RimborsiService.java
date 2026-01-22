@@ -1,19 +1,15 @@
 package it.unicam.filiera.services;
 
 import it.unicam.filiera.domain.Ordine;
-import it.unicam.filiera.domain.PagamentoOrdine;
 import it.unicam.filiera.domain.RichiestaRimborso;
-import it.unicam.filiera.enums.MetodoPagamento;
 import it.unicam.filiera.enums.StatoOrdine;
-import it.unicam.filiera.enums.StatoPagamento;
 import it.unicam.filiera.enums.StatoRimborso;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Acquirente;
 import it.unicam.filiera.repositories.AcquirenteRepository;
 import it.unicam.filiera.repositories.OrdineRepository;
-import it.unicam.filiera.repositories.PagamentoOrdineRepository;
-import it.unicam.filiera.repositories.RichiestaRimborsoRepository;
+import it.unicam.filiera.repositories.RimborsiRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,34 +19,21 @@ import java.util.List;
 @Service
 public class RimborsiService {
 
-    private static final int GIORNI_FINESTRA_RIMBORSO = 14;
-
-    private final RichiestaRimborsoRepository repo;
+    private final RimborsiRepository repo;
     private final OrdineRepository ordiniRepo;
     private final AcquirenteRepository acquirentiRepo;
-    private final PagamentoOrdineRepository pagamentiRepo;
 
-    public RimborsiService(RichiestaRimborsoRepository repo,
+    public RimborsiService(RimborsiRepository repo,
                            OrdineRepository ordiniRepo,
-                           AcquirenteRepository acquirentiRepo,
-                           PagamentoOrdineRepository pagamentiRepo) {
+                           AcquirenteRepository acquirentiRepo) {
         this.repo = repo;
         this.ordiniRepo = ordiniRepo;
         this.acquirentiRepo = acquirentiRepo;
-        this.pagamentiRepo = pagamentiRepo;
     }
 
     @Transactional
     public RichiestaRimborso richiedi(Long acquirenteId, Long ordineId, String motivazione) {
-        if (motivazione == null || motivazione.isBlank()) {
-            throw new BadRequestException("Motivazione obbligatoria");
-        }
-
-        if (repo.existsByOrdineId(ordineId)) {
-            throw new BadRequestException("Rimborso già richiesto per questo ordine");
-        }
-
-        Acquirente acquirente = acquirentiRepo.findById(acquirenteId)
+        Acquirente a = acquirentiRepo.findById(acquirenteId)
                 .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
 
         Ordine ordine = ordiniRepo.findById(ordineId)
@@ -60,23 +43,16 @@ public class RimborsiService {
             throw new BadRequestException("Ordine non appartiene a questo acquirente");
         }
 
-        if (ordine.getStato() != StatoOrdine.CONSEGNATO) {
-            throw new BadRequestException("Puoi chiedere rimborso solo dopo CONSEGNA");
+        if (ordine.getStato() != StatoOrdine.PAGATO && ordine.getStato() != StatoOrdine.CONSEGNATO) {
+            throw new BadRequestException("Rimborso possibile solo per ordini PAGATI o CONSEGNATI");
         }
 
-        if (ordine.getDataConsegna() == null) {
-            throw new BadRequestException("Data consegna mancante");
-        }
+        RichiestaRimborso r = new RichiestaRimborso(ordine, a, motivazione);
 
-        LocalDateTime deadline = ordine.getDataConsegna().plusDays(GIORNI_FINESTRA_RIMBORSO);
-        if (LocalDateTime.now().isAfter(deadline)) {
-            throw new BadRequestException("Finestra rimborso scaduta (14 giorni)");
-        }
-
+        // Aggiorna lo stato dell'ordine in richiesta rimborso
         ordine.setStato(StatoOrdine.RIMBORSO_RICHIESTO);
         ordiniRepo.save(ordine);
 
-        RichiestaRimborso r = new RichiestaRimborso(ordine, acquirente, motivazione.trim());
         return repo.save(r);
     }
 
@@ -87,32 +63,21 @@ public class RimborsiService {
     @Transactional
     public RichiestaRimborso valuta(Long rimborsoId, boolean approva, String notaGestore) {
         RichiestaRimborso r = repo.findById(rimborsoId)
-                .orElseThrow(() -> new NotFoundException("Richiesta rimborso non trovata"));
-
-        if (r.getStato() != StatoRimborso.IN_VALUTAZIONE) {
-            throw new BadRequestException("Rimborso già valutato");
-        }
-
-        Ordine ordine = r.getOrdine();
+                .orElseThrow(() -> new NotFoundException("Rimborso non trovato"));
 
         r.setNotaGestore(notaGestore);
+        r.setStato(approva ? StatoRimborso.APPROVATO : StatoRimborso.RIFIUTATO);
         r.setDecisoIl(LocalDateTime.now());
 
+        // Aggiorna lo stato ordine in base alla decisione
+        Ordine ordine = r.getOrdine();
         if (approva) {
-            r.setStato(StatoRimborso.APPROVATO);
             ordine.setStato(StatoOrdine.RIMBORSATO);
-
-            PagamentoOrdine p = PagamentoOrdine.creaRimborso(ordine, MetodoPagamento.PAYPAL, ordine.getImportoTotale());
-            p.setStato(StatoPagamento.RIMBORSATO);
-            p.setPagatoIl(LocalDateTime.now());
-            pagamentiRepo.save(p);
-
         } else {
-            r.setStato(StatoRimborso.RIFIUTATO);
             ordine.setStato(StatoOrdine.RIMBORSO_RIFIUTATO);
         }
-
         ordiniRepo.save(ordine);
+
         return repo.save(r);
     }
 }

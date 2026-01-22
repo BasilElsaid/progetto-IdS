@@ -1,8 +1,7 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.create.CreateOrdineRequest;
-import it.unicam.filiera.domain.Ordine;
-import it.unicam.filiera.enums.StatoOrdine;
+import it.unicam.filiera.controllers.dto.response.OrdineResponse;
+import it.unicam.filiera.enums.MetodoPagamento;
 import it.unicam.filiera.services.OrdiniService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ordini")
-@PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
+@PreAuthorize("hasRole('ACQUIRENTE')")
 public class OrdiniController {
 
     private final OrdiniService service;
@@ -21,40 +20,30 @@ public class OrdiniController {
     }
 
     @PostMapping
-    public Ordine crea(@RequestBody CreateOrdineRequest request) {
-        return service.creaOrdine(request.getAcquirenteId(), request.getPacchettoIds());
+    public OrdineResponse crea(@RequestBody List<OrdiniService.ItemRequest> items,
+                               @RequestParam Long acquirenteId) {
+        return service.creaOrdine(acquirenteId, items);
+    }
+
+    @PostMapping("/{id}/paga")
+    public OrdineResponse paga(@PathVariable Long id,
+                               @RequestParam Long acquirenteId,
+                               @RequestParam MetodoPagamento metodo) {
+        return service.pagaOrdine(acquirenteId, id, metodo);
     }
 
     @GetMapping("/{id}")
-    public Ordine get(@PathVariable Long id) {
+    public OrdineResponse get(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @GetMapping
-    public List<Ordine> all() {
+    public List<OrdineResponse> all() {
         return service.all();
     }
 
     @GetMapping("/acquirente/{acquirenteId}")
-    public List<Ordine> byAcquirente(@PathVariable Long acquirenteId) {
+    public List<OrdineResponse> byAcquirente(@PathVariable Long acquirenteId) {
         return service.getByAcquirente(acquirenteId);
-    }
-
-    // PATCH stato: lo deve vedere anche Swagger se questo file è in src/main/java
-    @PatchMapping("/{id}/stato")
-    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
-    public Ordine aggiornaStato(@PathVariable Long id, @RequestBody UpdateStatoReq req) {
-        return service.aggiornaStato(id, req.getStato(), req.getTrackingCode());
-    }
-
-    public static class UpdateStatoReq {
-        private StatoOrdine stato;
-        private String trackingCode;
-
-        public StatoOrdine getStato() { return stato; }
-        public void setStato(StatoOrdine stato) { this.stato = stato; }
-
-        public String getTrackingCode() { return trackingCode; }
-        public void setTrackingCode(String trackingCode) { this.trackingCode = trackingCode; }
     }
 }

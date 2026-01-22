@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(
         name = "recensioni",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"ordine_id", "prodotto_id", "acquirente_id"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"ordine_id", "item_id", "acquirente_id"})
 )
 public class Recensione {
 
@@ -19,11 +19,17 @@ public class Recensione {
     @ManyToOne(optional = false)
     private Ordine ordine;
 
-    @ManyToOne(optional = false)
-    private Prodotto prodotto;
+    @ManyToOne
+    private Prodotto prodotto; // se recensione su prodotto singolo, null se pacchetto
 
     @ManyToOne(optional = false)
     private Acquirente acquirente;
+
+    @Column(nullable = false)
+    private Long itemId; // id generico prodotto o pacchetto
+
+    @Column(nullable = false)
+    private boolean pacchetto = false;
 
     @Column(nullable = false)
     private int voto; // 1..5
@@ -45,10 +51,16 @@ public class Recensione {
         this.creataIl = LocalDateTime.now();
     }
 
+    // --- GETTERS / SETTERS ---
+
     public Long getId() { return id; }
     public Ordine getOrdine() { return ordine; }
     public Prodotto getProdotto() { return prodotto; }
     public Acquirente getAcquirente() { return acquirente; }
+    public Long getItemId() { return itemId; }
+    public void setItemId(Long itemId) { this.itemId = itemId; }
+    public boolean isPacchetto() { return pacchetto; }
+    public void setPacchetto(boolean pacchetto) { this.pacchetto = pacchetto; }
     public int getVoto() { return voto; }
     public String getTesto() { return testo; }
     public LocalDateTime getCreataIl() { return creataIl; }
