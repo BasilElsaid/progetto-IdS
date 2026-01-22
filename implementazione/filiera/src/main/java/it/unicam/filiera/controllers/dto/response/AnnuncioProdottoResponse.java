@@ -1,10 +1,10 @@
 package it.unicam.filiera.controllers.dto.response;
 
-import it.unicam.filiera.domain.AnnuncioMarketplace;
+import it.unicam.filiera.domain.AnnuncioProdotto;
 
 import java.time.LocalDateTime;
 
-public class AnnuncioMarketplaceResponse {
+public class AnnuncioProdottoResponse {
     public Long id;
     public Long aziendaId;
     public Long prodottoId;
@@ -13,8 +13,8 @@ public class AnnuncioMarketplaceResponse {
     public boolean attivo;
     public LocalDateTime creatoIl;
 
-    public static AnnuncioMarketplaceResponse from(AnnuncioMarketplace a) {
-        AnnuncioMarketplaceResponse r = new AnnuncioMarketplaceResponse();
+    public static AnnuncioProdottoResponse from(AnnuncioProdotto a) {
+        AnnuncioProdottoResponse r = new AnnuncioProdottoResponse();
         r.id = a.getId();
         r.aziendaId = a.getAzienda().getId();
         r.prodottoId = a.getProdotto().getId();

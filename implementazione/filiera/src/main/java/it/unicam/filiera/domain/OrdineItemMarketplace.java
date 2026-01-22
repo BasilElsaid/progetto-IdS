@@ -14,7 +14,7 @@ public class OrdineItemMarketplace {
     private Ordine ordine;
 
     @ManyToOne(optional = false)
-    private AnnuncioMarketplace annuncio;
+    private AnnuncioProdotto annuncio;
 
     @ManyToOne(optional = false)
     private Prodotto prodotto;
@@ -28,7 +28,7 @@ public class OrdineItemMarketplace {
     protected OrdineItemMarketplace() {
     }
 
-    public OrdineItemMarketplace(AnnuncioMarketplace annuncio, int quantita, double prezzoUnitario) {
+    public OrdineItemMarketplace(AnnuncioProdotto annuncio, int quantita, double prezzoUnitario) {
         this.annuncio = annuncio;
         this.prodotto = annuncio.getProdotto();
         this.quantita = quantita;
@@ -47,7 +47,7 @@ public class OrdineItemMarketplace {
         this.ordine = ordine;
     }
 
-    public AnnuncioMarketplace getAnnuncio() {
+    public AnnuncioProdotto getAnnuncio() {
         return annuncio;
     }
 

@@ -20,14 +20,14 @@ public class CarrelloService {
 
     private final CarrelloRepository carrelloRepo;
     private final CarrelloItemRepository itemRepo;
-    private final AnnuncioMarketplaceRepository annunciRepo;
+    private final AnnuncioProdottoRepository annunciRepo;
     private final AcquirenteRepository acquirentiRepo;
     private final OrdineRepository ordiniRepo;
     private final PagamentoOrdineRepository pagamentiRepo;
 
     public CarrelloService(CarrelloRepository carrelloRepo,
                            CarrelloItemRepository itemRepo,
-                           AnnuncioMarketplaceRepository annunciRepo,
+                           AnnuncioProdottoRepository annunciRepo,
                            AcquirenteRepository acquirentiRepo,
                            OrdineRepository ordiniRepo,
                            PagamentoOrdineRepository pagamentiRepo) {
@@ -55,7 +55,7 @@ public class CarrelloService {
 
         Carrello carrello = getOrCreate(acquirenteId);
 
-        AnnuncioMarketplace annuncio = annunciRepo.findByIdForUpdate(annuncioId)
+        AnnuncioProdotto annuncio = annunciRepo.findById(annuncioId)
                 .orElseThrow(() -> new NotFoundException("Annuncio non trovato"));
 
         if (!annuncio.isAttivo()) throw new BadRequestException("Annuncio non attivo");
@@ -82,7 +82,7 @@ public class CarrelloService {
             throw new BadRequestException("Item non appartiene a questo carrello");
         }
 
-        AnnuncioMarketplace annuncio = annunciRepo.findByIdForUpdate(item.getAnnuncio().getId())
+        AnnuncioProdotto annuncio = annunciRepo.findById(item.getAnnuncio().getId())
                 .orElseThrow(() -> new NotFoundException("Annuncio non trovato"));
 
         annuncio.setStock(annuncio.getStock() + item.getQuantita());
@@ -158,7 +158,7 @@ public class CarrelloService {
         var scaduti = itemRepo.findByScadeIlBefore(now);
 
         for (CarrelloItem item : scaduti) {
-            AnnuncioMarketplace annuncio = annunciRepo.findByIdForUpdate(item.getAnnuncio().getId()).orElse(null);
+            AnnuncioProdotto annuncio = annunciRepo.findById(item.getAnnuncio().getId()).orElse(null);
             if (annuncio != null) {
                 annuncio.setStock(annuncio.getStock() + item.getQuantita());
                 annunciRepo.save(annuncio);

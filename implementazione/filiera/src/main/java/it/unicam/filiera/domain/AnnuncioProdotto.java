@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "annunci_marketplace")
-public class AnnuncioMarketplace {
+@Table(name = "annunci_prodotti")
+public class AnnuncioProdotto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class AnnuncioMarketplace {
     private LocalDateTime creatoIl = LocalDateTime.now();
 
 
-    public AnnuncioMarketplace() {
+    public AnnuncioProdotto() {
         this.creatoIl = LocalDateTime.now();
         this.attivo = true;
     }

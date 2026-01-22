@@ -14,7 +14,7 @@ public class RigaOrdineMarketplace {
     private Ordine ordine;
 
     @ManyToOne(optional = false)
-    private AnnuncioMarketplace annuncio;
+    private AnnuncioProdotto annuncio;
 
     private int quantita;
     private double prezzoUnitarioAlMomento;
@@ -22,7 +22,7 @@ public class RigaOrdineMarketplace {
 
     protected RigaOrdineMarketplace() {}
 
-    public RigaOrdineMarketplace(Ordine ordine, AnnuncioMarketplace annuncio, int quantita, double prezzoUnitarioAlMomento) {
+    public RigaOrdineMarketplace(Ordine ordine, AnnuncioProdotto annuncio, int quantita, double prezzoUnitarioAlMomento) {
         this.ordine = ordine;
         this.annuncio = annuncio;
         this.quantita = quantita;
@@ -32,7 +32,7 @@ public class RigaOrdineMarketplace {
 
     public Long getId() { return id; }
     public Ordine getOrdine() { return ordine; }
-    public AnnuncioMarketplace getAnnuncio() { return annuncio; }
+    public AnnuncioProdotto getAnnuncio() { return annuncio; }
     public int getQuantita() { return quantita; }
     public double getPrezzoUnitarioAlMomento() { return prezzoUnitarioAlMomento; }
     public double getSubtotale() { return subtotale; }

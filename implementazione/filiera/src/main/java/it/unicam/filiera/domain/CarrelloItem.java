@@ -16,7 +16,7 @@ public class CarrelloItem {
     private Carrello carrello;
 
     @ManyToOne(optional = false)
-    private AnnuncioMarketplace annuncio;
+    private AnnuncioProdotto annuncio;
 
     @ManyToOne(optional = false)
     private Prodotto prodotto;
@@ -36,7 +36,7 @@ public class CarrelloItem {
     protected CarrelloItem() {
     }
 
-    public CarrelloItem(AnnuncioMarketplace annuncio, int quantita, double prezzoUnitario, LocalDateTime scadeIl) {
+    public CarrelloItem(AnnuncioProdotto annuncio, int quantita, double prezzoUnitario, LocalDateTime scadeIl) {
         this.annuncio = annuncio;
         this.prodotto = annuncio.getProdotto();
         this.quantita = quantita;
@@ -57,7 +57,7 @@ public class CarrelloItem {
         this.carrello = carrello;
     }
 
-    public AnnuncioMarketplace getAnnuncio() {
+    public AnnuncioProdotto getAnnuncio() {
         return annuncio;
     }
 

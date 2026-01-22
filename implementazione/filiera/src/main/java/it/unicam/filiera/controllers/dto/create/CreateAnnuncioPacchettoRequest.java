@@ -1,20 +1,20 @@
 package it.unicam.filiera.controllers.dto.create;
 
-public class CreateAnnuncioMarketplaceRequest {
+public class CreateAnnuncioPacchettoRequest {
 
     private Long aziendaId;
-    private Long prodottoId;
+    private Long pacchettoId;
     private double prezzo;
     private int stock;
     private boolean attivo = true;
 
-    public CreateAnnuncioMarketplaceRequest() {}
+    public CreateAnnuncioPacchettoRequest() {}
 
     public Long getAziendaId() { return aziendaId; }
     public void setAziendaId(Long aziendaId) { this.aziendaId = aziendaId; }
 
-    public Long getProdottoId() { return prodottoId; }
-    public void setProdottoId(Long prodottoId) { this.prodottoId = prodottoId; }
+    public Long getPacchettoId() { return pacchettoId; }
+    public void setPacchettoId(Long pacchettoId) { this.pacchettoId = pacchettoId; }
 
     public double getPrezzo() { return prezzo; }
     public void setPrezzo(double prezzo) { this.prezzo = prezzo; }
