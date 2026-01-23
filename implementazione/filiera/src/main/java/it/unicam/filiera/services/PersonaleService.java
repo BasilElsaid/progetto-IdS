@@ -1,8 +1,8 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.controllers.dto.create.CreatePersonaleRequest;
-import it.unicam.filiera.controllers.dto.update.UpdatePersonaleRequest;
-import it.unicam.filiera.controllers.dto.response.UtenteResponse;
+import it.unicam.filiera.dto.create.CreatePersonaleRequest;
+import it.unicam.filiera.dto.update.UpdatePersonaleRequest;
+import it.unicam.filiera.dto.response.UtenteResponse;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Animatore;

@@ -1,19 +1,17 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.response.AnnuncioPacchettoResponse;
-import it.unicam.filiera.controllers.dto.response.AnnuncioProdottoResponse;
-import it.unicam.filiera.controllers.dto.response.ProdottoResponse;
-import it.unicam.filiera.domain.Prodotto;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import it.unicam.filiera.dto.response.AnnuncioPacchettoResponse;
+import it.unicam.filiera.dto.response.AnnuncioProdottoResponse;
 import it.unicam.filiera.services.MarketplacePacchettiService;
 import it.unicam.filiera.services.MarketplaceProdottiService;
-import it.unicam.filiera.services.ProdottiService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/marketplace")
+@Tag(name = "10 - Marketplace", description = "Visualizzazione degli annunci")
 public class MarketplaceController {
 
     private final MarketplaceProdottiService marketplaceProdottiService;

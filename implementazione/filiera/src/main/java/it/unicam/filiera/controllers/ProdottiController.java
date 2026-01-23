@@ -1,16 +1,18 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.create.CreateProdottoRequest;
-import it.unicam.filiera.controllers.dto.response.ProdottoResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import it.unicam.filiera.dto.create.CreateProdottoRequest;
+import it.unicam.filiera.dto.response.ProdottoResponse;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import it.unicam.filiera.domain.Prodotto;
+
 import it.unicam.filiera.services.ProdottiService;
 
 @RestController
 @RequestMapping("/api/prodotti")
+@Tag(name = "05 - Prodotti", description = "Gestione prodotti")
 @PreAuthorize("hasAnyRole('PRODUTTORE', 'GESTORE_PIATTAFORMA')")
 public class ProdottiController {
 

@@ -1,10 +1,11 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.create.CreateAnnuncioProdottoRequest;
-import it.unicam.filiera.controllers.dto.create.CreateAnnuncioPacchettoRequest;
-import it.unicam.filiera.controllers.dto.response.AnnuncioProdottoResponse;
-import it.unicam.filiera.controllers.dto.response.AnnuncioPacchettoResponse;
-import it.unicam.filiera.controllers.dto.update.UpdateAnnuncioMarketplaceRequest;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import it.unicam.filiera.dto.create.CreateAnnuncioProdottoRequest;
+import it.unicam.filiera.dto.create.CreateAnnuncioPacchettoRequest;
+import it.unicam.filiera.dto.response.AnnuncioProdottoResponse;
+import it.unicam.filiera.dto.response.AnnuncioPacchettoResponse;
+import it.unicam.filiera.dto.update.UpdateAnnuncioMarketplaceRequest;
 import it.unicam.filiera.enums.CategoriaProdotto;
 import it.unicam.filiera.services.MarketplacePacchettiService;
 import it.unicam.filiera.services.MarketplaceProdottiService;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/marketplace/annunci")
+@Tag(name = "09 - Marketplace Annunci", description = "Gestione annunci del marketplace")
 @PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE', 'DISTRIBUTORE_TIPICITA', 'GESTORE_PIATTAFORMA')")
 public class MarketplaceAnnunciController {
 

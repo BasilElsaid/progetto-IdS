@@ -1,9 +1,9 @@
 package it.unicam.filiera.services;
 
 import it.unicam.filiera.builder.AcquirenteBuilder;
-import it.unicam.filiera.controllers.dto.create.CreateAcquirenteRequest;
-import it.unicam.filiera.controllers.dto.response.UtenteResponse;
-import it.unicam.filiera.controllers.dto.update.UpdateAcquirenteRequest;
+import it.unicam.filiera.dto.create.CreateAcquirenteRequest;
+import it.unicam.filiera.dto.response.UtenteResponse;
+import it.unicam.filiera.dto.update.UpdateAcquirenteRequest;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Acquirente;
 import it.unicam.filiera.repositories.AcquirenteRepository;

@@ -1,9 +1,9 @@
 package it.unicam.filiera.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.unicam.filiera.controllers.dto.create.CreatePersonaleRequest;
-import it.unicam.filiera.controllers.dto.response.UtenteResponse;
-import it.unicam.filiera.controllers.dto.update.UpdatePersonaleRequest;
+import it.unicam.filiera.dto.create.CreatePersonaleRequest;
+import it.unicam.filiera.dto.response.UtenteResponse;
+import it.unicam.filiera.dto.update.UpdatePersonaleRequest;
 import it.unicam.filiera.services.PersonaleService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/personale")
-@Tag(name = "Personale", description = "Gestione Curatore, Animatore e Gestore Piattaforma")
+@Tag(name = "03 - Personale", description = "Gestione Curatore, Animatore e Gestore Piattaforma")
 public class PersonaleController {
 
     private final PersonaleService service;

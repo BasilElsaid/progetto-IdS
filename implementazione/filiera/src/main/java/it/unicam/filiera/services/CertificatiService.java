@@ -1,6 +1,6 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.controllers.dto.CertificatoDTO;
+import it.unicam.filiera.dto.create.CreateCertificatoRequest;
 import it.unicam.filiera.certificati.*;
 import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.enums.TipoCertificatore;
@@ -35,7 +35,7 @@ public class CertificatiService {
     }
 
     // --- CREATE ---
-    public Certificato creaCertificato(CertificatoDTO dto) {
+    public Certificato creaCertificato(CreateCertificatoRequest dto) {
         UtenteGenerico u = getUtenteLoggato();
         TipoCertificatore consentito = tipoConsentito(u);
 
@@ -81,7 +81,7 @@ public class CertificatiService {
         return c;
     }
 
-    public Certificato aggiornaCertificato(Long id, CertificatoDTO dto) {
+    public Certificato aggiornaCertificato(Long id, CreateCertificatoRequest dto) {
         Certificato c = getCertificato(id);
         checkOwnership(c);
 
@@ -130,7 +130,7 @@ public class CertificatiService {
     }
 
     // --- VALIDAZIONE ---
-    private void validaDto(CertificatoDTO dto) {
+    private void validaDto(CreateCertificatoRequest dto) {
         switch(dto.tipo) {
             case PRODUTTORE -> {
                 if(dto.azienda == null || dto.origineMateriaPrima == null)
@@ -192,7 +192,7 @@ public class CertificatiService {
         }
     }
 
-    private Certificato inizializzaCertificato(CertificatoDTO dto, Prodotto p) {
+    private Certificato inizializzaCertificato(CreateCertificatoRequest dto, Prodotto p) {
         switch (dto.tipo) {
             case PRODUTTORE: {
                 CertificazioneProduttore cp = new CertificazioneProduttore();
@@ -231,7 +231,7 @@ public class CertificatiService {
         }
     }
 
-    private void assegnaCampiCertificato(Certificato c, CertificatoDTO dto) {
+    private void assegnaCampiCertificato(Certificato c, CreateCertificatoRequest dto) {
         switch(dto.tipo) {
             case PRODUTTORE -> {
                 if(c instanceof CertificazioneProduttore cp) {

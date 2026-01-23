@@ -1,7 +1,8 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.LoginRequest;
-import it.unicam.filiera.controllers.dto.response.LoginResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import it.unicam.filiera.dto.create.CreateLoginRequest;
+import it.unicam.filiera.dto.response.LoginResponse;
 import it.unicam.filiera.models.UtenteGenerico;
 import it.unicam.filiera.services.AuthService;
 import it.unicam.filiera.services.JwtService;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "01 - Auth", description = "Gestione autenticazione Login")
 public class AuthController {
 
     private final AuthService authService;
@@ -21,7 +23,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest request) {
+    public LoginResponse login(@RequestBody CreateLoginRequest request) {
         UtenteGenerico user =
                 authService.authenticate(request.getUsername(), request.getPassword());
 

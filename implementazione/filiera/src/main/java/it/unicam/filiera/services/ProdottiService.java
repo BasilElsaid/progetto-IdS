@@ -1,16 +1,14 @@
 package it.unicam.filiera.services;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-import it.unicam.filiera.controllers.dto.create.CreateProdottoRequest;
-import it.unicam.filiera.controllers.dto.response.ProdottoResponse;
+import it.unicam.filiera.dto.create.CreateProdottoRequest;
+import it.unicam.filiera.dto.response.ProdottoResponse;
 import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Produttore;
 import it.unicam.filiera.models.UtenteGenerico;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import it.unicam.filiera.domain.Prodotto;

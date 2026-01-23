@@ -1,5 +1,6 @@
 package it.unicam.filiera.services;
 
+import it.unicam.filiera.dto.response.SpedizioneResponse;
 import it.unicam.filiera.domain.Ordine;
 import it.unicam.filiera.enums.StatoOrdine;
 import it.unicam.filiera.exceptions.BadRequestException;
@@ -20,7 +21,7 @@ public class SpedizioniService {
     }
 
     @Transactional
-    public String spedisci(Long ordineId, String trackingCode) {
+    public SpedizioneResponse spedisci(Long ordineId, String trackingCode) {
         Ordine ordine = ordiniRepo.findById(ordineId)
                 .orElseThrow(() -> new NotFoundException("Ordine non trovato"));
 
@@ -39,12 +40,14 @@ public class SpedizioniService {
             ordine.setTrackingCode(trackingCode.trim());
         }
 
-        ordiniRepo.save(ordine);
-        return "Ordine " + ordineId + " spedito con tracking: " + trackingCode;
+        Ordine saved = ordiniRepo.save(ordine);
+
+        return SpedizioneResponse.from(saved,
+                "Ordine " + ordineId + " spedito con tracking: " + saved.getTrackingCode());
     }
 
     @Transactional
-    public String consegna(Long ordineId) {
+    public SpedizioneResponse consegna(Long ordineId) {
         Ordine ordine = ordiniRepo.findById(ordineId)
                 .orElseThrow(() -> new NotFoundException("Ordine non trovato"));
 
@@ -55,7 +58,9 @@ public class SpedizioniService {
         ordine.setStato(StatoOrdine.CONSEGNATO);
         ordine.setDataConsegna(LocalDateTime.now());
 
-        ordiniRepo.save(ordine);
-        return "Ordine " + ordineId + " consegnato";
+        Ordine saved = ordiniRepo.save(ordine);
+
+        return SpedizioneResponse.from(saved,
+                "Ordine " + ordineId + " consegnato");
     }
 }

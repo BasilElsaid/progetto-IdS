@@ -1,6 +1,7 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.response.OrdineResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import it.unicam.filiera.dto.response.OrdineResponse;
 import it.unicam.filiera.enums.MetodoPagamento;
 import it.unicam.filiera.services.OrdiniService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/ordini")
+@Tag(name = "11 - Ordini", description = "Gestione ordini")
 @PreAuthorize("hasRole('ACQUIRENTE')")
 public class OrdiniController {
 

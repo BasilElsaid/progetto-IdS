@@ -1,13 +1,12 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.controllers.dto.response.TicketEventoResponse;
+import it.unicam.filiera.dto.response.TicketEventoResponse;
 import it.unicam.filiera.domain.Evento;
 import it.unicam.filiera.domain.TicketEvento;
 import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
-import it.unicam.filiera.models.Acquirente;
 import it.unicam.filiera.models.UtenteGenerico;
 import it.unicam.filiera.repositories.*;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -88,25 +87,6 @@ public class TicketEventiService {
         return ticketRepository.findByEventoId(eventoId).stream().map(this::toResponse).toList();
     }
 
-    public TicketEventoResponse usaTicket(int numeroTicket) {
-        UtenteGenerico u = getUtenteLoggato();
-        if (u.getRuolo() != Ruolo.ANIMATORE && u.getRuolo() != Ruolo.GESTORE_PIATTAFORMA) {
-            throw new ForbiddenException("Ruolo non autorizzato");
-        }
-
-        TicketEvento ticket = ticketRepository.findByNumeroTicket(numeroTicket)
-                .orElseThrow(() -> new NotFoundException("Ticket non trovato"));
-
-        if (ticket.isUsato()) {
-            throw new BadRequestException("Ticket gia utilizzato");
-        }
-
-        ticket.setUsato(true);
-        ticket.setUsatoIl(LocalDateTime.now());
-        return toResponse(ticket);
-    }
-
-    // ✅ NUOVO: check-in che registra operatore + ora (usa ticket)
     public TicketEventoResponse checkIn(int numeroTicket) {
         UtenteGenerico operatore = getUtenteLoggato();
         if (operatore.getRuolo() != Ruolo.ANIMATORE && operatore.getRuolo() != Ruolo.GESTORE_PIATTAFORMA) {

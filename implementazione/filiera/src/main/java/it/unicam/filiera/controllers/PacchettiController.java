@@ -1,6 +1,7 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.create.CreatePacchettoRequest;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import it.unicam.filiera.dto.create.CreatePacchettoRequest;
 import it.unicam.filiera.domain.Pacchetto;
 import it.unicam.filiera.services.PacchettiService;
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/pacchetti")
+@Tag(name = "06 - Pacchetti", description = "Gestione pacchetti")
 @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'GESTORE_PIATTAFORMA')")
 public class PacchettiController {
 

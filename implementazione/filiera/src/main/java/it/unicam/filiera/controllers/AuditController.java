@@ -1,6 +1,7 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.response.AuditLogResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import it.unicam.filiera.dto.response.AuditLogResponse;
 import it.unicam.filiera.services.AuditService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/audit")
+@Tag(name = "16 - Audit", description = "Gestione audit")
 @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
 public class AuditController {
 

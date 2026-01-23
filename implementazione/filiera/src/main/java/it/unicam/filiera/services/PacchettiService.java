@@ -1,6 +1,6 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.controllers.dto.create.CreatePacchettoRequest;
+import it.unicam.filiera.dto.create.CreatePacchettoRequest;
 import it.unicam.filiera.domain.Pacchetto;
 import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.enums.Ruolo;

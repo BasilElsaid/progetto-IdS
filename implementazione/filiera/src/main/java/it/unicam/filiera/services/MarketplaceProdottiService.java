@@ -1,8 +1,8 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.controllers.dto.response.AnnuncioProdottoResponse;
-import it.unicam.filiera.controllers.dto.create.CreateAnnuncioProdottoRequest;
-import it.unicam.filiera.controllers.dto.update.UpdateAnnuncioMarketplaceRequest;
+import it.unicam.filiera.dto.response.AnnuncioProdottoResponse;
+import it.unicam.filiera.dto.create.CreateAnnuncioProdottoRequest;
+import it.unicam.filiera.dto.update.UpdateAnnuncioMarketplaceRequest;
 import it.unicam.filiera.domain.AnnuncioProdotto;
 import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.repositories.*;

@@ -3,10 +3,10 @@ package it.unicam.filiera.services;
 import it.unicam.filiera.builder.DistributoreTipicitaBuilder;
 import it.unicam.filiera.builder.ProduttoreBuilder;
 import it.unicam.filiera.builder.TrasformatoreBuilder;
-import it.unicam.filiera.controllers.dto.CoordinateDTO;
-import it.unicam.filiera.controllers.dto.create.CreateAziendaRequest;
-import it.unicam.filiera.controllers.dto.update.UpdateAziendaRequest;
-import it.unicam.filiera.controllers.dto.response.UtenteResponse;
+import it.unicam.filiera.dto.create.CreateCoordinateRequest;
+import it.unicam.filiera.dto.create.CreateAziendaRequest;
+import it.unicam.filiera.dto.update.UpdateAziendaRequest;
+import it.unicam.filiera.dto.response.UtenteResponse;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Azienda;
@@ -136,7 +136,7 @@ public class AziendeService {
     }
 
     // ================= HELPERS =================
-    private CoordinateOSM toCoordinate(CoordinateDTO dto) {
+    private CoordinateOSM toCoordinate(CreateCoordinateRequest dto) {
         return dto == null ? null : new CoordinateOSM(dto.lat, dto.lon);
     }
 

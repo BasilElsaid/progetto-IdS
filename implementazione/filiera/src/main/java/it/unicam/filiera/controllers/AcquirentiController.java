@@ -1,9 +1,9 @@
 package it.unicam.filiera.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.unicam.filiera.controllers.dto.create.CreateAcquirenteRequest;
-import it.unicam.filiera.controllers.dto.response.UtenteResponse;
-import it.unicam.filiera.controllers.dto.update.UpdateAcquirenteRequest;
+import it.unicam.filiera.dto.create.CreateAcquirenteRequest;
+import it.unicam.filiera.dto.response.UtenteResponse;
+import it.unicam.filiera.dto.update.UpdateAcquirenteRequest;
 import it.unicam.filiera.services.AcquirentiService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/acquirenti")
-@Tag(name = "Acquirenti", description = "Gestione Specifica di Acquirenti")
+@Tag(name = "04 - Acquirenti", description = "Gestione Specifica di Acquirenti")
 public class AcquirentiController {
 
     private final AcquirentiService service;

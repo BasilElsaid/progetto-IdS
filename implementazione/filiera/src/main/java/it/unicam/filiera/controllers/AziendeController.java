@@ -1,9 +1,9 @@
 package it.unicam.filiera.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.unicam.filiera.controllers.dto.create.CreateAziendaRequest;
-import it.unicam.filiera.controllers.dto.response.UtenteResponse;
-import it.unicam.filiera.controllers.dto.update.UpdateAziendaRequest;
+import it.unicam.filiera.dto.create.CreateAziendaRequest;
+import it.unicam.filiera.dto.response.UtenteResponse;
+import it.unicam.filiera.dto.update.UpdateAziendaRequest;
 import it.unicam.filiera.services.AziendeService;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/aziende")
-@Tag(name = "Aziende", description = "Gestione Produttori, Trasformatori e Distributori di tipicità")
+@Tag(name = "02 - Aziende", description = "Gestione Produttori, Trasformatori e Distributori di tipicità")
 public class AziendeController {
 
     private final AziendeService service;

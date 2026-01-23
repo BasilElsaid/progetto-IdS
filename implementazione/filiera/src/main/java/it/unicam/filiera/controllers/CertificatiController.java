@@ -1,8 +1,8 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.CertificatoDTO;
-import it.unicam.filiera.controllers.dto.VerificaCertificatoDTO;
-import it.unicam.filiera.enums.TipoCertificatore;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import it.unicam.filiera.dto.create.CreateCertificatoRequest;
+import it.unicam.filiera.dto.create.CreateVerificaCertificatoRequest;
 import it.unicam.filiera.certificati.Certificato;
 import it.unicam.filiera.services.CertificatiService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/certificati")
+@Tag(name = "08 - Certificati", description = "Gestione certificati")
 @PreAuthorize("hasAnyRole('CURATORE', 'PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
 public class CertificatiController {
 
@@ -22,8 +23,14 @@ public class CertificatiController {
     }
 
     @PostMapping
-    public Certificato creaCertificato(@RequestBody CertificatoDTO dto) {
+    public Certificato creaCertificato(@RequestBody CreateCertificatoRequest dto) {
         return certificatiService.creaCertificato(dto);
+    }
+
+    @PreAuthorize("hasAnyRole('CURATORE', 'GESTORE_PIATTAFORMA')")
+    @PostMapping("/{id}/verifica")
+    public boolean verificaCertificato(@PathVariable Long id, @RequestBody CreateVerificaCertificatoRequest dto) {
+        return certificatiService.verificaCertificato(id, dto.approvato, dto.commento);
     }
 
     @PreAuthorize("hasAnyRole('CURATORE', 'GESTORE_PIATTAFORMA')")
@@ -37,8 +44,9 @@ public class CertificatiController {
         return certificatiService.getCertificato(id);
     }
 
+
     @PutMapping("/{id}")
-    public Certificato aggiornaCertificato(@PathVariable Long id, @RequestBody CertificatoDTO dto) {
+    public Certificato aggiornaCertificato(@PathVariable Long id, @RequestBody CreateCertificatoRequest dto) {
         return certificatiService.aggiornaCertificato(id, dto);
     }
 
@@ -47,9 +55,4 @@ public class CertificatiController {
         certificatiService.eliminaCertificato(id);
     }
 
-    @PreAuthorize("hasAnyRole('CURATORE', 'GESTORE_PIATTAFORMA')")
-    @PostMapping("/{id}/verifica")
-    public boolean verificaCertificato(@PathVariable Long id, @RequestBody VerificaCertificatoDTO dto) {
-        return certificatiService.verificaCertificato(id, dto.approvato, dto.commento);
-    }
 }

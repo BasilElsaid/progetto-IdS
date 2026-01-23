@@ -1,7 +1,8 @@
 package it.unicam.filiera.controllers;
 
-import it.unicam.filiera.controllers.dto.create.CreateTrasformazioneRequest;
-import it.unicam.filiera.controllers.dto.response.TrasformazioneResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import it.unicam.filiera.dto.create.CreateTrasformazioneRequest;
+import it.unicam.filiera.dto.response.TrasformazioneResponse;
 import it.unicam.filiera.services.TrasformazioniService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/trasformazioni")
+@Tag(name = "07 - Trasformazioni", description = "Gestione Processi di trasformazioni")
 @PreAuthorize("hasAnyRole('TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
 public class TrasformazioniController {
 
