@@ -6,7 +6,6 @@ public class ProdottoResponse {
     private Long id;
     private String nome;
     private String categoria;
-    private double prezzo;
 
     private Long produttoreId;
     private String nomeAzienda;
@@ -33,14 +32,6 @@ public class ProdottoResponse {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
-    }
-
-    public double getPrezzo() {
-        return prezzo;
-    }
-
-    public void setPrezzo(double prezzo) {
-        this.prezzo = prezzo;
     }
 
     public Long getProduttoreId() {

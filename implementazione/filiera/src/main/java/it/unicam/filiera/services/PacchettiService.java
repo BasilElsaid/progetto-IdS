@@ -131,7 +131,6 @@ public class PacchettiService {
         PacchettoResponse dto = new PacchettoResponse();
         dto.setId(p.getId());
         dto.setNome(p.getNome());
-        dto.setPrezzo(p.getPrezzo());
 
         if (p.getProdotti() != null) {
             dto.setProdotti(

@@ -127,6 +127,11 @@ public class CertificatiService {
             throw new BadRequestException("Non è possibile verificare un altro certificato curatore");
         }
 
+        boolean giaVerificato = curatoreRepo.existsByCertificatoTargetId(certificatoId);
+        if (giaVerificato) {
+            throw new BadRequestException("Questo certificato è già stato verificato dal curatore");
+        }
+
         CertificatoCuratore cc = new CertificatoCuratore();
         cc.setCertificatoTarget(target);
         cc.setProdotto(target.getProdotto());
@@ -144,20 +149,14 @@ public class CertificatiService {
             case PRODUTTORE -> {
                 if(dto.azienda == null || dto.origineMateriaPrima == null)
                     throw new BadRequestException("Campi azienda e origineMateriaPrima obbligatori per PRODUTTORE");
-                if(dto.processo != null || dto.impianto != null || dto.approvato != null || dto.commento != null)
+                if(dto.processo != null || dto.impianto != null)
                     throw new BadRequestException("Campi non validi presenti per PRODUTTORE");
             }
             case TRASFORMATORE -> {
                 if(dto.processo == null || dto.impianto == null)
                     throw new BadRequestException("Campi processo e impianto obbligatori per TRASFORMATORE");
-                if(dto.azienda != null || dto.origineMateriaPrima != null || dto.approvato != null || dto.commento != null)
+                if(dto.azienda != null || dto.origineMateriaPrima != null)
                     throw new BadRequestException("Campi non validi presenti per TRASFORMATORE");
-            }
-            case CURATORE -> {
-                if(dto.approvato == null || dto.commento == null)
-                    throw new BadRequestException("Campi approvato e commento obbligatori per CURATORE");
-                if(dto.azienda != null || dto.origineMateriaPrima != null || dto.processo != null || dto.impianto != null)
-                    throw new BadRequestException("Campi non validi presenti per CURATORE");
             }
         }
     }
@@ -220,47 +219,12 @@ public class CertificatiService {
                 return ct;
             }
             case CURATORE: {
-                CertificatoCuratore cc = new CertificatoCuratore();
-                Certificato target = certificatoRepo.findById(dto.certificatoTargetId)
-                        .orElseThrow(() -> new NotFoundException("Certificato target non trovato"));
-
-                if (target.getTipo() == TipoCertificatore.CURATORE) {
-                    throw new BadRequestException("Un curatore non può approvare un altro curatore");
-                }
-
-                cc.setCertificatoTarget(target);
-                cc.setProdotto(target.getProdotto());
-                cc.setApprovato(dto.approvato);
-                cc.setCommento(dto.commento);
-                cc.setTipo(TipoCertificatore.CURATORE);
-                return cc;
+                throw new BadRequestException("I certificati curatore si creano solo tramite verificaCertificato");
             }
             default:
                 throw new BadRequestException("Tipo certificatore non valido");
         }
     }
 
-    private void assegnaCampiCertificato(Certificato c, CreateCertificatoRequest dto) {
-        switch(dto.tipo) {
-            case PRODUTTORE -> {
-                if(c instanceof CertificazioneProduttore cp) {
-                    cp.setAzienda(dto.azienda);
-                    cp.setOrigineMateriaPrima(dto.origineMateriaPrima);
-                }
-            }
-            case TRASFORMATORE -> {
-                if(c instanceof CertificatoTrasformatore ct) {
-                    ct.setProcesso(dto.processo);
-                    ct.setImpianto(dto.impianto);
-                }
-            }
-            case CURATORE -> {
-                if(c instanceof CertificatoCuratore cc) {
-                    cc.setApprovato(dto.approvato);
-                    cc.setCommento(dto.commento);
-                }
-            }
-        }
-        c.setTipo(dto.tipo);
-    }
+
 }

@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 import it.unicam.filiera.models.Acquirente;
 
 @Repository
-public interface AcquirenteRepository
-        extends JpaRepository<Acquirente, Long> {
+public interface AcquirenteRepository extends JpaRepository<Acquirente, Long> {
 }

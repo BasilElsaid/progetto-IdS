@@ -12,18 +12,5 @@ public interface ProdottoRepository extends JpaRepository<Prodotto, Long> {
     List<Prodotto> findByProduttore(Produttore produttore);
 
     Optional<Prodotto> findByIdAndProduttore(Long id, Produttore produttore);
-
-    /*
-	List<Prodotto> findByProduttore_Id(Long id);
-
-    List<Prodotto> findByNomeContainingIgnoreCase(String nome);
-
-    List<Prodotto> findByOrigineContainingIgnoreCase(String origine);
-
-    List<Prodotto> findByNomeContainingIgnoreCaseAndOrigineContainingIgnoreCase(
-        String nome, String origine
-    );
-    
-     */
 }
 

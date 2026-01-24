@@ -21,10 +21,6 @@ public class ProdottiService {
 
     private final ProdottoRepository repo;
 
-    public List<Prodotto> list(String nome, String categoria) {
-        return repo.findAll();
-    }
-
     public ProdottiService(ProdottoRepository repo) {
         this.repo = repo;
     }
@@ -145,7 +141,6 @@ public class ProdottiService {
         dto.setId(p.getId());
         dto.setNome(p.getNome());
         dto.setCategoria(p.getCategoria());
-        dto.setPrezzo(p.getPrezzo());
 
         if (p.getProduttore() != null) {
             dto.setProduttoreId(p.getProduttore().getId());

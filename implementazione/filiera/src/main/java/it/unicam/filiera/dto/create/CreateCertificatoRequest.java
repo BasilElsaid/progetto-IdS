@@ -11,17 +11,12 @@ public class CreateCertificatoRequest {
 
     @NotNull
     public Long prodottoId;
+    public String azienda;
 
     // campi Produttore
-    public String azienda;
     public String origineMateriaPrima;
 
     // campi Trasformatore
     public String processo;
     public String impianto;
-
-    // campi Curatore
-    public Boolean approvato;
-    public String commento;
-    public Long certificatoTargetId;
 }

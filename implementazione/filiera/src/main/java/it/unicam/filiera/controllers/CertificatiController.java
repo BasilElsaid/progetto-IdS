@@ -45,6 +45,7 @@ public class CertificatiController {
         return certificatiService.getCertificato(id);
     }
 
+    @PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE')")
     @PatchMapping("/{id}")
     public Certificato patchCertificato(@PathVariable Long id, @RequestBody UpdateCertificatoRequest dto) {
         return certificatiService.patchCertificato(id, dto);
