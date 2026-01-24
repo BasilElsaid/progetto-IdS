@@ -19,9 +19,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
+    private final SecurityProblemHandlers securityProblemHandlers;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtFilter) {
+    public SecurityConfig(JwtAuthenticationFilter jwtFilter, SecurityProblemHandlers securityProblemHandlers) {
         this.jwtFilter = jwtFilter;
+        this.securityProblemHandlers = securityProblemHandlers;
     }
 
     @Bean
@@ -38,6 +40,10 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(form -> form.disable())
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(securityProblemHandlers)
+                        .accessDeniedHandler(securityProblemHandlers)
+                )
                 .authorizeHttpRequests(auth -> auth
 
                         .dispatcherTypeMatchers(DispatcherType.ERROR, DispatcherType.FORWARD).permitAll()
