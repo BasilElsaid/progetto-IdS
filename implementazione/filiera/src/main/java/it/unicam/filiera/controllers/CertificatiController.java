@@ -31,7 +31,7 @@ public class CertificatiController {
     @PreAuthorize("hasAnyRole('CURATORE', 'GESTORE_PIATTAFORMA')")
     @PostMapping("/{id}/verifica")
     public boolean verificaCertificato(@PathVariable Long id, @RequestBody CreateVerificaCertificatoRequest dto) {
-        return certificatiService.verificaCertificato(id, dto.approvato, dto.commento);
+        return certificatiService.verificaCertificato(id, dto.approvato(), dto.commento());
     }
 
     @PreAuthorize("hasAnyRole('CURATORE', 'GESTORE_PIATTAFORMA')")

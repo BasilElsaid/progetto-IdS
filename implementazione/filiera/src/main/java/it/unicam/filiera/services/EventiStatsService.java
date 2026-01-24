@@ -25,12 +25,15 @@ public class EventiStatsService {
         long venduti = ticketRepo.countByEventoId(eventoId);
         long checkin = ticketRepo.countByEventoIdAndUsatoTrue(eventoId);
 
-        EventoStatsResponse r = new EventoStatsResponse();
-        r.setEventoId(eventoId);
-        r.setPostiResidui(e.getPosti());
-        r.setTicketsVenduti(venduti);
-        r.setCheckInFatti(checkin);
-        r.setPostiTotali((int) venduti + e.getPosti());
-        return r;
+        int postiTotali = (int) venduti + e.getPosti();
+        int postiResidui = e.getPosti();
+
+        return new EventoStatsResponse(
+                eventoId,
+                postiTotali,
+                postiResidui,
+                venduti,
+                checkin
+        );
     }
 }

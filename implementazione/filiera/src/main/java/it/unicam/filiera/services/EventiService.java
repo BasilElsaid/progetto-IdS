@@ -23,11 +23,11 @@ public class EventiService {
     // CREATE
     public Evento creaEvento(CreateEventoRequest dto) {
         Evento evento = new Evento();
-        evento.setNome(dto.getNome());
-        evento.setDataOra(dto.getDataOra());
-        evento.setPrezzo(dto.getPrezzo());
-        evento.setTipo(dto.getTipo());
-        evento.setPosti(dto.getPosti());
+        evento.setNome(dto.nome());
+        evento.setDataOra(dto.dataOra());
+        evento.setPrezzo(dto.prezzo());
+        evento.setTipo(dto.tipo());
+        evento.setPosti(dto.posti());
         return eventoRepo.save(evento);
     }
 
@@ -64,11 +64,11 @@ public class EventiService {
         Evento e = eventoRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Evento non trovato:"));
 
-        if (dto.getNome() != null) e.setNome(dto.getNome());
-        if (dto.getDataOra() != null) e.setDataOra(dto.getDataOra());
-        if (dto.getPrezzo() != null) e.setPrezzo(dto.getPrezzo());
-        if (dto.getTipo() != null) e.setTipo(dto.getTipo());
-        if (dto.getPosti() != null) e.setPosti(dto.getPosti());
+        if (dto.nome() != null) e.setNome(dto.nome());
+        if (dto.dataOra() != null) e.setDataOra(dto.dataOra());
+        if (dto.prezzo() != null) e.setPrezzo(dto.prezzo());
+        if (dto.tipo() != null) e.setTipo(dto.tipo());
+        if (dto.posti() != null) e.setPosti(dto.posti());
 
         return e; // JPA dirty checking
     }

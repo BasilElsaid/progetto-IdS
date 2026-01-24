@@ -68,8 +68,8 @@ public class PacchettiService {
         }
 
         List<Prodotto> prodotti = new ArrayList<>();
-        if (req.getProdottiIds() != null && !req.getProdottiIds().isEmpty()) {
-            for (Long pid : req.getProdottiIds()) {
+        if (req.prodottiIds() != null && !req.prodottiIds().isEmpty()) {
+            for (Long pid : req.prodottiIds()) {
                 prodotti.add(prodottoRepo.findById(pid)
                         .orElseThrow(() -> new BadRequestException("Prodotto con id " + pid + " non trovato")));
             }
@@ -82,7 +82,7 @@ public class PacchettiService {
 
         if (isDistributore(u)) {
             boolean exists = pacchettoRepo.existsByNomeAndDistributoreId(
-                    req.getNome(),
+                    req.nome(),
                     u.getId()
             );
 
@@ -94,7 +94,7 @@ public class PacchettiService {
         }
 
         Pacchetto p = new Pacchetto();
-        p.setNome(req.getNome());
+        p.setNome(req.nome());
         p.setProdotti(prodotti);
 
         if (isDistributore(u)) {
@@ -102,8 +102,7 @@ public class PacchettiService {
         }
 
         Pacchetto saved = pacchettoRepo.save(p);
-        return toResponse(saved);
-    }
+        return PacchettoResponse.from(saved);    }
 
     public void elimina(Long id) {
         UtenteGenerico u = getUtenteLoggato();
@@ -125,31 +124,6 @@ public class PacchettiService {
             throw new ForbiddenException("Utente non autenticato");
         }
         return u;
-    }
-
-    private PacchettoResponse toResponse(Pacchetto p) {
-        PacchettoResponse dto = new PacchettoResponse();
-        dto.setId(p.getId());
-        dto.setNome(p.getNome());
-
-        if (p.getProdotti() != null) {
-            dto.setProdotti(
-                    p.getProdotti().stream()
-                            .map(prod -> new PacchettoResponse.ProdottoInfo(prod.getId(), prod.getNome()))
-                            .toList()
-            );
-        }
-
-        if (p.getDistributore() != null) {
-            dto.setDistributore(
-                    new PacchettoResponse.DistributoreInfo(
-                            p.getDistributore().getId(),
-                            p.getDistributore().getNomeAzienda()
-                    )
-            );
-        }
-
-        return dto;
     }
 
     private boolean isGestorePiattaforma(UtenteGenerico u) {

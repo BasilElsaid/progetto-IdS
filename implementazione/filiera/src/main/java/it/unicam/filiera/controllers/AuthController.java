@@ -25,7 +25,7 @@ public class AuthController {
     @PostMapping("/login")
     public LoginResponse login(@RequestBody CreateLoginRequest request) {
         UtenteGenerico user =
-                authService.authenticate(request.getUsername(), request.getPassword());
+                authService.authenticate(request.username(), request.password());
 
         return new LoginResponse(jwtService.generateToken(user));
     }

@@ -4,28 +4,28 @@ import it.unicam.filiera.domain.TrasformazioneProdotto;
 
 import java.time.LocalDateTime;
 
-public class TrasformazioneResponse {
-    public Long id;
-    public Long processoId;
-    public Long trasformatoreId;
-    public Long inputId;
-    public Long outputId;
-    public Double quantitaInput;
-    public Double quantitaOutput;
-    public String note;
-    public LocalDateTime creatoIl;
-
+public record TrasformazioneResponse(
+        Long id,
+        Long processoId,
+        Long trasformatoreId,
+        Long inputId,
+        Long outputId,
+        Double quantitaInput,
+        Double quantitaOutput,
+        String note,
+        LocalDateTime creatoIl
+) {
     public static TrasformazioneResponse from(TrasformazioneProdotto t) {
-        TrasformazioneResponse r = new TrasformazioneResponse();
-        r.id = t.getId();
-        r.processoId = t.getProcesso().getId();
-        r.trasformatoreId = t.getTrasformatore().getId();
-        r.inputId = t.getInputProdotto().getId();
-        r.outputId = t.getOutputProdotto().getId();
-        r.quantitaInput = t.getQuantitaInput();
-        r.quantitaOutput = t.getQuantitaOutput();
-        r.note = t.getNote();
-        r.creatoIl = t.getCreatoIl();
-        return r;
+        return new TrasformazioneResponse(
+                t.getId(),
+                t.getProcesso().getId(),
+                t.getTrasformatore().getId(),
+                t.getInputProdotto().getId(),
+                t.getOutputProdotto().getId(),
+                t.getQuantitaInput(),
+                t.getQuantitaOutput(),
+                t.getNote(),
+                t.getCreatoIl()
+        );
     }
 }

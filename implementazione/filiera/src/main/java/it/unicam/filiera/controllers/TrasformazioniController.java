@@ -25,13 +25,13 @@ public class TrasformazioniController {
     public TrasformazioneResponse crea(@RequestBody CreateTrasformazioneRequest req) {
         return TrasformazioneResponse.from(
                 service.creaTrasformazione(
-                        req.getProcessoId(),
-                        req.getTrasformatoreId(),
-                        req.getInputId(),
-                        req.getOutputId(),
-                        req.getQuantitaInput(),
-                        req.getQuantitaOutput(),
-                        req.getNote()
+                        req.processoId(),
+                        req.trasformatoreId(),
+                        req.inputId(),
+                        req.outputId(),
+                        req.quantitaInput(),
+                        req.quantitaOutput(),
+                        req.note()
                 )
         );
     }

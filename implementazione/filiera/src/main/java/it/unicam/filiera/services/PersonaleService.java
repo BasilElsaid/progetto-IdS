@@ -39,18 +39,18 @@ public class PersonaleService {
     }
 
     public UtenteResponse creaPersonale(CreatePersonaleRequest request) {
-        switch (request.getRuolo()) {
+        switch (request.ruolo()) {
             case CURATORE:
                 if (curatoreRepository.count() > 0) {
                     throw new BadRequestException("Curatore già presente");
                 }
                 Curatore c = new Curatore();
-                c.setUsername(request.getUsername());
-                c.setEmail(request.getEmail());
-                c.setPassword(passwordEncoder.encode(request.getPassword()));
-                c.setNome(request.getNome());
-                c.setCognome(request.getCognome());
-                c.setTelefono(request.getTelefono());
+                c.setUsername(request.username());
+                c.setEmail(request.email());
+                c.setPassword(passwordEncoder.encode(request.password()));
+                c.setNome(request.nome());
+                c.setCognome(request.cognome());
+                c.setTelefono(request.telefono());
                 c.setRuolo(Ruolo.CURATORE);
                 return UtenteResponse.from(curatoreRepository.save(c));
 
@@ -59,12 +59,12 @@ public class PersonaleService {
                     throw new BadRequestException("Animatore già presente");
                 }
                 Animatore a = new Animatore();
-                a.setUsername(request.getUsername());
-                a.setEmail(request.getEmail());
-                a.setPassword(passwordEncoder.encode(request.getPassword()));
-                a.setNome(request.getNome());
-                a.setCognome(request.getCognome());
-                a.setTelefono(request.getTelefono());
+                a.setUsername(request.username());
+                a.setEmail(request.email());
+                a.setPassword(passwordEncoder.encode(request.password()));
+                a.setNome(request.nome());
+                a.setCognome(request.cognome());
+                a.setTelefono(request.telefono());
                 a.setRuolo(Ruolo.ANIMATORE);
                 return UtenteResponse.from(animatoreRepository.save(a));
 
@@ -73,12 +73,12 @@ public class PersonaleService {
                     throw new BadRequestException("Gestore piattaforma già presente");
                 }
                 GestorePiattaforma g = new GestorePiattaforma();
-                g.setUsername(request.getUsername());
-                g.setEmail(request.getEmail());
-                g.setPassword(passwordEncoder.encode(request.getPassword()));
-                g.setNome(request.getNome());
-                g.setCognome(request.getCognome());
-                g.setTelefono(request.getTelefono());
+                g.setUsername(request.username());
+                g.setEmail(request.email());
+                g.setPassword(passwordEncoder.encode(request.password()));
+                g.setNome(request.nome());
+                g.setCognome(request.cognome());
+                g.setTelefono(request.telefono());
                 g.setRuolo(Ruolo.GESTORE_PIATTAFORMA);
                 return UtenteResponse.from(gestoreRepository.save(g));
 

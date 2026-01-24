@@ -40,15 +40,15 @@ public class CertificatiService {
         UtenteGenerico u = getUtenteLoggato();
         TipoCertificatore consentito = tipoConsentito(u);
 
-        if (consentito != null && dto.tipo != consentito) {
-            throw new ForbiddenException("Non puoi creare certificati di tipo " + dto.tipo);
+        if (consentito != null && dto.tipo() != consentito) {
+            throw new ForbiddenException("Non puoi creare certificati di tipo " + dto.tipo());
         }
 
-        Prodotto p = prodottoRepo.findById(dto.prodottoId)
+        Prodotto p = prodottoRepo.findById(dto.prodottoId())
                 .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
 
-        if (certificatoRepo.existsByProdottoIdAndTipo(dto.prodottoId, dto.tipo)) {
-            throw new BadRequestException("Esiste già un certificato di tipo " + dto.tipo + " per questo prodotto");
+        if (certificatoRepo.existsByProdottoIdAndTipo(dto.prodottoId(), dto.tipo())) {
+            throw new BadRequestException("Esiste già un certificato di tipo " + dto.tipo() + " per questo prodotto");
         }
 
         validaDto(dto);
@@ -145,17 +145,17 @@ public class CertificatiService {
 
     // --- VALIDAZIONE ---
     private void validaDto(CreateCertificatoRequest dto) {
-        switch(dto.tipo) {
+        switch(dto.tipo()) {
             case PRODUTTORE -> {
-                if(dto.azienda == null || dto.origineMateriaPrima == null)
+                if(dto.azienda() == null || dto.origineMateriaPrima() == null)
                     throw new BadRequestException("Campi azienda e origineMateriaPrima obbligatori per PRODUTTORE");
-                if(dto.processo != null || dto.impianto != null)
+                if(dto.processo() != null || dto.impianto() != null)
                     throw new BadRequestException("Campi non validi presenti per PRODUTTORE");
             }
             case TRASFORMATORE -> {
-                if(dto.processo == null || dto.impianto == null)
+                if(dto.processo() == null || dto.impianto() == null)
                     throw new BadRequestException("Campi processo e impianto obbligatori per TRASFORMATORE");
-                if(dto.azienda != null || dto.origineMateriaPrima != null)
+                if(dto.azienda() != null || dto.origineMateriaPrima() != null)
                     throw new BadRequestException("Campi non validi presenti per TRASFORMATORE");
             }
         }
@@ -201,20 +201,20 @@ public class CertificatiService {
     }
 
     private Certificato inizializzaCertificato(CreateCertificatoRequest dto, Prodotto p) {
-        switch (dto.tipo) {
+        switch (dto.tipo()) {
             case PRODUTTORE: {
                 CertificazioneProduttore cp = new CertificazioneProduttore();
                 cp.setProdotto(p);
-                cp.setAzienda(dto.azienda);
-                cp.setOrigineMateriaPrima(dto.origineMateriaPrima);
+                cp.setAzienda(dto.azienda());
+                cp.setOrigineMateriaPrima(dto.origineMateriaPrima());
                 cp.setTipo(TipoCertificatore.PRODUTTORE);
                 return cp;
             }
             case TRASFORMATORE: {
                 CertificatoTrasformatore ct = new CertificatoTrasformatore();
                 ct.setProdotto(p);
-                ct.setProcesso(dto.processo);
-                ct.setImpianto(dto.impianto);
+                ct.setProcesso(dto.processo());
+                ct.setImpianto(dto.impianto());
                 ct.setTipo(TipoCertificatore.TRASFORMATORE);
                 return ct;
             }

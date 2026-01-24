@@ -4,25 +4,24 @@ import it.unicam.filiera.domain.AnnuncioPacchetto;
 
 import java.time.LocalDateTime;
 
-public class AnnuncioPacchettoResponse {
-
-    public Long id;
-    public Long aziendaId;
-    public Long pacchettoId;
-    public double prezzo;
-    public int stock;
-    public boolean attivo;
-    public LocalDateTime creatoIl;
-
+public record AnnuncioPacchettoResponse(
+        Long id,
+        Long aziendaId,
+        Long pacchettoId,
+        double prezzo,
+        int stock,
+        boolean attivo,
+        LocalDateTime creatoIl
+) {
     public static AnnuncioPacchettoResponse from(AnnuncioPacchetto a) {
-        AnnuncioPacchettoResponse r = new AnnuncioPacchettoResponse();
-        r.id = a.getId();
-        r.aziendaId = a.getAzienda().getId();
-        r.pacchettoId = a.getPacchetto().getId();
-        r.prezzo = a.getPrezzo();
-        r.stock = a.getStock();
-        r.attivo = a.isAttivo();
-        r.creatoIl = a.getCreatoIl();
-        return r;
+        return new AnnuncioPacchettoResponse(
+                a.getId(),
+                a.getAzienda().getId(),
+                a.getPacchetto().getId(),
+                a.getPrezzo(),
+                a.getStock(),
+                a.isAttivo(),
+                a.getCreatoIl()
+        );
     }
 }

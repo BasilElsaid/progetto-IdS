@@ -66,14 +66,17 @@ public class TicketEventiService {
             t.setQrCode("TCK-" + UUID.randomUUID().toString().replace("-", ""));
             evento.aggiungiBiglietto(t); // scala 1 posto
             ticketRepository.save(t);
-            result.add(toResponse(t));
+            result.add(TicketEventoResponse.from(t));
         }
         return result;
     }
 
     public List<TicketEventoResponse> listaMieiTicket() {
         UtenteGenerico utente = getUtenteLoggato();
-        return ticketRepository.findByProprietario_Id(utente.getId()).stream().map(this::toResponse).toList();
+        return ticketRepository.findByProprietario_Id(utente.getId())
+                .stream()
+                .map(TicketEventoResponse::from)
+                .toList();
     }
 
     public List<TicketEventoResponse> listaTicketEvento(Long eventoId) {
@@ -84,7 +87,10 @@ public class TicketEventiService {
         if (!eventiRepository.existsById(eventoId)) {
             throw new NotFoundException("Evento non trovato");
         }
-        return ticketRepository.findByEventoId(eventoId).stream().map(this::toResponse).toList();
+        return ticketRepository.findByEventoId(eventoId)
+                .stream()
+                .map(TicketEventoResponse::from)
+                .toList();
     }
 
     public TicketEventoResponse checkIn(int numeroTicket) {
@@ -104,8 +110,7 @@ public class TicketEventiService {
         ticket.setUsatoIl(LocalDateTime.now());
         ticket.setCheckInDa(operatore);
 
-        return toResponse(ticket);
-    }
+        return TicketEventoResponse.from(ticket);    }
 
     public void annullaTicket(Long ticketId) {
         UtenteGenerico u = getUtenteLoggato();
@@ -146,26 +151,6 @@ public class TicketEventiService {
             if (candidate < 100_000) candidate = 100_000;
         }
         return candidate;
-    }
-
-    private TicketEventoResponse toResponse(TicketEvento t) {
-        TicketEventoResponse r = new TicketEventoResponse();
-        r.setId(t.getId());
-        r.setNumeroTicket(t.getNumeroTicket());
-        r.setEventoId(t.getEvento().getId());
-        r.setEventoNome(t.getEvento().getNome());
-        r.setEventoDataOra(t.getEvento().getDataOra());
-        r.setProprietarioId(t.getProprietario().getId());
-        r.setAcquistatoIl(t.getAcquistatoIl());
-        r.setUsato(t.isUsato());
-        r.setUsatoIl(t.getUsatoIl());
-
-        // extra (non rompe nulla se il client non li usa)
-        r.setQrCode(t.getQrCode());
-        if (t.getCheckInDa() != null) {
-            r.setCheckInDaUsername(t.getCheckInDa().getUsername());
-        }
-        return r;
     }
 
     private UtenteGenerico getUtenteLoggato() {

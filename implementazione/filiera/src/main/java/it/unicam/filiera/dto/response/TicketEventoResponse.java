@@ -1,68 +1,38 @@
 package it.unicam.filiera.dto.response;
 
+import it.unicam.filiera.domain.TicketEvento;
+
 import java.time.LocalDateTime;
 
-public class TicketEventoResponse {
-    private String eventoNome;
-    private LocalDateTime eventoDataOra;
+public record TicketEventoResponse(
+        Long id,
+        int numeroTicket,
+        String qrCode,
+        Long eventoId,
+        String eventoNome,
+        LocalDateTime eventoDataOra,
+        Long proprietarioId,
+        LocalDateTime acquistatoIl,
+        boolean usato,
+        LocalDateTime usatoIl,
+        Long checkInDaId,
+        String checkInDaUsername
+) {
 
-    private Long id;
-    private int numeroTicket;
-    private String qrCode;
-
-    private Long eventoId;
-    private Long proprietarioId;
-
-    private LocalDateTime acquistatoIl;
-    private boolean usato;
-    private LocalDateTime usatoIl;
-
-    private Long checkInDaId;
-    private String checkInDaUsername;
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public int getNumeroTicket() { return numeroTicket; }
-    public void setNumeroTicket(int numeroTicket) { this.numeroTicket = numeroTicket; }
-
-    public String getQrCode() { return qrCode; }
-    public void setQrCode(String qrCode) { this.qrCode = qrCode; }
-
-    public Long getEventoId() { return eventoId; }
-    public void setEventoId(Long eventoId) { this.eventoId = eventoId; }
-
-    public Long getProprietarioId() { return proprietarioId; }
-    public void setProprietarioId(Long proprietarioId) { this.proprietarioId = proprietarioId; }
-
-    public LocalDateTime getAcquistatoIl() { return acquistatoIl; }
-    public void setAcquistatoIl(LocalDateTime acquistatoIl) { this.acquistatoIl = acquistatoIl; }
-
-    public boolean isUsato() { return usato; }
-    public void setUsato(boolean usato) { this.usato = usato; }
-
-    public LocalDateTime getUsatoIl() { return usatoIl; }
-    public void setUsatoIl(LocalDateTime usatoIl) { this.usatoIl = usatoIl; }
-
-    public Long getCheckInDaId() { return checkInDaId; }
-    public void setCheckInDaId(Long checkInDaId) { this.checkInDaId = checkInDaId; }
-
-    public String getCheckInDaUsername() { return checkInDaUsername; }
-    public void setCheckInDaUsername(String checkInDaUsername) { this.checkInDaUsername = checkInDaUsername; }
-    public String getEventoNome() {
-        return eventoNome;
+    public static TicketEventoResponse from(TicketEvento t) {
+        return new TicketEventoResponse(
+                t.getId(),
+                t.getNumeroTicket(),
+                t.getQrCode(),
+                t.getEvento().getId(),
+                t.getEvento().getNome(),
+                t.getEvento().getDataOra(),
+                t.getProprietario().getId(),
+                t.getAcquistatoIl(),
+                t.isUsato(),
+                t.getUsatoIl(),
+                t.getCheckInDa() != null ? t.getCheckInDa().getId() : null,
+                t.getCheckInDa() != null ? t.getCheckInDa().getUsername() : null
+        );
     }
-
-    public void setEventoNome(String eventoNome) {
-        this.eventoNome = eventoNome;
-    }
-
-    public LocalDateTime getEventoDataOra() {
-        return eventoDataOra;
-    }
-
-    public void setEventoDataOra(LocalDateTime eventoDataOra) {
-        this.eventoDataOra = eventoDataOra;
-    }
-
 }

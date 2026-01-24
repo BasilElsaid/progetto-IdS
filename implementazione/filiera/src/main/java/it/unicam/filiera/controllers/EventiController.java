@@ -27,6 +27,7 @@ public class EventiController {
 		return eventiService.creaEvento(dto);
 	}
 
+	@PreAuthorize("hasAnyRole('ANIMATORE', 'GESTORE_PIATTAFORMA', 'ACQUIRENTE', 'PRODUTTORE', 'TRASFORMATORE', 'DISTRIBUTORE_TIPICITA')")
 	@GetMapping
 	public List<EventoResponse> getTuttiEventi() {
 		return eventiService.getTuttiEventi();

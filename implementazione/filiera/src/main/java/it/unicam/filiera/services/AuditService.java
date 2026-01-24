@@ -28,26 +28,17 @@ public class AuditService {
 
     public List<AuditLogResponse> byEntity(String entityType, Long entityId) {
         return auditRepo.findByEntityTypeAndEntityIdOrderByCreatedAtDesc(entityType, entityId)
-                .stream().map(this::toResponse).toList();
+                .stream()
+                .map(AuditLogResponse::from)
+                .toList();
     }
 
     public List<AuditLogResponse> mine() {
         UtenteGenerico user = getUtenteLoggato();
         return auditRepo.findByActorUsernameOrderByCreatedAtDesc(user.getUsername())
-                .stream().map(this::toResponse).toList();
-    }
-
-    private AuditLogResponse toResponse(AuditLog a) {
-        AuditLogResponse r = new AuditLogResponse();
-        r.setId(a.getId());
-        r.setEntityType(a.getEntityType());
-        r.setEntityId(a.getEntityId());
-        r.setAction(a.getAction());
-        r.setActorUsername(a.getActorUsername());
-        r.setActorId(a.getActorId());
-        r.setCreatedAt(a.getCreatedAt());
-        r.setDetails(a.getDetails());
-        return r;
+                .stream()
+                .map(AuditLogResponse::from)
+                .toList();
     }
 
     private UtenteGenerico getUtenteLoggato() {

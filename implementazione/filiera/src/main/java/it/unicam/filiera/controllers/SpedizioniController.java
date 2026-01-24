@@ -21,7 +21,7 @@ public class SpedizioniController {
 
     @PostMapping("/{ordineId}/spedisci")
     public SpedizioneResponse spedisci(@PathVariable Long ordineId, @RequestBody CreateSpedisciRequest req) {
-        return service.spedisci(ordineId, req.getTrackingCode());
+        return service.spedisci(ordineId, req.trackingCode());
     }
 
     @PostMapping("/{ordineId}/consegna")

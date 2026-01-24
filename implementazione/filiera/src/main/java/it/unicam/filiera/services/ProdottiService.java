@@ -38,7 +38,7 @@ public class ProdottiService {
         }
 
         return prodotti.stream()
-                .map(this::toResponse)
+                .map(ProdottoResponse::from)
                 .toList();
     }
 
@@ -56,7 +56,7 @@ public class ProdottiService {
             throw new ForbiddenException("Ruolo non autorizzato");
         }
 
-        return toResponse(p);
+        return ProdottoResponse.from(repo.save(p));
     }
 
     public ProdottoResponse crea(CreateProdottoRequest dto) {
@@ -69,7 +69,7 @@ public class ProdottiService {
             p.setProduttore((Produttore) u);
 
             Prodotto saved = repo.save(p);
-            return toResponse(saved);
+            return ProdottoResponse.from(repo.save(saved));
         }
 
 
@@ -97,8 +97,7 @@ public class ProdottiService {
             existing.setCategoria(dto.categoria());
         }
 
-        return toResponse(repo.save(existing));
-    }
+        return ProdottoResponse.from(repo.save(existing));    }
 
     public void delete(Long id) {
         UtenteGenerico u = getUtenteLoggato();
@@ -133,21 +132,6 @@ public class ProdottiService {
 
     private boolean isProduttore(UtenteGenerico u) {
         return u instanceof Produttore;
-    }
-
-    private ProdottoResponse toResponse(Prodotto p) {
-        ProdottoResponse dto = new ProdottoResponse();
-
-        dto.setId(p.getId());
-        dto.setNome(p.getNome());
-        dto.setCategoria(p.getCategoria());
-
-        if (p.getProduttore() != null) {
-            dto.setProduttoreId(p.getProduttore().getId());
-            dto.setNomeAzienda(p.getProduttore().getNomeAzienda());
-        }
-
-        return dto;
     }
 
 }

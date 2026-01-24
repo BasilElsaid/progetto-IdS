@@ -45,54 +45,52 @@ public class AziendeService {
     }
 
     public UtenteResponse creaAzienda(CreateAziendaRequest request) {
-        if (request.getNomeAzienda() == null || request.getNomeAzienda().isBlank()) {
+        if (request.nomeAzienda() == null || request.nomeAzienda().isBlank()) {
             throw new BadRequestException("Nome azienda obbligatorio");
         }
-        if (request.getSede() == null || request.getSede().isBlank()) {
+        if (request.sede() == null || request.sede().isBlank()) {
             throw new BadRequestException("Sede obbligatoria");
         }
-        if (request.getCoordinate() == null) {
+        if (request.coordinate() == null) {
             throw new BadRequestException("Coordinate obbligatorie");
         }
 
-        Ruolo ruolo = request.getRuolo();
+        Ruolo ruolo = request.ruolo();
         Azienda a;
         switch (ruolo) {
             case PRODUTTORE -> {
                 a = new ProduttoreBuilder()
-                        .setUsername(request.getUsername())
-                        .setPassword(passwordEncoder.encode(request.getPassword()))
-                        .setEmail(request.getEmail())
-                        .setNomeAzienda(request.getNomeAzienda())
-                        .setPartitaIva(request.getPartitaIva())
-                        .setSede(request.getSede())
-                        .setCoordinate(toCoordinate(request.getCoordinate()))
+                        .setUsername(request.username())
+                        .setPassword(passwordEncoder.encode(request.password()))
+                        .setEmail(request.email())
+                        .setNomeAzienda(request.nomeAzienda())
+                        .setPartitaIva(request.partitaIva())
+                        .setSede(request.sede())
+                        .setCoordinate(toCoordinate(request.coordinate()))
                         .build();
                 a = produttoreRepo.save((Produttore) a);
             }
             case TRASFORMATORE -> {
                 a = new TrasformatoreBuilder()
-                        .setUsername(request.getUsername())
-                        .setPassword(passwordEncoder.encode(request.getPassword()))
-                        .setEmail(request.getEmail())
-                        .setNomeAzienda(request.getNomeAzienda())
-                        .setPartitaIva(request.getPartitaIva())
-                        .setLaboratorio(request.getLaboratorio())
-                        .setSede(request.getSede())
-                        .setCoordinate(toCoordinate(request.getCoordinate()))
+                        .setUsername(request.username())
+                        .setPassword(passwordEncoder.encode(request.password()))
+                        .setEmail(request.email())
+                        .setNomeAzienda(request.nomeAzienda())
+                        .setPartitaIva(request.partitaIva())
+                        .setSede(request.sede())
+                        .setCoordinate(toCoordinate(request.coordinate()))
                         .build();
                 a = trasformatoreRepo.save((Trasformatore) a);
             }
             case DISTRIBUTORE_TIPICITA -> {
                 a = new DistributoreTipicitaBuilder()
-                        .setUsername(request.getUsername())
-                        .setPassword(passwordEncoder.encode(request.getPassword()))
-                        .setEmail(request.getEmail())
-                        .setNomeAzienda(request.getNomeAzienda())
-                        .setPartitaIva(request.getPartitaIva())
-                        .setSede(request.getSede())
-                        .setAreaDistribuzione(request.getAreaDistribuzione())
-                        .setCoordinate(toCoordinate(request.getCoordinate()))
+                        .setUsername(request.username())
+                        .setPassword(passwordEncoder.encode(request.password()))
+                        .setEmail(request.email())
+                        .setNomeAzienda(request.nomeAzienda())
+                        .setPartitaIva(request.partitaIva())
+                        .setSede(request.sede())
+                        .setCoordinate(toCoordinate(request.coordinate()))
                         .build();
                 a = distributoreRepo.save((DistributoreTipicita) a);
             }
@@ -137,7 +135,7 @@ public class AziendeService {
 
     // ================= HELPERS =================
     private CoordinateOSM toCoordinate(CreateCoordinateRequest dto) {
-        return dto == null ? null : new CoordinateOSM(dto.lat, dto.lon);
+        return dto == null ? null : new CoordinateOSM(dto.lat(), dto.lon());
     }
 
     private void updateBaseFields(Azienda a, UpdateAziendaRequest request) {

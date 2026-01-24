@@ -1,27 +1,40 @@
 package it.unicam.filiera.dto.response;
 
+import it.unicam.filiera.domain.Pacchetto;
+
 import java.util.List;
 
-public class PacchettoResponse {
-
-    private Long id;
-    private String nome;
-    private List<ProdottoInfo> prodotti;
-    private DistributoreInfo distributore;
+public record PacchettoResponse(
+        Long id,
+        String nome,
+        List<ProdottoInfo> prodotti,
+        DistributoreInfo distributore
+) {
 
     public record ProdottoInfo(Long id, String nome) {}
     public record DistributoreInfo(Long id, String nomeAzienda) {}
 
-    // ======== GETTER/SETTER ========
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public static PacchettoResponse from(Pacchetto p) {
+        List<ProdottoInfo> prodotti = null;
+        if (p.getProdotti() != null) {
+            prodotti = p.getProdotti().stream()
+                    .map(prod -> new ProdottoInfo(prod.getId(), prod.getNome()))
+                    .toList();
+        }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+        DistributoreInfo distributore = null;
+        if (p.getDistributore() != null) {
+            distributore = new DistributoreInfo(
+                    p.getDistributore().getId(),
+                    p.getDistributore().getNomeAzienda()
+            );
+        }
 
-    public List<ProdottoInfo> getProdotti() { return prodotti; }
-    public void setProdotti(List<ProdottoInfo> prodotti) { this.prodotti = prodotti; }
-
-    public DistributoreInfo getDistributore() { return distributore; }
-    public void setDistributore(DistributoreInfo distributore) { this.distributore = distributore; }
+        return new PacchettoResponse(
+                p.getId(),
+                p.getNome(),
+                prodotti,
+                distributore
+        );
+    }
 }

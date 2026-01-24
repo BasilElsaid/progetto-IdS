@@ -26,9 +26,9 @@ public class AcquirentiService {
 
     public UtenteResponse creaAcquirente(CreateAcquirenteRequest request) {
         Acquirente a = (Acquirente) new AcquirenteBuilder()
-                .setUsername(request.getUsername())
-                .setPassword(passwordEncoder.encode(request.getPassword()))
-                .setEmail(request.getEmail())
+                .setUsername(request.username())
+                .setPassword(passwordEncoder.encode(request.password()))
+                .setEmail(request.email())
                 .build();
         Acquirente saved = acquirenteRepo.save(a);
         return UtenteResponse.from(saved);
