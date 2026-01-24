@@ -3,6 +3,7 @@ package it.unicam.filiera.controllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.unicam.filiera.dto.create.CreateProdottoRequest;
 import it.unicam.filiera.dto.response.ProdottoResponse;
+import it.unicam.filiera.dto.update.UpdateProdottoRequest;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -37,12 +38,12 @@ public class ProdottiController {
         return service.all();
     }
 
-    @PutMapping("/{id}")
-    public ProdottoResponse update(
+    @PatchMapping("/{id}")
+    public ProdottoResponse patch(
             @PathVariable Long id,
-            @RequestBody @Valid CreateProdottoRequest dto
+            @RequestBody UpdateProdottoRequest dto
     ) {
-        return service.update(id, dto);
+        return service.patch(id, dto);
     }
 
     @DeleteMapping("/{id}")

@@ -3,6 +3,8 @@ package it.unicam.filiera.controllers;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.unicam.filiera.dto.create.CreatePacchettoRequest;
 import it.unicam.filiera.domain.Pacchetto;
+import it.unicam.filiera.dto.response.PacchettoResponse;
+import it.unicam.filiera.dto.update.UpdatePacchettoRequest;
 import it.unicam.filiera.services.PacchettiService;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +30,7 @@ public class PacchettiController {
     }
 
     @PostMapping
-    public Pacchetto crea(@RequestBody @Valid CreatePacchettoRequest req) {
+    public PacchettoResponse crea(@RequestBody @Valid CreatePacchettoRequest req) {
         return service.crea(req);
     }
 
@@ -42,8 +44,4 @@ public class PacchettiController {
         service.elimina(id);
     }
 
-    @PutMapping("/{id}")
-    public Pacchetto aggiorna(@PathVariable Long id, @RequestBody @Valid CreatePacchettoRequest req) {
-        return service.aggiorna(id, req);
-    }
 }

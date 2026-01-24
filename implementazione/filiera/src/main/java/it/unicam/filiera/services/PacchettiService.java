@@ -3,6 +3,7 @@ package it.unicam.filiera.services;
 import it.unicam.filiera.dto.create.CreatePacchettoRequest;
 import it.unicam.filiera.domain.Pacchetto;
 import it.unicam.filiera.domain.Prodotto;
+import it.unicam.filiera.dto.response.PacchettoResponse;
 import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.ForbiddenException;
@@ -59,7 +60,7 @@ public class PacchettiService {
         throw new ForbiddenException("Accesso non consentito");
     }
 
-    public Pacchetto crea(CreatePacchettoRequest req) {
+    public PacchettoResponse crea(CreatePacchettoRequest req) {
         UtenteGenerico u = getUtenteLoggato();
 
         if (!isDistributore(u) && !isGestorePiattaforma(u)) {
@@ -94,14 +95,14 @@ public class PacchettiService {
 
         Pacchetto p = new Pacchetto();
         p.setNome(req.getNome());
-        p.setPrezzo(req.getPrezzo());
         p.setProdotti(prodotti);
 
         if (isDistributore(u)) {
             p.setDistributore((DistributoreTipicita) u);
         }
 
-        return pacchettoRepo.save(p);
+        Pacchetto saved = pacchettoRepo.save(p);
+        return toResponse(saved);
     }
 
     public void elimina(Long id) {
@@ -117,33 +118,6 @@ public class PacchettiService {
         pacchettoRepo.delete(p);
     }
 
-    public Pacchetto aggiorna(Long id, CreatePacchettoRequest req) {
-        UtenteGenerico u = getUtenteLoggato();
-
-        Pacchetto p = pacchettoRepo.findById(id)
-                .orElseThrow(() -> new NotFoundException("Pacchetto non trovato"));
-
-        if (isDistributore(u) && !p.getDistributore().getId().equals(u.getId())) {
-            throw new ForbiddenException("Pacchetto non tuo");
-        }
-
-        if (isDistributore(u) && !p.getNome().equals(req.getNome())) {
-            boolean exists = pacchettoRepo.existsByNomeAndDistributoreId(
-                    req.getNome(),
-                    u.getId()
-            );
-            if (exists) {
-                throw new BadRequestException("Nome pacchetto già esistente");
-            }
-        }
-
-        p.setNome(req.getNome());
-        p.setPrezzo(req.getPrezzo());
-        p.setProdotti(caricaProdotti(req.getProdottiIds()));
-
-        return pacchettoRepo.save(p);
-    }
-
     // ================= HELPERS =================
     private UtenteGenerico getUtenteLoggato() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
@@ -153,19 +127,30 @@ public class PacchettiService {
         return u;
     }
 
-    private List<Prodotto> caricaProdotti(List<Long> ids) {
-        List<Prodotto> prodotti = new ArrayList<>();
+    private PacchettoResponse toResponse(Pacchetto p) {
+        PacchettoResponse dto = new PacchettoResponse();
+        dto.setId(p.getId());
+        dto.setNome(p.getNome());
+        dto.setPrezzo(p.getPrezzo());
 
-        if (ids != null) {
-            for (Long id : ids) {
-                prodotti.add(
-                        prodottoRepo.findById(id)
-                                .orElseThrow(() -> new NotFoundException("Prodotto non trovato"))
-                );
-            }
+        if (p.getProdotti() != null) {
+            dto.setProdotti(
+                    p.getProdotti().stream()
+                            .map(prod -> new PacchettoResponse.ProdottoInfo(prod.getId(), prod.getNome()))
+                            .toList()
+            );
         }
 
-        return prodotti;
+        if (p.getDistributore() != null) {
+            dto.setDistributore(
+                    new PacchettoResponse.DistributoreInfo(
+                            p.getDistributore().getId(),
+                            p.getDistributore().getNomeAzienda()
+                    )
+            );
+        }
+
+        return dto;
     }
 
     private boolean isGestorePiattaforma(UtenteGenerico u) {

@@ -4,7 +4,9 @@ import java.util.List;
 
 import it.unicam.filiera.dto.create.CreateProdottoRequest;
 import it.unicam.filiera.dto.response.ProdottoResponse;
+import it.unicam.filiera.dto.update.UpdateProdottoRequest;
 import it.unicam.filiera.enums.Ruolo;
+import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Produttore;
@@ -68,7 +70,6 @@ public class ProdottiService {
             Prodotto p = new Prodotto();
             p.setNome(dto.nome());
             p.setCategoria(dto.categoria());
-            p.setPrezzo((dto.prezzo()));
             p.setProduttore((Produttore) u);
 
             Prodotto saved = repo.save(p);
@@ -79,7 +80,7 @@ public class ProdottiService {
         throw new ForbiddenException("Solo produttori possono creare prodotti");
     }
 
-    public ProdottoResponse update(Long id, CreateProdottoRequest dto) {
+    public ProdottoResponse patch(Long id, UpdateProdottoRequest dto) {
         UtenteGenerico u = getUtenteLoggato();
         Prodotto existing;
 
@@ -93,12 +94,14 @@ public class ProdottiService {
             throw new ForbiddenException("Ruolo non autorizzato");
         }
 
-        existing.setNome(dto.nome());
-        existing.setCategoria(dto.categoria());
-        existing.setPrezzo((dto.prezzo()));
+        if (dto.nome() != null) {
+            existing.setNome(dto.nome());
+        }
+        if (dto.categoria() != null) {
+            existing.setCategoria(dto.categoria());
+        }
 
-        Prodotto saved = repo.save(existing);
-        return toResponse(saved);
+        return toResponse(repo.save(existing));
     }
 
     public void delete(Long id) {

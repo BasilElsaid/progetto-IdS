@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import it.unicam.filiera.dto.create.CreateCertificatoRequest;
 import it.unicam.filiera.dto.create.CreateVerificaCertificatoRequest;
 import it.unicam.filiera.certificati.Certificato;
+import it.unicam.filiera.dto.update.UpdateCertificatoRequest;
 import it.unicam.filiera.services.CertificatiService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -44,10 +45,9 @@ public class CertificatiController {
         return certificatiService.getCertificato(id);
     }
 
-
-    @PutMapping("/{id}")
-    public Certificato aggiornaCertificato(@PathVariable Long id, @RequestBody CreateCertificatoRequest dto) {
-        return certificatiService.aggiornaCertificato(id, dto);
+    @PatchMapping("/{id}")
+    public Certificato patchCertificato(@PathVariable Long id, @RequestBody UpdateCertificatoRequest dto) {
+        return certificatiService.patchCertificato(id, dto);
     }
 
     @DeleteMapping("/{id}")

@@ -6,6 +6,5 @@ import jakarta.validation.constraints.NotNull;
 
 public record CreateProdottoRequest(
         @NotBlank String nome,
-        @NotBlank String categoria,
-        @Min(0) double prezzo
+        @NotBlank String categoria
 ) {}

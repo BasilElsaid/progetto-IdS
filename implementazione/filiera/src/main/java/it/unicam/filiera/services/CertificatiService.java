@@ -2,6 +2,7 @@ package it.unicam.filiera.services;
 
 import it.unicam.filiera.dto.create.CreateCertificatoRequest;
 import it.unicam.filiera.certificati.*;
+import it.unicam.filiera.dto.update.UpdateCertificatoRequest;
 import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.enums.TipoCertificatore;
 import it.unicam.filiera.exceptions.BadRequestException;
@@ -81,19 +82,27 @@ public class CertificatiService {
         return c;
     }
 
-    public Certificato aggiornaCertificato(Long id, CreateCertificatoRequest dto) {
+    public Certificato patchCertificato(Long id, UpdateCertificatoRequest dto) {
         Certificato c = getCertificato(id);
         checkOwnership(c);
 
-        if (!c.getProdotto().getId().equals(dto.prodottoId)) {
-            throw new BadRequestException("Non è consentito cambiare il prodotto del certificato");
+        switch (c.getTipo()) {
+            case PRODUTTORE -> {
+                if (c instanceof CertificazioneProduttore cp) {
+                    if (dto.azienda != null) cp.setAzienda(dto.azienda);
+                    if (dto.origineMateriaPrima != null) cp.setOrigineMateriaPrima(dto.origineMateriaPrima);
+                }
+            }
+            case TRASFORMATORE -> {
+                if (c instanceof CertificatoTrasformatore ct) {
+                    if (dto.processo != null) ct.setProcesso(dto.processo);
+                    if (dto.impianto != null) ct.setImpianto(dto.impianto);
+                }
+            }
+            case CURATORE -> {
+                throw new BadRequestException("I certificati rilasciati dal curatore non possono essere modificati");
+            }
         }
-
-        c.setProdotto(prodottoRepo.findById(dto.prodottoId)
-                .orElseThrow(() -> new NotFoundException("Prodotto non trovato")));
-
-        validaDto(dto);
-        assegnaCampiCertificato(c, dto);
 
         return certificatoRepo.save(c);
     }
