@@ -17,9 +17,6 @@ public class CertificatoCuratore extends Certificato implements StrategieCertifi
 
 	@Override
 	public boolean verifica(Prodotto p) {
-		// Restituisce true solo se:
-		// - questo certificato curatore è approvato
-		// - il target è un certificato Produttore o Trasformatore
 		return approvato && (certificatoTarget instanceof CertificazioneProduttore
 				|| certificatoTarget instanceof CertificatoTrasformatore);
 	}
@@ -29,7 +26,6 @@ public class CertificatoCuratore extends Certificato implements StrategieCertifi
 		return "Certificato Curatore";
 	}
 
-	// getter/setter
 	public boolean isApprovato() { return approvato; }
 	public void setApprovato(boolean approvato) { this.approvato = approvato; }
 

@@ -140,24 +140,26 @@ public class PersonaleService {
 
     // =================== Helper ===================
     private void updateUtente(Object utente, UpdatePersonaleRequest request) {
-        if(utente instanceof Curatore c) {
-            if(request.getEmail() != null) c.setEmail(request.getEmail());
-            if(request.getPassword() != null) c.setPassword(passwordEncoder.encode(request.getPassword()));
-            if(request.getNome() != null) c.setNome(request.getNome());
-            if(request.getCognome() != null) c.setCognome(request.getCognome());
-            if(request.getTelefono() != null) c.setTelefono(request.getTelefono());
-        } else if(utente instanceof Animatore a) {
-            if(request.getEmail() != null) a.setEmail(request.getEmail());
-            if(request.getPassword() != null) a.setPassword(passwordEncoder.encode(request.getPassword()));
-            if(request.getNome() != null) a.setNome(request.getNome());
-            if(request.getCognome() != null) a.setCognome(request.getCognome());
-            if(request.getTelefono() != null) a.setTelefono(request.getTelefono());
-        } else if(utente instanceof GestorePiattaforma g) {
-            if(request.getEmail() != null) g.setEmail(request.getEmail());
-            if(request.getPassword() != null) g.setPassword(passwordEncoder.encode(request.getPassword()));
-            if(request.getNome() != null) g.setNome(request.getNome());
-            if(request.getCognome() != null) g.setCognome(request.getCognome());
-            if(request.getTelefono() != null) g.setTelefono(request.getTelefono());
+        if (utente instanceof Curatore c) {
+            if (request.email() != null) c.setEmail(request.email());
+            if (request.password() != null) c.setPassword(passwordEncoder.encode(request.password()));
+            if (request.nome() != null) c.setNome(request.nome());
+            if (request.cognome() != null) c.setCognome(request.cognome());
+            if (request.telefono() != null) c.setTelefono(request.telefono());
+
+        } else if (utente instanceof Animatore a) {
+            if (request.email() != null) a.setEmail(request.email());
+            if (request.password() != null) a.setPassword(passwordEncoder.encode(request.password()));
+            if (request.nome() != null) a.setNome(request.nome());
+            if (request.cognome() != null) a.setCognome(request.cognome());
+            if (request.telefono() != null) a.setTelefono(request.telefono());
+
+        } else if (utente instanceof GestorePiattaforma g) {
+            if (request.email() != null) g.setEmail(request.email());
+            if (request.password() != null) g.setPassword(passwordEncoder.encode(request.password()));
+            if (request.nome() != null) g.setNome(request.nome());
+            if (request.cognome() != null) g.setCognome(request.cognome());
+            if (request.telefono() != null) g.setTelefono(request.telefono());
         }
     }
 }

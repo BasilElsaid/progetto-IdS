@@ -4,15 +4,13 @@ import it.unicam.filiera.domain.Prodotto;
 import jakarta.persistence.Entity;
 
 @Entity
-public class CertificazioneProduttore extends Certificato
-		implements StrategieCertificazioni{
+public class CertificazioneProduttore extends Certificato implements StrategieCertificazioni{
 
 	private String azienda;
 	private String origineMateriaPrima;
 
 	@Override
 	public boolean verifica(Prodotto p) {
-		// logica reale qui
 		return true;
 	}
 

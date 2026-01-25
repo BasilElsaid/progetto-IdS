@@ -56,8 +56,8 @@ public class AcquirentiService {
         Acquirente a = acquirenteRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
 
-        if (request.getEmail() != null) a.setEmail(request.getEmail());
-        if (request.getPassword() != null) a.setPassword(passwordEncoder.encode(request.getPassword()));
+        if (request.email() != null) a.setEmail(request.email());
+        if (request.password() != null) a.setPassword(passwordEncoder.encode(request.password()));
 
         return UtenteResponse.from(acquirenteRepo.save(a));
     }

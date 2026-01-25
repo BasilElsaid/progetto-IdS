@@ -89,14 +89,14 @@ public class CertificatiService {
         switch (c.getTipo()) {
             case PRODUTTORE -> {
                 if (c instanceof CertificazioneProduttore cp) {
-                    if (dto.azienda != null) cp.setAzienda(dto.azienda);
-                    if (dto.origineMateriaPrima != null) cp.setOrigineMateriaPrima(dto.origineMateriaPrima);
+                    if (dto.azienda() != null) cp.setAzienda(dto.azienda());
+                    if (dto.origineMateriaPrima() != null) cp.setOrigineMateriaPrima(dto.origineMateriaPrima());
                 }
             }
             case TRASFORMATORE -> {
                 if (c instanceof CertificatoTrasformatore ct) {
-                    if (dto.processo != null) ct.setProcesso(dto.processo);
-                    if (dto.impianto != null) ct.setImpianto(dto.impianto);
+                    if (dto.processo() != null) ct.setProcesso(dto.processo());
+                    if (dto.impianto() != null) ct.setImpianto(dto.impianto());
                 }
             }
             case CURATORE -> {

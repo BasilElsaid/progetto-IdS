@@ -100,9 +100,9 @@ public class MarketplacePacchettiService {
                         "Annuncio non trovato: id=" + id
                 ));
 
-        if (req.getPrezzo() != null) a.setPrezzo(req.getPrezzo());
-        if (req.getStock() != null) a.setStock(req.getStock());
-        if (req.getAttivo() != null) a.setAttivo(req.getAttivo());
+        if (req.prezzo() != null) a.setPrezzo(req.prezzo());
+        if (req.stock() != null) a.setStock(req.stock());
+        if (req.attivo() != null) a.setAttivo(req.attivo());
 
         return AnnuncioPacchettoResponse.from(annuncioPacchettoRepo.save(a));
     }

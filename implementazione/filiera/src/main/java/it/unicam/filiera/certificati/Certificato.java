@@ -18,12 +18,10 @@ public abstract class Certificato {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    protected TipoCertificatore tipo; // <-- nuovo campo
+    protected TipoCertificatore tipo;
 
-    public abstract boolean verifica(Prodotto p);
     public abstract String getNome();
 
-    // --- GETTER / SETTER ---
     public Long getId() { return id; }
 
     public Prodotto getProdotto() { return prodotto; }

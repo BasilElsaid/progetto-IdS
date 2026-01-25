@@ -13,7 +13,7 @@ public class DistributoreTipicitaBuilder implements UtenteBuilder, AziendeBuilde
 		this.distributore.setRuolo(Ruolo.DISTRIBUTORE_TIPICITA);
 	}
 
-	// ===== UtenteGenerico =====
+	// UtenteGenerico
 	@Override
 	public DistributoreTipicitaBuilder setUsername(String username) {
 		distributore.setUsername(username);
@@ -32,7 +32,7 @@ public class DistributoreTipicitaBuilder implements UtenteBuilder, AziendeBuilde
 		return this;
 	}
 
-	// ===== Azienda =====
+	// Azienda
 	@Override
 	public DistributoreTipicitaBuilder setNomeAzienda(String nome) {
 		distributore.setNomeAzienda(nome);
@@ -57,13 +57,13 @@ public class DistributoreTipicitaBuilder implements UtenteBuilder, AziendeBuilde
 		return this;
 	}
 
-	// ===== DistributoreTipicita specifico =====
+	// DistributoreTipicita specifico
 	public DistributoreTipicitaBuilder setAreaDistribuzione(String area) {
 		distributore.setAreaDistribuzione(area);
 		return this;
 	}
 
-	// ===== Build finale =====
+	// Build finale
 	@Override
 	public DistributoreTipicita build() {
 		return distributore;

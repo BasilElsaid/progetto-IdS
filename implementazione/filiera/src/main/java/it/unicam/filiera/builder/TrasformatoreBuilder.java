@@ -13,7 +13,7 @@ public class TrasformatoreBuilder implements UtenteBuilder, AziendeBuilder {
 		this.trasformatore.setRuolo(Ruolo.TRASFORMATORE);
 	}
 
-	// --- UtenteBuilder ---
+	// UtenteBuilder
 	@Override
 	public TrasformatoreBuilder setUsername(String username) {
 		trasformatore.setUsername(username);
@@ -32,7 +32,7 @@ public class TrasformatoreBuilder implements UtenteBuilder, AziendeBuilder {
 		return this;
 	}
 
-	// --- AziendeBuilder ---
+	// AziendeBuilder
 	@Override
 	public TrasformatoreBuilder setNomeAzienda(String nome) {
 		trasformatore.setNomeAzienda(nome);
@@ -57,7 +57,7 @@ public class TrasformatoreBuilder implements UtenteBuilder, AziendeBuilder {
 		return this;
 	}
 
-	// --- Builder specifico Trasformatore ---
+	// Builder specifico Trasformatore
 	public TrasformatoreBuilder setLaboratorio(String laboratorio) {
 		trasformatore.setLaboratorio(laboratorio);
 		return this;

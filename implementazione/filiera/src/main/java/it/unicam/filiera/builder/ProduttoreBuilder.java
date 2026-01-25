@@ -13,7 +13,7 @@ public class ProduttoreBuilder implements UtenteBuilder, AziendeBuilder {
 		this.produttore.setRuolo(Ruolo.PRODUTTORE);
 	}
 
-	// --- UtenteBuilder ---
+	// UtenteBuilder
 	@Override
 	public ProduttoreBuilder setUsername(String username) {
 		produttore.setUsername(username);
@@ -32,7 +32,7 @@ public class ProduttoreBuilder implements UtenteBuilder, AziendeBuilder {
 		return this;
 	}
 
-	// --- AziendeBuilder ---
+	// AziendeBuilder
 	@Override
 	public ProduttoreBuilder setNomeAzienda(String nome) {
 		produttore.setNomeAzienda(nome);

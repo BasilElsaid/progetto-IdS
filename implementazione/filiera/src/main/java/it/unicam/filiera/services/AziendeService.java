@@ -77,6 +77,7 @@ public class AziendeService {
                         .setEmail(request.email())
                         .setNomeAzienda(request.nomeAzienda())
                         .setPartitaIva(request.partitaIva())
+                        .setLaboratorio(request.laboratorio())
                         .setSede(request.sede())
                         .setCoordinate(toCoordinate(request.coordinate()))
                         .build();
@@ -89,6 +90,7 @@ public class AziendeService {
                         .setEmail(request.email())
                         .setNomeAzienda(request.nomeAzienda())
                         .setPartitaIva(request.partitaIva())
+                        .setAreaDistribuzione(request.areaDistribuzione())
                         .setSede(request.sede())
                         .setCoordinate(toCoordinate(request.coordinate()))
                         .build();
@@ -97,7 +99,7 @@ public class AziendeService {
             default -> throw new BadRequestException("Ruolo non gestito dal sistema");
         }
 
-        return UtenteResponse.from(a); // <-- sempre trasformo in DTO
+        return UtenteResponse.from(a);
     }
 
     public List<UtenteResponse> listaAziende() {
@@ -117,12 +119,12 @@ public class AziendeService {
 
         updateBaseFields(azienda, request);
 
-        if (azienda instanceof Trasformatore t && request.getLaboratorio() != null) {
-            t.setLaboratorio(request.getLaboratorio());
+        if (azienda instanceof Trasformatore t && request.laboratorio() != null) {
+            t.setLaboratorio(request.laboratorio());
         }
 
-        if (azienda instanceof DistributoreTipicita d && request.getAreaDistribuzione() != null) {
-            d.setAreaDistribuzione(request.getAreaDistribuzione());
+        if (azienda instanceof DistributoreTipicita d && request.areaDistribuzione() != null) {
+            d.setAreaDistribuzione(request.areaDistribuzione());
         }
 
         return UtenteResponse.from(saveAzienda(azienda));
@@ -133,18 +135,18 @@ public class AziendeService {
         deleteAziendaByTipo(azienda);
     }
 
-    // ================= HELPERS =================
+    // HELPERS
     private CoordinateOSM toCoordinate(CreateCoordinateRequest dto) {
         return dto == null ? null : new CoordinateOSM(dto.lat(), dto.lon());
     }
 
     private void updateBaseFields(Azienda a, UpdateAziendaRequest request) {
-        if (request.getEmail() != null) a.setEmail(request.getEmail());
-        if (request.getPassword() != null) a.setPassword(passwordEncoder.encode(request.getPassword()));
-        if (request.getNomeAzienda() != null) a.setNomeAzienda(request.getNomeAzienda());
-        if (request.getPartitaIva() != null) a.setPartitaIva(request.getPartitaIva());
-        if (request.getSede() != null) a.setSede(request.getSede());
-        if (request.getCoordinate() != null) a.setCoordinate(toCoordinate(request.getCoordinate()));
+        if (request.email() != null) a.setEmail(request.email());
+        if (request.password() != null) a.setPassword(passwordEncoder.encode(request.password()));
+        if (request.nomeAzienda() != null) a.setNomeAzienda(request.nomeAzienda());
+        if (request.partitaIva() != null) a.setPartitaIva(request.partitaIva());
+        if (request.sede() != null) a.setSede(request.sede());
+        if (request.coordinate() != null) a.setCoordinate(toCoordinate(request.coordinate()));
     }
 
     private Azienda findAziendaById(Long id) {
