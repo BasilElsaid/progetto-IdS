@@ -30,7 +30,8 @@ public class CertificatiController {
 
     @PreAuthorize("hasAnyRole('CURATORE', 'GESTORE_PIATTAFORMA')")
     @PostMapping("/{id}/verifica")
-    public boolean verificaCertificato(@PathVariable Long id, @RequestBody CreateVerificaCertificatoRequest dto) {
+    public boolean verificaCertificato(@PathVariable Long id,
+                                       @RequestBody CreateVerificaCertificatoRequest dto) {
         return certificatiService.verificaCertificato(id, dto.approvato(), dto.commento());
     }
 
@@ -47,7 +48,8 @@ public class CertificatiController {
 
     @PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE')")
     @PatchMapping("/{id}")
-    public Certificato patchCertificato(@PathVariable Long id, @RequestBody UpdateCertificatoRequest dto) {
+    public Certificato patchCertificato(@PathVariable Long id,
+                                        @RequestBody UpdateCertificatoRequest dto) {
         return certificatiService.patchCertificato(id, dto);
     }
 

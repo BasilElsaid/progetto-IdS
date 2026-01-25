@@ -1,6 +1,5 @@
 package it.unicam.filiera.certificati;
 
-import it.unicam.filiera.domain.Prodotto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

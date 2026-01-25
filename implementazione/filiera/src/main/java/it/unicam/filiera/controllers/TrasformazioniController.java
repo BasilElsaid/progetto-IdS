@@ -1,6 +1,7 @@
 package it.unicam.filiera.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import it.unicam.filiera.domain.TrasformazioneProdotto;
 import it.unicam.filiera.dto.create.CreateTrasformazioneRequest;
 import it.unicam.filiera.dto.response.TrasformazioneResponse;
 import it.unicam.filiera.services.TrasformazioniService;
@@ -23,17 +24,8 @@ public class TrasformazioniController {
 
     @PostMapping
     public TrasformazioneResponse crea(@RequestBody CreateTrasformazioneRequest req) {
-        return TrasformazioneResponse.from(
-                service.creaTrasformazione(
-                        req.processoId(),
-                        req.trasformatoreId(),
-                        req.inputId(),
-                        req.outputId(),
-                        req.quantitaInput(),
-                        req.quantitaOutput(),
-                        req.note()
-                )
-        );
+        TrasformazioneProdotto t = service.creaTrasformazione(req);
+        return TrasformazioneResponse.from(t);
     }
 
     @GetMapping("/processo/{processoId}")

@@ -1,6 +1,7 @@
 package it.unicam.filiera.models;
 
 import it.unicam.filiera.domain.Evento;
+import it.unicam.filiera.enums.Ruolo;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -14,6 +15,10 @@ public class Animatore extends Personale {
     private List<Evento> eventi = new ArrayList<>();
 
     public List<Evento> getEventi() { return eventi; }
+
+    public Animatore() {
+        setRuolo(Ruolo.ANIMATORE);
+    }
 
     public void aggiungiEvento(Evento evento) {
         eventi.add(evento);

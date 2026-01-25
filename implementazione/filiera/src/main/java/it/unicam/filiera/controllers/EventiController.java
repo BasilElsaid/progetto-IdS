@@ -39,10 +39,8 @@ public class EventiController {
 	}
 
 	@PatchMapping("/{id}")
-	public Evento aggiornaEvento(
-			@PathVariable Long id,
-			@RequestBody CreateEventoRequest dto
-	) {
+	public Evento aggiornaEvento(@PathVariable Long id,
+								 @RequestBody CreateEventoRequest dto) {
 		return eventiService.aggiornaEvento(id, dto);
 	}
 

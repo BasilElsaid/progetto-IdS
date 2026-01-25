@@ -10,7 +10,6 @@ public class DistributoreTipicitaBuilder implements UtenteBuilder, AziendeBuilde
 
 	public DistributoreTipicitaBuilder() {
 		this.distributore = new DistributoreTipicita();
-		this.distributore.setRuolo(Ruolo.DISTRIBUTORE_TIPICITA);
 	}
 
 	// UtenteGenerico

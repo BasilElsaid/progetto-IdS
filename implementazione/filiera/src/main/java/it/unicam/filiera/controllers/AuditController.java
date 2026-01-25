@@ -21,7 +21,8 @@ public class AuditController {
     }
 
     @GetMapping
-    public List<AuditLogResponse> byEntity(@RequestParam String entity, @RequestParam Long id) {
+    public List<AuditLogResponse> byEntity(@RequestParam String entity,
+                                           @RequestParam Long id) {
         return auditService.byEntity(entity, id);
     }
 

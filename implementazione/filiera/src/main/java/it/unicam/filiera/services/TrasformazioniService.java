@@ -3,6 +3,7 @@ package it.unicam.filiera.services;
 import it.unicam.filiera.domain.ProcessoTrasformazione;
 import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.domain.TrasformazioneProdotto;
+import it.unicam.filiera.dto.create.CreateTrasformazioneRequest;
 import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.models.Trasformatore;
@@ -34,39 +35,21 @@ public class TrasformazioniService {
         this.trasformatoreRepo = trasformatoreRepo;
     }
 
-    public TrasformazioneProdotto creaTrasformazione(
-            Long processoId,
-            Long trasformatoreId,
-            Long inputId,
-            Long outputId,
-            Double quantitaInput,
-            Double quantitaOutput,
-            String note
-    ) {
-
+    public TrasformazioneProdotto creaTrasformazione(CreateTrasformazioneRequest req) {
         UtenteGenerico u = getUtenteLoggato();
 
-        if (isTrasformatore(u)) {
-            Trasformatore tLoggato = (Trasformatore) u;
-            if (!tLoggato.getId().equals(trasformatoreId)) {
-                throw new ForbiddenException("Non puoi creare trasformazioni per altri trasformatori");
-            }
+        if (isTrasformatore(u) && !((Trasformatore) u).getId().equals(req.trasformatoreId())) {
+            throw new ForbiddenException("Non puoi creare trasformazioni per altri trasformatori");
         }
-        // gestore piattaforma → libero
 
-        ProcessoTrasformazione processo = processiRepo.findById(processoId).orElseThrow();
-        Trasformatore trasformatore = trasformatoreRepo.findById(trasformatoreId).orElseThrow();
-        Prodotto input = prodottoRepo.findById(inputId).orElseThrow();
-        Prodotto output = prodottoRepo.findById(outputId).orElseThrow();
+        ProcessoTrasformazione processo = processiRepo.findById(req.processoId()).orElseThrow();
+        Trasformatore trasformatore = trasformatoreRepo.findById(req.trasformatoreId()).orElseThrow();
+        Prodotto input = prodottoRepo.findById(req.inputId()).orElseThrow();
+        Prodotto output = prodottoRepo.findById(req.outputId()).orElseThrow();
 
         TrasformazioneProdotto t = new TrasformazioneProdotto(
-                processo,
-                trasformatore,
-                input,
-                output,
-                quantitaInput,
-                quantitaOutput,
-                note
+                processo, trasformatore, input, output,
+                req.quantitaInput(), req.quantitaOutput(), req.note()
         );
 
         return trasformazioniRepo.save(t);

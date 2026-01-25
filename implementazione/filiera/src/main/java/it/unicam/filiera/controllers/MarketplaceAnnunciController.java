@@ -30,7 +30,7 @@ public class MarketplaceAnnunciController {
         this.marketplacePacchettiService = marketplacePacchettiService;
     }
 
-    // -------------------- PRODOTTI --------------------
+    // PRODOTTI
 
     @PostMapping("/prodotti")
     public AnnuncioProdottoResponse creaProdotto(@RequestBody CreateAnnuncioProdottoRequest req) {
@@ -38,11 +38,9 @@ public class MarketplaceAnnunciController {
     }
 
     @GetMapping("/prodotti")
-    public List<AnnuncioProdottoResponse> listaProdotti(
-            @RequestParam Optional<Long> aziendaId,
-            @RequestParam Optional<CategoriaProdotto> categoria,
-            @RequestParam Optional<Boolean> attivo
-    ) {
+    public List<AnnuncioProdottoResponse> listaProdotti(@RequestParam Optional<Long> aziendaId,
+                                                        @RequestParam Optional<CategoriaProdotto> categoria,
+                                                        @RequestParam Optional<Boolean> attivo) {
         String categoriaStr = categoria.map(Enum::name).orElse(null);
         return marketplaceProdottiService.listaAnnunci(aziendaId.orElse(null), categoriaStr, attivo.orElse(null));
     }
@@ -63,7 +61,7 @@ public class MarketplaceAnnunciController {
         marketplaceProdottiService.eliminaAnnuncio(id);
     }
 
-    // -------------------- PACCHETTI --------------------
+        // PACCHETTI
 
     @PostMapping("/pacchetti")
     public AnnuncioPacchettoResponse creaPacchetto(@RequestBody CreateAnnuncioPacchettoRequest req) {

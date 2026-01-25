@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("ACQUIRENTE")
 public class Acquirente extends UtenteGenerico {
 
-
     public Acquirente() {
         setRuolo(Ruolo.ACQUIRENTE);
     }

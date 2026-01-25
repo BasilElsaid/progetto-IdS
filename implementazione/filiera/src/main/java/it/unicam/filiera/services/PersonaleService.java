@@ -51,7 +51,6 @@ public class PersonaleService {
                 c.setNome(request.nome());
                 c.setCognome(request.cognome());
                 c.setTelefono(request.telefono());
-                c.setRuolo(Ruolo.CURATORE);
                 return UtenteResponse.from(curatoreRepository.save(c));
 
             case ANIMATORE:
@@ -65,7 +64,6 @@ public class PersonaleService {
                 a.setNome(request.nome());
                 a.setCognome(request.cognome());
                 a.setTelefono(request.telefono());
-                a.setRuolo(Ruolo.ANIMATORE);
                 return UtenteResponse.from(animatoreRepository.save(a));
 
             case GESTORE_PIATTAFORMA:
@@ -79,7 +77,6 @@ public class PersonaleService {
                 g.setNome(request.nome());
                 g.setCognome(request.cognome());
                 g.setTelefono(request.telefono());
-                g.setRuolo(Ruolo.GESTORE_PIATTAFORMA);
                 return UtenteResponse.from(gestoreRepository.save(g));
 
             default:

@@ -16,8 +16,7 @@ public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
 
-    public AuthController(AuthService authService,
-                                   JwtService jwtService) {
+    public AuthController(AuthService authService, JwtService jwtService) {
         this.authService = authService;
         this.jwtService = jwtService;
     }

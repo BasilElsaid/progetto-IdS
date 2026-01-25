@@ -1,5 +1,6 @@
 package it.unicam.filiera.services;
 
+import it.unicam.filiera.dto.create.CreateOrdineItemRequest;
 import it.unicam.filiera.dto.response.OrdineResponse;
 import it.unicam.filiera.domain.*;
 import it.unicam.filiera.enums.StatoOrdine;
@@ -35,7 +36,7 @@ public class OrdiniService {
     }
 
     @Transactional
-    public OrdineResponse creaOrdine(Long acquirenteId, List<ItemRequest> items) {
+    public OrdineResponse creaOrdine(Long acquirenteId, List<CreateOrdineItemRequest> items) {
         if (acquirenteId == null) throw new BadRequestException("acquirenteId mancante");
         if (items == null || items.isEmpty()) throw new BadRequestException("items mancanti");
 
@@ -49,28 +50,28 @@ public class OrdiniService {
 
         double totale = 0.0;
 
-        for (ItemRequest r : items) {
-            if (r.getQuantita() <= 0) throw new BadRequestException("Quantita non valida");
+        for (CreateOrdineItemRequest r : items) {
+            if (r.quantita() <= 0) throw new BadRequestException("Quantita non valida");
 
             OrdineItem item = new OrdineItem();
-            item.setAnnuncioId(r.getAnnuncioId());
-            item.setPacchetto(r.isPacchetto());
-            item.setQuantita(r.getQuantita());
+            item.setAnnuncioId(r.annuncioId());
+            item.setPacchetto(r.pacchetto());
+            item.setQuantita(r.quantita());
 
-            if (r.isPacchetto()) {
-                var annuncio = pacchettiRepo.findById(r.getAnnuncioId())
+            if (r.pacchetto()) {
+                var annuncio = pacchettiRepo.findById(r.annuncioId())
                         .orElseThrow(() -> new NotFoundException("Pacchetto non trovato"));
-                if (!annuncio.isAttivo() || annuncio.getStock() < r.getQuantita())
+                if (!annuncio.isAttivo() || annuncio.getStock() < r.quantita())
                     throw new BadRequestException("Pacchetto non disponibile");
-                annuncio.setStock(annuncio.getStock() - r.getQuantita());
+                annuncio.setStock(annuncio.getStock() - r.quantita());
                 pacchettiRepo.save(annuncio);
                 item.setPrezzoUnitario(annuncio.getPrezzo());
             } else {
-                var annuncio = prodottiRepo.findById(r.getAnnuncioId())
+                var annuncio = prodottiRepo.findById(r.annuncioId())
                         .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
-                if (!annuncio.isAttivo() || annuncio.getStock() < r.getQuantita())
+                if (!annuncio.isAttivo() || annuncio.getStock() < r.quantita())
                     throw new BadRequestException("Prodotto non disponibile");
-                annuncio.setStock(annuncio.getStock() - r.getQuantita());
+                annuncio.setStock(annuncio.getStock() - r.quantita());
                 prodottiRepo.save(annuncio);
                 item.setPrezzoUnitario(annuncio.getPrezzo());
             }
@@ -143,19 +144,5 @@ public class OrdiniService {
         return ordineRepo.findByAcquirenteId(acquirenteId).stream()
                 .map(OrdineResponse::from)
                 .collect(Collectors.toList());
-    }
-
-    // DTO interno per richiesta items
-    public static class ItemRequest {
-        private Long annuncioId;
-        private int quantita;
-        private boolean pacchetto;
-
-        public Long getAnnuncioId() { return annuncioId; }
-        public void setAnnuncioId(Long annuncioId) { this.annuncioId = annuncioId; }
-        public int getQuantita() { return quantita; }
-        public void setQuantita(int quantita) { this.quantita = quantita; }
-        public boolean isPacchetto() { return pacchetto; }
-        public void setPacchetto(boolean pacchetto) { this.pacchetto = pacchetto; }
     }
 }

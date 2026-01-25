@@ -39,7 +39,8 @@ public class ProdottiController {
     }
 
     @PatchMapping("/{id}")
-    public ProdottoResponse patch(@PathVariable Long id, @RequestBody UpdateProdottoRequest dto) {
+    public ProdottoResponse patch(@PathVariable Long id,
+                                  @RequestBody UpdateProdottoRequest dto) {
         return service.patch(id, dto);
     }
 

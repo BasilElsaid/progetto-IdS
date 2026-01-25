@@ -46,7 +46,8 @@ public class PersonaleController {
 
     @PreAuthorize("hasAnyRole('CURATORE', 'ANIMATORE', 'GESTORE_PIATTAFORMA')")
     @PatchMapping("/{id}")
-    public UtenteResponse patch(@PathVariable Long id, @RequestBody UpdatePersonaleRequest request) {
+    public UtenteResponse patch(@PathVariable Long id,
+                                @RequestBody UpdatePersonaleRequest request) {
         return service.patchPersonale(id, request);
     }
 }

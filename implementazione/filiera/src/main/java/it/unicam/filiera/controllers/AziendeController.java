@@ -24,7 +24,6 @@ public class AziendeController {
 
     @PostMapping
     public UtenteResponse crea(@Valid @RequestBody CreateAziendaRequest request) {
-        // switch interno per decidere il tipo di azienda
         return service.creaAzienda(request);
     }
 
@@ -48,7 +47,8 @@ public class AziendeController {
 
     @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
     @PatchMapping("/{id}")
-    public UtenteResponse patch(@PathVariable Long id, @RequestBody UpdateAziendaRequest request) {
+    public UtenteResponse patch(@PathVariable Long id,
+                                @RequestBody UpdateAziendaRequest request) {
         return service.patchAzienda(id, request);
     }
 }

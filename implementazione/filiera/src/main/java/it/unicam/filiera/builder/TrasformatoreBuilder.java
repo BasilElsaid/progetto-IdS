@@ -10,7 +10,6 @@ public class TrasformatoreBuilder implements UtenteBuilder, AziendeBuilder {
 
 	public TrasformatoreBuilder() {
 		this.trasformatore = new Trasformatore();
-		this.trasformatore.setRuolo(Ruolo.TRASFORMATORE);
 	}
 
 	// UtenteBuilder

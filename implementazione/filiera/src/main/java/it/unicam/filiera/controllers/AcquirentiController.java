@@ -23,7 +23,7 @@ public class AcquirentiController {
 
     @PostMapping
     public UtenteResponse crea(@RequestBody CreateAcquirenteRequest request) {
-        return service.creaAcquirente(request); // UtenteResponse, non Acquirente
+        return service.creaAcquirente(request);
     }
 
     @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
@@ -46,7 +46,8 @@ public class AcquirentiController {
 
     @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
     @PatchMapping("/{id}")
-    public UtenteResponse patch(@PathVariable Long id, @RequestBody UpdateAcquirenteRequest request) {
+    public UtenteResponse patch(@PathVariable Long id,
+                                @RequestBody UpdateAcquirenteRequest request) {
         return service.patchAcquirente(id, request);
     }
 }

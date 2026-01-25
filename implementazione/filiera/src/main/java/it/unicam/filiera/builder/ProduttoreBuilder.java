@@ -10,7 +10,6 @@ public class ProduttoreBuilder implements UtenteBuilder, AziendeBuilder {
 
 	public ProduttoreBuilder() {
 		this.produttore = new Produttore();
-		this.produttore.setRuolo(Ruolo.PRODUTTORE);
 	}
 
 	// UtenteBuilder

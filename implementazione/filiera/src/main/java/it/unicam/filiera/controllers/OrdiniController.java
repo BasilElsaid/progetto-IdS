@@ -6,6 +6,7 @@ import it.unicam.filiera.enums.MetodoPagamento;
 import it.unicam.filiera.services.OrdiniService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import it.unicam.filiera.dto.create.CreateOrdineItemRequest;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class OrdiniController {
     }
 
     @PostMapping
-    public OrdineResponse crea(@RequestBody List<OrdiniService.ItemRequest> items,
+    public OrdineResponse crea(@RequestBody List<CreateOrdineItemRequest> items,
                                @RequestParam Long acquirenteId) {
         return service.creaOrdine(acquirenteId, items);
     }

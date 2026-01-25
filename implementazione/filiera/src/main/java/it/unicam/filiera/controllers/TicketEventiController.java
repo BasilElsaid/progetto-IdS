@@ -21,11 +21,9 @@ public class TicketEventiController {
     }
 
     @PostMapping("/eventi/{eventoId}/tickets")
-    public List<TicketEventoResponse> acquistaTicket(
-            @PathVariable Long eventoId,
-            @RequestBody(required = false) CreateAcquistaTicketRequest req
-    ) {
-        int quantita = (req == null || req.getQuantita() == null) ? 1 : req.getQuantita();
+    public List<TicketEventoResponse> acquistaTicket(@PathVariable Long eventoId,
+                                                     @RequestBody(required = false) CreateAcquistaTicketRequest req) {
+        int quantita = (req == null || req.quantita() == null) ? 1 : req.quantita();
         return ticketEventiService.acquistaTicket(eventoId, quantita);
     }
 
