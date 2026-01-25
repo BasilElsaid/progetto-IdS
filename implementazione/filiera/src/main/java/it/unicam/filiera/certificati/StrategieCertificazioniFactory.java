@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+import org.springframework.stereotype.Component;
+import java.util.Map;
+
 @Component
 public class StrategieCertificazioniFactory {
 
@@ -12,9 +15,9 @@ public class StrategieCertificazioniFactory {
 
     public StrategieCertificazioniFactory() {
         strategie = Map.of(
-                TipoCertificatore.PRODUTTORE, (StrategieCertificazioni) new CertificazioneProduttore(),
-                TipoCertificatore.TRASFORMATORE, (StrategieCertificazioni) new CertificatoTrasformatore(),
-                TipoCertificatore.CURATORE, (StrategieCertificazioni) new CertificatoCuratore()
+                TipoCertificatore.PRODUTTORE, new CertificatoProduttoreStrategy(),
+                TipoCertificatore.TRASFORMATORE, new CertificatoTrasformatoreStrategy(),
+                TipoCertificatore.CURATORE, new CertificatoCuratoreStrategy()
         );
     }
 
@@ -22,4 +25,3 @@ public class StrategieCertificazioniFactory {
         return strategie.get(tipo);
     }
 }
-

@@ -4,21 +4,11 @@ import it.unicam.filiera.domain.Prodotto;
 import jakarta.persistence.Entity;
 
 @Entity
-public class CertificatoTrasformatore extends Certificato implements StrategieCertificazioni{
-
+public class CertificatoTrasformatore extends Certificato {
 	private String processo;
 	private String impianto;
 
-	@Override
-	public boolean verifica(Prodotto p) {
-		return true;
-	}
-
-	@Override
-	public String getNome() {
-		return "Certificato Trasformatore";
-	}
-
+	// getters/setters
 	public String getProcesso() { return processo; }
 	public void setProcesso(String processo) { this.processo = processo; }
 

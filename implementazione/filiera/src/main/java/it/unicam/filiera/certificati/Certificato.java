@@ -20,8 +20,6 @@ public abstract class Certificato {
     @Column(nullable = false)
     protected TipoCertificatore tipo;
 
-    public abstract String getNome();
-
     public Long getId() { return id; }
 
     public Prodotto getProdotto() { return prodotto; }
