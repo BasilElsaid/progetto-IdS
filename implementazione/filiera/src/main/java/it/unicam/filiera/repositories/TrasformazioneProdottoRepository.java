@@ -7,10 +7,7 @@ import java.util.List;
 
 public interface TrasformazioneProdottoRepository extends JpaRepository<TrasformazioneProdotto, Long> {
 
-    List<TrasformazioneProdotto> findByProcessoId(Long processoId);
 
     List<TrasformazioneProdotto> findByTrasformatoreId(Long trasformatoreId);
-
-    List<TrasformazioneProdotto> findByProcessoIdAndTrasformatoreId(Long processoId, Long trasformatoreId);
 
 }

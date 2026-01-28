@@ -1,14 +1,13 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.domain.ProcessoTrasformazione;
 import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.domain.TrasformazioneProdotto;
 import it.unicam.filiera.dto.create.CreateTrasformazioneRequest;
 import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.exceptions.ForbiddenException;
+import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Trasformatore;
 import it.unicam.filiera.models.UtenteGenerico;
-import it.unicam.filiera.repositories.ProcessoTrasformazioneRepository;
 import it.unicam.filiera.repositories.ProdottoRepository;
 import it.unicam.filiera.repositories.TrasformatoreRepository;
 import it.unicam.filiera.repositories.TrasformazioneProdottoRepository;
@@ -21,16 +20,13 @@ import java.util.List;
 public class TrasformazioniService {
 
     private final TrasformazioneProdottoRepository trasformazioniRepo;
-    private final ProcessoTrasformazioneRepository processiRepo;
     private final ProdottoRepository prodottoRepo;
     private final TrasformatoreRepository trasformatoreRepo;
 
     public TrasformazioniService(TrasformazioneProdottoRepository trasformazioniRepo,
-                                 ProcessoTrasformazioneRepository processiRepo,
                                  ProdottoRepository prodottoRepo,
                                  TrasformatoreRepository trasformatoreRepo) {
         this.trasformazioniRepo = trasformazioniRepo;
-        this.processiRepo = processiRepo;
         this.prodottoRepo = prodottoRepo;
         this.trasformatoreRepo = trasformatoreRepo;
     }
@@ -38,39 +34,37 @@ public class TrasformazioniService {
     public TrasformazioneProdotto creaTrasformazione(CreateTrasformazioneRequest req) {
         UtenteGenerico u = getUtenteLoggato();
 
+        // Solo il trasformatore può creare trasformazioni su se stesso
         if (isTrasformatore(u) && !((Trasformatore) u).getId().equals(req.trasformatoreId())) {
             throw new ForbiddenException("Non puoi creare trasformazioni per altri trasformatori");
         }
 
-        ProcessoTrasformazione processo = processiRepo.findById(req.processoId()).orElseThrow();
-        Trasformatore trasformatore = trasformatoreRepo.findById(req.trasformatoreId()).orElseThrow();
-        Prodotto input = prodottoRepo.findById(req.inputId()).orElseThrow();
-        Prodotto output = prodottoRepo.findById(req.outputId()).orElseThrow();
+        // Recupero prodotto di input e trasformatore
+        Prodotto input = prodottoRepo.findById(req.inputId())
+                .orElseThrow(() -> new NotFoundException("Prodotto di input non trovato"));
+        Trasformatore trasformatore = trasformatoreRepo.findById(req.trasformatoreId())
+                .orElseThrow(() -> new NotFoundException("Trasformatore non trovato"));
 
-        TrasformazioneProdotto t = new TrasformazioneProdotto(
-                processo, trasformatore, input, output,
-                req.quantitaInput(), req.quantitaOutput(), req.note()
+        // Creo il prodotto di output clonando il prodotto di input
+        Prodotto output = new Prodotto();
+        output.setProduttore(input.getProduttore());
+        output.setCategoria(input.getCategoria());
+        output.setPrezzo(input.getPrezzo());
+        output.setNome(req.nuovoNomeOutput() != null ? req.nuovoNomeOutput() : input.getNome());
+
+        prodottoRepo.save(output);
+
+        // Creo la trasformazione
+        TrasformazioneProdotto trasformazione = new TrasformazioneProdotto(
+                trasformatore,
+                input,
+                output,
+                req.note()
         );
 
-        return trasformazioniRepo.save(t);
+        return trasformazioniRepo.save(trasformazione);
     }
 
-    public List<TrasformazioneProdotto> listaPerProcesso(Long processoId) {
-        UtenteGenerico u = getUtenteLoggato();
-
-        if (isGestorePiattaforma(u)) {
-            return trasformazioniRepo.findByProcessoId(processoId);
-        }
-
-        if (isTrasformatore(u)) {
-            return trasformazioniRepo.findByProcessoIdAndTrasformatoreId(
-                    processoId,
-                    ((Trasformatore) u).getId()
-            );
-        }
-
-        throw new ForbiddenException("Accesso non consentito");
-    }
 
     public List<TrasformazioneProdotto> listaPerTrasformatore(Long trasformatoreId) {
         UtenteGenerico u = getUtenteLoggato();

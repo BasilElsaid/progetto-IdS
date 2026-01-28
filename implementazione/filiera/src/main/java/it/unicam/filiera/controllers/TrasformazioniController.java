@@ -28,11 +28,6 @@ public class TrasformazioniController {
         return TrasformazioneResponse.from(t);
     }
 
-    @GetMapping("/processo/{processoId}")
-    public List<TrasformazioneResponse> listaPerProcesso(@PathVariable Long processoId) {
-        return service.listaPerProcesso(processoId).stream().map(TrasformazioneResponse::from).toList();
-    }
-
     @GetMapping("/trasformatore/{trasformatoreId}")
     public List<TrasformazioneResponse> listaPerTrasformatore(@PathVariable Long trasformatoreId) {
         return service.listaPerTrasformatore(trasformatoreId).stream().map(TrasformazioneResponse::from).toList();
