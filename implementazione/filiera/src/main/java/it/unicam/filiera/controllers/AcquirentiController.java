@@ -55,11 +55,13 @@ public class AcquirentiController {
         return service.patchAcquirente(id, request);
     }
 
+    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/{acquirenteId}/prodotti")
     public List<ProdottoResponse> getProdottiAcquistati(@PathVariable Long acquirenteId) {
         return service.getProdottiAcquistati(acquirenteId);
     }
 
+    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/{acquirenteId}/pacchetti")
     public List<PacchettoResponse> getPacchettiAcquistati(@PathVariable Long acquirenteId) {
         return service.getPacchettiAcquistati(acquirenteId);
