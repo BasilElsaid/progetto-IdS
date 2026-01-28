@@ -10,6 +10,7 @@ import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.DistributoreTipicita;
 import it.unicam.filiera.models.UtenteGenerico;
+import it.unicam.filiera.repositories.AnnuncioProdottoRepository;
 import it.unicam.filiera.repositories.PacchettoRepository;
 import it.unicam.filiera.repositories.ProdottoRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,10 +24,12 @@ public class PacchettiService {
 
     private final PacchettoRepository pacchettoRepo;
     private final ProdottoRepository prodottoRepo;
+    private final AnnuncioProdottoRepository annuncioProdottoRepo;
 
-    public PacchettiService(PacchettoRepository pacchettoRepo, ProdottoRepository prodottoRepo) {
+    public PacchettiService(PacchettoRepository pacchettoRepo, ProdottoRepository prodottoRepo, AnnuncioProdottoRepository annuncioProdottoRepo) {
         this.pacchettoRepo = pacchettoRepo;
         this.prodottoRepo = prodottoRepo;
+        this.annuncioProdottoRepo = annuncioProdottoRepo;
     }
 
     public List<Pacchetto> lista() {
@@ -70,8 +73,15 @@ public class PacchettiService {
         List<Prodotto> prodotti = new ArrayList<>();
         if (req.prodottiIds() != null && !req.prodottiIds().isEmpty()) {
             for (Long pid : req.prodottiIds()) {
-                prodotti.add(prodottoRepo.findById(pid)
-                        .orElseThrow(() -> new BadRequestException("Prodotto con id " + pid + " non trovato")));
+                Prodotto prod = prodottoRepo.findById(pid)
+                        .orElseThrow(() -> new BadRequestException("Prodotto con id " + pid + " non trovato"));
+
+                // Controllo che il prodotto non sia già su marketplace
+                if (annuncioProdottoRepo.existsByProdotto_Id(pid)) {
+                    throw new BadRequestException("Il prodotto con id " + pid + " è già presente su marketplace e non può essere incluso nel pacchetto");
+                }
+
+                prodotti.add(prod);
             }
         }
 
@@ -102,7 +112,8 @@ public class PacchettiService {
         }
 
         Pacchetto saved = pacchettoRepo.save(p);
-        return PacchettoResponse.from(saved);    }
+        return PacchettoResponse.from(saved);
+    }
 
     public void elimina(Long id) {
         UtenteGenerico u = getUtenteLoggato();

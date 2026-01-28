@@ -20,4 +20,6 @@ public interface AnnuncioProdottoRepository extends JpaRepository<AnnuncioProdot
 
     Optional<AnnuncioProdotto> findByAziendaAndProdotto(Azienda azienda, Prodotto prodotto);
 
+    boolean existsByProdotto_Id(Long prodottoId);
+
 }
