@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/trasformazioni")
 @Tag(name = "07 - Trasformazioni", description = "Gestione Processi di trasformazioni")
-@PreAuthorize("hasAnyRole('TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
 public class TrasformazioniController {
 
     private final TrasformazioniService service;
@@ -22,12 +21,14 @@ public class TrasformazioniController {
         this.service = service;
     }
 
+    @PreAuthorize("hasRole('TRASFORMATORE')")
     @PostMapping
     public TrasformazioneResponse crea(@RequestBody CreateTrasformazioneRequest req) {
         TrasformazioneProdotto t = service.creaTrasformazione(req);
         return TrasformazioneResponse.from(t);
     }
 
+    @PreAuthorize("hasAnyRole('TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/trasformatore/{trasformatoreId}")
     public List<TrasformazioneResponse> listaPerTrasformatore(@PathVariable Long trasformatoreId) {
         return service.listaPerTrasformatore(trasformatoreId).stream().map(TrasformazioneResponse::from).toList();

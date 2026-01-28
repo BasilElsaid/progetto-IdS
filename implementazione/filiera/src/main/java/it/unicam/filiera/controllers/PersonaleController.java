@@ -26,7 +26,7 @@ public class PersonaleController {
         return service.creaPersonale(request);
     }
 
-    @PreAuthorize("hasAnyRole('CURATORE', 'ANIMATORE', 'GESTORE_PIATTAFORMA')")
+    @PreAuthorize("hasAnyRole('GESTORE_PIATTAFORMA')")
     @GetMapping
     public List<UtenteResponse> lista() {
         return service.listaPersonale();

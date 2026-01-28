@@ -35,16 +35,19 @@ public class OrdiniController {
         return service.pagaOrdine(request.acquirenteId(), id, request.metodo());
     }
 
+    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/{id}")
     public OrdineResponse get(@PathVariable Long id) {
         return service.getById(id);
     }
 
+    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
     @GetMapping
     public List<OrdineResponse> all() {
         return service.all();
     }
 
+    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/acquirente/{acquirenteId}")
     public List<OrdineResponse> byAcquirente(@PathVariable Long acquirenteId) {
         return service.getByAcquirente(acquirenteId);

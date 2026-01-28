@@ -20,6 +20,7 @@ public class TicketEventiController {
         this.ticketEventiService = ticketEventiService;
     }
 
+    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'PRODUTTORE', 'TRASFORMATORE', 'DISTRIBUTORE_TIPICITA')")
     @PostMapping("/eventi/{eventoId}/tickets")
     public List<TicketEventoResponse> acquistaTicket(@PathVariable Long eventoId,
                                                      @RequestBody(required = false) CreateAcquistaTicketRequest req) {
@@ -27,6 +28,7 @@ public class TicketEventiController {
         return ticketEventiService.acquistaTicket(eventoId, quantita);
     }
 
+    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'PRODUTTORE', 'TRASFORMATORE', 'DISTRIBUTORE_TIPICITA')")
     @GetMapping("/tickets/miei")
     public List<TicketEventoResponse> listaMieiTicket() {
         return ticketEventiService.listaMieiTicket();

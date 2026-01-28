@@ -6,8 +6,6 @@ import it.unicam.filiera.dto.response.PacchettoResponse;
 import it.unicam.filiera.dto.response.ProdottoResponse;
 import it.unicam.filiera.dto.response.UtenteResponse;
 import it.unicam.filiera.dto.update.UpdateAcquirenteRequest;
-import it.unicam.filiera.exceptions.NotFoundException;
-import it.unicam.filiera.models.Acquirente;
 import it.unicam.filiera.services.AcquirentiService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +28,7 @@ public class AcquirentiController {
         return service.creaAcquirente(request);
     }
 
-    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
+    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
     @GetMapping
     public List<UtenteResponse> lista() {
         return service.listaAcquirenti();
@@ -55,13 +53,13 @@ public class AcquirentiController {
         return service.patchAcquirente(id, request);
     }
 
-    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
+    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
     @GetMapping("/{acquirenteId}/prodotti")
     public List<ProdottoResponse> getProdottiAcquistati(@PathVariable Long acquirenteId) {
         return service.getProdottiAcquistati(acquirenteId);
     }
 
-    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
+    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
     @GetMapping("/{acquirenteId}/pacchetti")
     public List<PacchettoResponse> getPacchettiAcquistati(@PathVariable Long acquirenteId) {
         return service.getPacchettiAcquistati(acquirenteId);

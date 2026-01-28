@@ -23,6 +23,7 @@ public class ProdottiController {
         this.service = service;
     }
 
+    @PreAuthorize("hasRole('PRODUTTORE')")
     @PostMapping
     public ProdottoResponse crea(@RequestBody @Valid CreateProdottoRequest dto) {
         return service.crea(dto);
@@ -38,6 +39,7 @@ public class ProdottiController {
         return service.all();
     }
 
+    @PreAuthorize("hasRole('PRODUTTORE')")
     @PatchMapping("/{id}")
     public ProdottoResponse patch(@PathVariable Long id,
                                   @RequestBody UpdateProdottoRequest dto) {

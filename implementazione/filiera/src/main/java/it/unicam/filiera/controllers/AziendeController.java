@@ -27,7 +27,7 @@ public class AziendeController {
         return service.creaAzienda(request);
     }
 
-    @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
+    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
     @GetMapping
     public List<UtenteResponse> listaTutti() {
         return service.listaAziende();

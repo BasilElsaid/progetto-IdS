@@ -29,6 +29,7 @@ public class PacchettiController {
         return service.lista();
     }
 
+    @PreAuthorize("hasRole('DISTRIBUTORE_TIPICITA')")
     @PostMapping
     public PacchettoResponse crea(@RequestBody @Valid CreatePacchettoRequest req) {
         return service.crea(req);

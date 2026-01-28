@@ -19,7 +19,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/marketplace/annunci")
 @Tag(name = "09 - Marketplace Annunci", description = "Gestione annunci del marketplace")
-@PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE', 'DISTRIBUTORE_TIPICITA', 'GESTORE_PIATTAFORMA')")
 public class MarketplaceAnnunciController {
 
     private final MarketplaceProdottiService marketplaceProdottiService;
@@ -31,12 +30,13 @@ public class MarketplaceAnnunciController {
     }
 
     // PRODOTTI
-
+    @PreAuthorize("hasRole('PRODUTTORE')")
     @PostMapping("/prodotti")
     public AnnuncioProdottoResponse creaProdotto(@RequestBody CreateAnnuncioProdottoRequest req) {
         return marketplaceProdottiService.creaAnnuncio(req);
     }
 
+    @PreAuthorize("hasAnyRole('PRODUTTORE', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/prodotti")
     public List<AnnuncioProdottoResponse> listaProdotti(@RequestParam Optional<Long> aziendaId,
                                                         @RequestParam Optional<CategoriaProdotto> categoria,
@@ -45,29 +45,33 @@ public class MarketplaceAnnunciController {
         return marketplaceProdottiService.listaAnnunci(aziendaId.orElse(null), categoriaStr, attivo.orElse(null));
     }
 
+    @PreAuthorize("hasAnyRole('PRODUTTORE', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/prodotti/{id}")
     public AnnuncioProdottoResponse dettaglioProdotto(@PathVariable Long id) {
         return marketplaceProdottiService.getAnnuncio(id);
     }
 
+    @PreAuthorize("hasRole('PRODUTTORE')")
     @PatchMapping("/prodotti/{id}")
     public AnnuncioProdottoResponse aggiornaProdotto(@PathVariable Long id,
                                                      @RequestBody UpdateAnnuncioMarketplaceRequest req) {
         return marketplaceProdottiService.aggiornaAnnuncio(id, req);
     }
 
+    @PreAuthorize("hasAnyRole('PRODUTTORE', 'GESTORE_PIATTAFORMA')")
     @DeleteMapping("/prodotti/{id}")
     public void eliminaAnnuncioProdotto(@PathVariable Long id) {
         marketplaceProdottiService.eliminaAnnuncio(id);
     }
 
-        // PACCHETTI
-
+    // PACCHETTI
+    @PreAuthorize("hasRole('DISTRIBUTORE_TIPICITA')")
     @PostMapping("/pacchetti")
     public AnnuncioPacchettoResponse creaPacchetto(@RequestBody CreateAnnuncioPacchettoRequest req) {
         return marketplacePacchettiService.creaAnnuncioPacchetto(req);
     }
 
+    @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/pacchetti")
     public List<AnnuncioPacchettoResponse> listaPacchetti(
             @RequestParam Optional<Long> aziendaId,
@@ -76,17 +80,20 @@ public class MarketplaceAnnunciController {
         return marketplacePacchettiService.listaAnnunci(aziendaId.orElse(null), attivo.orElse(null));
     }
 
+    @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/pacchetti/{id}")
     public AnnuncioPacchettoResponse dettaglioPacchetto(@PathVariable Long id) {
         return marketplacePacchettiService.getAnnuncio(id);
     }
 
+    @PreAuthorize("hasRole('DISTRIBUTORE_TIPICITA')")
     @PatchMapping("/pacchetti/{id}")
     public AnnuncioPacchettoResponse aggiornaPacchetto(@PathVariable Long id,
                                                        @RequestBody UpdateAnnuncioMarketplaceRequest req) {
         return marketplacePacchettiService.aggiornaAnnuncio(id, req);
     }
 
+    @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'GESTORE_PIATTAFORMA')")
     @DeleteMapping("/pacchetti/{id}")
     public void eliminaAnnuncioPacchetto(@PathVariable Long id) {
         marketplacePacchettiService.eliminaAnnuncioPacchetto(id);
