@@ -24,15 +24,17 @@ public class OrdiniService {
     private final AcquirenteRepository acquirenteRepo;
     private final AnnuncioProdottoRepository prodottiRepo;
     private final AnnuncioPacchettoRepository pacchettiRepo;
+    private final SpedizioniAsyncService spedizioniAsyncService;
 
     public OrdiniService(OrdineRepository ordineRepo,
                          AcquirenteRepository acquirenteRepo,
                          AnnuncioProdottoRepository prodottiRepo,
-                         AnnuncioPacchettoRepository pacchettiRepo) {
+                         AnnuncioPacchettoRepository pacchettiRepo, SpedizioniAsyncService spedizioniAsyncService) {
         this.ordineRepo = ordineRepo;
         this.acquirenteRepo = acquirenteRepo;
         this.prodottiRepo = prodottiRepo;
         this.pacchettiRepo = pacchettiRepo;
+        this.spedizioniAsyncService = spedizioniAsyncService;
     }
 
     @Transactional
@@ -63,16 +65,12 @@ public class OrdiniService {
                         .orElseThrow(() -> new NotFoundException("Pacchetto non trovato"));
                 if (!annuncio.isAttivo() || annuncio.getStock() < r.quantita())
                     throw new BadRequestException("Pacchetto non disponibile");
-                annuncio.setStock(annuncio.getStock() - r.quantita());
-                pacchettiRepo.save(annuncio);
                 item.setPrezzoUnitario(annuncio.getPrezzo());
             } else {
                 var annuncio = prodottiRepo.findById(r.annuncioId())
                         .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
                 if (!annuncio.isAttivo() || annuncio.getStock() < r.quantita())
                     throw new BadRequestException("Prodotto non disponibile");
-                annuncio.setStock(annuncio.getStock() - r.quantita());
-                prodottiRepo.save(annuncio);
                 item.setPrezzoUnitario(annuncio.getPrezzo());
             }
 
@@ -88,7 +86,7 @@ public class OrdiniService {
     }
 
     @Transactional
-    public OrdineResponse pagaOrdine(Long acquirenteId, Long ordineId, boolean pacchetto, MetodoPagamento metodo) {
+    public OrdineResponse pagaOrdine(Long acquirenteId, Long ordineId, MetodoPagamento metodo) {
         Ordine ordine = ordineRepo.findById(ordineId)
                 .orElseThrow(() -> new NotFoundException("Ordine non trovato"));
 
@@ -100,9 +98,8 @@ public class OrdiniService {
 
         // Controllo disponibilità degli item in base al tipo
         for (OrdineItem item : ordine.getItems()) {
-            if (item.isPacchetto() != pacchetto) continue; // ignora gli altri tipi
 
-            if (pacchetto) {
+            if (item.isPacchetto()) {
                 var pacchettoAnnuncio = pacchettiRepo.findById(item.getAnnuncioId())
                         .orElseThrow(() -> new NotFoundException("Pacchetto non trovato"));
                 if (!pacchettoAnnuncio.isAttivo() || pacchettoAnnuncio.getStock() < item.getQuantita())
@@ -124,6 +121,10 @@ public class OrdiniService {
 
         ordine.setStato(StatoOrdine.PAGATO);
         ordine.setDataPagamento(LocalDateTime.now());
+
+        Ordine saved = ordineRepo.save(ordine);
+
+        spedizioniAsyncService.gestisciOrdineAutomatico(saved.getId());
 
         return OrdineResponse.from(ordineRepo.save(ordine));
     }

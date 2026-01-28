@@ -1,6 +1,7 @@
 package it.unicam.filiera.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import it.unicam.filiera.dto.create.CreatePagaOrdineRequest;
 import it.unicam.filiera.dto.response.OrdineResponse;
 import it.unicam.filiera.enums.MetodoPagamento;
 import it.unicam.filiera.services.OrdiniService;
@@ -30,10 +31,8 @@ public class OrdiniController {
 
     @PostMapping("/{id}/paga")
     public OrdineResponse paga(@PathVariable Long id,
-                               @RequestParam Long acquirenteId,
-                               @RequestParam boolean pacchetto,
-                               @RequestParam MetodoPagamento metodo) {
-        return service.pagaOrdine(acquirenteId, id, pacchetto, metodo);
+                               @RequestBody CreatePagaOrdineRequest request) {
+        return service.pagaOrdine(request.acquirenteId(), id, request.metodo());
     }
 
     @GetMapping("/{id}")

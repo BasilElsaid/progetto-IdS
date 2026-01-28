@@ -2,6 +2,8 @@ package it.unicam.filiera.services;
 
 import it.unicam.filiera.builder.AcquirenteBuilder;
 import it.unicam.filiera.dto.create.CreateAcquirenteRequest;
+import it.unicam.filiera.dto.response.PacchettoResponse;
+import it.unicam.filiera.dto.response.ProdottoResponse;
 import it.unicam.filiera.dto.response.UtenteResponse;
 import it.unicam.filiera.dto.update.UpdateAcquirenteRequest;
 import it.unicam.filiera.exceptions.NotFoundException;
@@ -60,5 +62,23 @@ public class AcquirentiService {
         if (request.password() != null) a.setPassword(passwordEncoder.encode(request.password()));
 
         return UtenteResponse.from(acquirenteRepo.save(a));
+    }
+
+    public List<ProdottoResponse> getProdottiAcquistati(Long id) {
+        Acquirente a = acquirenteRepo.findById(id)
+                .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
+
+        return a.getProdottiAcquistati().stream()
+                .map(ProdottoResponse::from)
+                .toList();
+    }
+
+    public List<PacchettoResponse> getPacchettiAcquistati(Long acquirenteId) {
+        Acquirente a = acquirenteRepo.findById(acquirenteId)
+                .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
+
+        return a.getPacchettiAcquistati().stream()
+                .map(PacchettoResponse::from)
+                .toList();
     }
 }

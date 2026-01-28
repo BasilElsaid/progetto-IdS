@@ -2,8 +2,12 @@ package it.unicam.filiera.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.unicam.filiera.dto.create.CreateAcquirenteRequest;
+import it.unicam.filiera.dto.response.PacchettoResponse;
+import it.unicam.filiera.dto.response.ProdottoResponse;
 import it.unicam.filiera.dto.response.UtenteResponse;
 import it.unicam.filiera.dto.update.UpdateAcquirenteRequest;
+import it.unicam.filiera.exceptions.NotFoundException;
+import it.unicam.filiera.models.Acquirente;
 import it.unicam.filiera.services.AcquirentiService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -49,5 +53,15 @@ public class AcquirentiController {
     public UtenteResponse patch(@PathVariable Long id,
                                 @RequestBody UpdateAcquirenteRequest request) {
         return service.patchAcquirente(id, request);
+    }
+
+    @GetMapping("/{acquirenteId}/prodotti")
+    public List<ProdottoResponse> getProdottiAcquistati(@PathVariable Long acquirenteId) {
+        return service.getProdottiAcquistati(acquirenteId);
+    }
+
+    @GetMapping("/{acquirenteId}/pacchetti")
+    public List<PacchettoResponse> getPacchettiAcquistati(@PathVariable Long acquirenteId) {
+        return service.getPacchettiAcquistati(acquirenteId);
     }
 }
