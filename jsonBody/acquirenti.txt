@@ -1,0 +1,28 @@
+--ACQUIRENTI--
+
+POST
+{
+  "username": "acquirente1",
+  "email": "acquirente1@example.com",
+  "password": "password123"
+}
+
+LOGIN
+{
+  "username": "acquirente1",
+  "password": "password123"
+}
+
+----
+POST
+{
+  "username": "acquirente2",
+  "email": "acquirente2@example.com",
+  "password": "password123"
+}
+
+LOGIN
+{
+  "username": "acquirente2",
+  "password": "password123"
+}

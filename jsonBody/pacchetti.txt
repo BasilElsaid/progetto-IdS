@@ -1,0 +1,18 @@
+--PACCHETTI--
+
+POST
+
+
+Pacchetto 1 — Box Formaggi Tipici
+
+{
+  "nome": "Box Formaggi Tipici",
+  "prodottiIds": [1, 4, 15]
+}
+
+Pacchetto 2 — Box Pasta Artigianale
+
+{
+  "nome": "Box Pasta Artigianale",
+  "prodottiIds": [9, 11, 13]
+}

@@ -1,0 +1,53 @@
+--ANNUNCI--
+
+POST
+
+PRODOTTI 
+[
+  {
+    "aziendaId": 1,
+    "prodottoId": 1,
+    "prezzo": 3.5,
+    "stock": 100,
+    "attivo": true
+  },
+  {
+    "aziendaId": 2,
+    "prodottoId": 2,
+    "prezzo": 4.2,
+    "stock": 50,
+    "attivo": true
+  },
+  {
+    "aziendaId": 3,
+    "prodottoId": 3,
+    "prezzo": 2.8,
+    "stock": 200,
+    "attivo": true
+  }
+]
+
+PACCHETTI
+[
+  {
+    "aziendaId": 1,
+    "pacchettoId": 1,
+    "prezzo": 12.0,
+    "stock": 30,
+    "attivo": true
+  },
+  {
+    "aziendaId": 2,
+    "pacchettoId": 2,
+    "prezzo": 18.5,
+    "stock": 20,
+    "attivo": true
+  },
+  {
+    "aziendaId": 3,
+    "pacchettoId": 3,
+    "prezzo": 15.0,
+    "stock": 25,
+    "attivo": true
+  }
+]

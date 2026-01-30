@@ -1,0 +1,159 @@
+--PRODUTTORI--
+
+POST
+{
+  "ruolo": "PRODUTTORE",
+  "username": "produttore1",
+  "email": "prod1@example.com",
+  "password": "password123",
+  "nomeAzienda": "Azienda Agricola Rossi",
+  "partitaIva": "IT01234567890",
+  "sede": "Camerino (MC)",
+  "coordinate": {
+    "lat": 43.1386,
+    "lon": 13.0696
+  }
+}
+
+LOGIN
+{
+  "username": "produttore1",
+  "password": "password123"
+}
+
+----
+POST
+{
+  "ruolo": "PRODUTTORE",
+  "username": "produttore2",
+  "email": "prod2@example.com",
+  "password": "password123",
+  "nomeAzienda": "Fattoria Bianchi",
+  "partitaIva": "IT09876543210",
+  "sede": "Macerata (MC)",
+  "coordinate": {
+    "lat": 43.3007,
+    "lon": 13.4534
+  }
+}
+
+LOGIN
+{
+  "username": "produttore2",
+  "password": "password123"
+}
+
+----
+POST
+{
+  "ruolo": "PRODUTTORE",
+  "username": "produttore3",
+  "email": "prod3@example.com",
+  "password": "password123",
+  "nomeAzienda": "Coltivazioni Verdi",
+  "partitaIva": "IT11223344556",
+  "sede": "Tolentino (MC)",
+  "coordinate": {
+    "lat": 43.2093,
+    "lon": 13.2852
+  }
+}
+
+LOGIN
+{
+  "username": "produttore3",
+  "password": "password123"
+}
+
+--TRASFORMATORI--
+POST
+{
+  "ruolo": "TRASFORMATORE",
+  "username": "trasformatore1",
+  "email": "trasf1@example.com",
+  "password": "password123",
+  "nomeAzienda": "Caseificio Monti Azzurri",
+  "partitaIva": "IT22334455667",
+  "sede": "San Severino Marche (MC)",
+  "laboratorio": "Laboratorio Latticini",
+  "coordinate": {
+    "lat": 43.2287,
+    "lon": 13.1794
+  }
+}
+
+LOGIN
+{
+  "username": "trasformatore1",
+  "password": "password123"
+}
+
+----
+POST
+{
+  "ruolo": "TRASFORMATORE",
+  "username": "trasformatore2",
+  "email": "trasf2@example.com",
+  "password": "password123",
+  "nomeAzienda": "Salumificio del Borgo",
+  "partitaIva": "IT33445566778",
+  "sede": "Matelica (MC)",
+  "laboratorio": "Laboratorio Carni",
+  "coordinate": {
+    "lat": 43.2551,
+    "lon": 13.0088
+  }
+}
+
+LOGIN
+{
+  "username": "trasformatore2",
+  "password": "password123"
+}
+
+--DISTRIBUTORI_TIPICITA--
+
+POST
+{
+  "ruolo": "DISTRIBUTORE_TIPICITA",
+  "username": "distributore1",
+  "email": "dist1@example.com",
+  "password": "password123",
+  "nomeAzienda": "Distribuzione Marche Srl",
+  "partitaIva": "IT44556677889",
+  "sede": "Civitanova Marche (MC)",
+  "areaDistribuzione": "Provincia di Macerata",
+  "coordinate": {
+    "lat": 43.3062,
+    "lon": 13.7249
+  }
+}
+
+LOGIN
+{
+  "username": "distributore1",
+  "password": "password123"
+}
+
+----
+POST
+{
+  "ruolo": "DISTRIBUTORE_TIPICITA",
+  "username": "distributore2",
+  "email": "dist2@example.com",
+  "password": "password123",
+  "nomeAzienda": "Adriatica Logistica",
+  "partitaIva": "IT55667788990",
+  "sede": "Ancona (AN)",
+  "areaDistribuzione": "Marche e Abruzzo",
+  "coordinate": {
+    "lat": 43.6158,
+    "lon": 13.5189
+  }
+}
+
+LOGIN
+{
+  "username": "distributore2",
+  "password": "password123"
+}

@@ -1,0 +1,56 @@
+--ORDINI--
+
+POST
+
+CREA
+[
+  {
+    "annuncioId": 1,
+    "quantita": 10,
+    "pacchetto": false
+  },
+  {
+    "annuncioId": 2,
+    "quantita": 5,
+    "pacchetto": false
+  },
+  {
+    "annuncioId": 4,
+    "quantita": 2,
+    "pacchetto": true
+  },
+  {
+    "annuncioId": 5,
+    "quantita": 1,
+    "pacchetto": true
+  },
+  {
+    "annuncioId": 3,
+    "quantita": 20,
+    "pacchetto": false
+  },
+  {
+    "annuncioId": 6,
+    "quantita": 3,
+    "pacchetto": true
+  }
+]
+
+PAGA
+[
+  {
+    "acquirenteId": 1,
+    "pacchetto": false,
+    "metodo": "CARTA"
+  },
+  {
+    "acquirenteId": 2,
+    "pacchetto": true,
+    "metodo": "CARTA"
+  },
+  {
+    "acquirenteId": 1,
+    "pacchetto": true,
+    "metodo": "CARTA"
+  }
+]

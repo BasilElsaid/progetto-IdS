@@ -81,9 +81,16 @@ La piattaforma è pensata per supportare diversi soggetti coinvolti nella filier
 
 ---
 
-## ✅ Stato del progetto
+## 🌍 Accesso all'Applicazione
+Una volta avviata, l'applicazione sarà raggiungibile all'indirizzo:
 
-✔ Backend REST in sviluppo  
-✔ Modellazione della filiera agricola  
-✔ API documentate con Swagger  
-✔ Progetto coerente con gli obiettivi del corso di Ingegneria del Software  
+```
+http://localhost:8080
+```
+
+Sono disponibili due bottoni nella pagina principale:  
+
+- **Swagger UI**: per testare direttamente tutte le API dell’applicazione.  
+- **H2 Database Console**: per accedere al database in memoria e verificare i dati.
+
+---

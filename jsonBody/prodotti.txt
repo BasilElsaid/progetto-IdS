@@ -1,0 +1,50 @@
+--PRODOTTI--
+
+POST
+
+[
+  {
+    "nome": "Mele Golden Bio",
+    "categoria": "ORTOFRUTTA"
+  },
+  {
+    "nome": "Pomodori San Marzano",
+    "categoria": "ORTOFRUTTA"
+  },
+  {
+    "nome": "Zucchine Verdi",
+    "categoria": "ORTOFRUTTA"
+  },
+  {
+    "nome": "Latte Fresco Intero",
+    "categoria": "LATTICINI"
+  },
+  {
+    "nome": "Pecorino Stagionato",
+    "categoria": "LATTICINI"
+  },
+  {
+    "nome": "Farina di Grano Tenero Tipo 1",
+    "categoria": "CEREALI"
+  },
+  {
+    "nome": "Pasta Artigianale di Grano Duro",
+    "categoria": "CEREALI"
+  },
+  {
+    "nome": "Olio Extra Vergine di Oliva",
+    "categoria": "OLI_E_CONSERVE"
+  },
+  {
+    "nome": "Passata di Pomodoro",
+    "categoria": "OLI_E_CONSERVE"
+  },
+  {
+    "nome": "Miele Millefiori",
+    "categoria": "DOLCI_E_MIELE"
+  },
+  {
+    "nome": "Confettura di Albicocche",
+    "categoria": "DOLCI_E_MIELE"
+  }
+]

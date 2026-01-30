@@ -1,0 +1,45 @@
+--ANIMATORE--
+
+POST
+{
+  "ruolo": "ANIMATORE",
+  "username": "animatore1",
+  "email": "animatore1@example.com",
+  "password": "password123",
+  "nome": "Luca",
+  "cognome": "Bianchi",
+  "telefono": "+39 333 1112233"
+}
+
+LOGIN
+{
+  "username": "animatore1",
+  "password": "password123"
+}
+
+--CURATORE--
+
+POST
+{
+  "ruolo": "CURATORE",
+  "username": "curatore1",
+  "email": "curatore1@example.com",
+  "password": "password123",
+  "nome": "Maria",
+  "cognome": "Rossi",
+  "telefono": "+39 347 4455667"
+}
+
+LOGIN
+{
+  "username": "curatore1",
+  "password": "password123"
+}
+
+--GESTORE_PIATTAFORMA--
+
+LOGIN
+{
+  "username": "admin",
+  "password": "admin"
+}
