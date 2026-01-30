@@ -3,16 +3,29 @@
 POST
 
 
-Pacchetto 1 — Box Formaggi Tipici
-
 {
-  "nome": "Box Formaggi Tipici",
-  "prodottiIds": [1, 4, 15]
+  "nome": "Box Frutta Varia",
+  "prodottiIds": [1, 2, 3]
 }
 
-Pacchetto 2 — Box Pasta Artigianale
 
 {
-  "nome": "Box Pasta Artigianale",
-  "prodottiIds": [9, 11, 13]
+  "nome": "Box Latticini,
+  "prodottiIds": [4, 5]
+}
+
+
+{
+  "nome": "Box Cereali",
+  "prodottiIds": [6, 7]
+}
+
+{
+  "nome": "Box Oli e conserve",
+  "prodottiIds": [8, 9]
+}
+
+{
+  "nome": "Box Dolci",
+  "prodottiIds": [10, 11]
 }

@@ -4,66 +4,70 @@ POST
 
 LATTE → FORMAGGI
 
-[
+
   {
     "inputId": 1,
     "trasformatoreId": 1,
     "nuovoNomeOutput": "Latte Pastorizzato",
     "note": "Pastorizzazione a bassa temperatura"
-  },
+  }
+
   {
     "inputId": 1,
     "trasformatoreId": 1,
     "nuovoNomeOutput": "Ricotta Fresca",
     "note": "Produzione di ricotta da siero di latte"
-  },
+  }
+
   {
     "inputId": 1,
     "trasformatoreId": 1,
     "nuovoNomeOutput": "Pecorino Fresco",
     "note": "Cagliatura e stagionatura breve"
   }
-]
+
 
 GRANO → FARINA / PASTA
 
-[
+
   {
     "inputId": 8,
     "trasformatoreId": 2,
     "nuovoNomeOutput": "Farina di Grano Tenero Macinata a Pietra",
     "note": "Molitura tradizionale a pietra"
-  },
+  }
+
   {
     "inputId": 8,
     "trasformatoreId": 2,
     "nuovoNomeOutput": "Semola di Grano Duro",
     "note": "Raffinazione del grano duro"
-  },
+  }
+
   {
     "inputId": 9,
     "trasformatoreId": 2,
     "nuovoNomeOutput": "Pasta Secca Artigianale",
     "note": "Trafilatura al bronzo ed essiccazione lenta"
   }
-]
+
 
 POMODORI → CONSERVE
 
-[
+
   {
     "inputId": 2,
     "trasformatoreId": 1,
     "nuovoNomeOutput": "Passata di Pomodoro Artigianale",
     "note": "Cottura lenta e imbottigliamento"
-  },
+  }
+
   {
     "inputId": 2,
     "trasformatoreId": 1,
     "nuovoNomeOutput": "Pomodori Pelati",
     "note": "Pelatura a vapore e conservazione in vetro"
   }
-]
 
 FRUTTA → CONFETTURE
 

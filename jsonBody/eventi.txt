@@ -3,35 +3,39 @@
 POST
 
 CREA
-[
+
   {
     "nome": "Visita guidata alla Fattoria Rossi",
     "dataOra": "2026-02-05T10:00:00.000Z",
     "prezzo": 15,
     "tipo": "VISITA",
     "posti": 20
-  },
+  }
+
   {
     "nome": "Laboratorio formaggi artigianali",
     "dataOra": "2026-02-12T14:30:00.000Z",
     "prezzo": 25,
     "tipo": "LABORATORIO",
     "posti": 15
-  },
+  }
+
   {
     "nome": "Degustazione prodotti tipici",
     "dataOra": "2026-02-20T17:00:00.000Z",
     "prezzo": 20,
     "tipo": "DEGUSTAZIONE",
     "posti": 30
-  },
+  }
+
   {
     "nome": "Visita al laboratorio Salumificio del Borgo",
     "dataOra": "2026-03-01T11:00:00.000Z",
     "prezzo": 18,
     "tipo": "VISITA",
     "posti": 25
-  },
+  }
+
   {
     "nome": "Corso di trasformazione pomodoro",
     "dataOra": "2026-03-08T15:00:00.000Z",
@@ -39,4 +43,4 @@ CREA
     "tipo": "LABORATORIO",
     "posti": 10
   }
-]
+

@@ -4,71 +4,77 @@ POST
 
 PRODUTTORE
 
-[
+
   {
     "tipo": "PRODUTTORE",
     "prodottoId": 1,
     "azienda": "Azienda Agricola Rossi",
     "origineMateriaPrima": "Grano duro 100% Marche"
-  },
+  }
+
   {
     "tipo": "PRODUTTORE",
     "prodottoId": 4,
     "azienda": "Fattoria Bianchi",
     "origineMateriaPrima": "Latte vaccino locale"
-  },
+  }
+
   {
     "tipo": "PRODUTTORE",
     "prodottoId": 2,
     "azienda": "Coltivazioni Verdi",
     "origineMateriaPrima": "Pomodoro marchigiano"
   }
-]
+
 
 TRASFORMATORE
 
-[
+
   {
     "tipo": "TRASFORMATORE",
     "prodottoId": 1,
     "processo": "Pastorizzazione latte vaccino",
     "impianto": "Laboratorio Latticini Monti Azzurri - San Severino Marche (MC)"
-  },
+  }
+
   {
     "tipo": "TRASFORMATORE",
     "prodottoId": 2,
     "processo": "Produzione passata di pomodoro",
     "impianto": "Laboratorio Conserva Verdi - Tolentino (MC)"
-  },
+  }
+
   {
     "tipo": "TRASFORMATORE",
     "prodottoId": 3,
     "processo": "Stagionatura formaggi DOP",
     "impianto": "Salumificio e Formaggi Bianchi - Macerata (MC)"
   }
-]
 
 CURTTORE
 
-[
+
   {
     "approvato": true,
     "commento": "Documentazione completa e conforme agli standard di qualità."
-  },
+  }
+
   {
     "approvato": true,
     "commento": "Tracciabilità della filiera verificata correttamente."
-  },
+  }
+
   {
     "approvato": true,
     "commento": "Certificazione biologica valida e controllata."
-  },
+  }
+
   {
     "approvato": true,
     "commento": "Controlli igienico-sanitari superati con esito positivo."
-  },
+  }
+
   {
     "approvato": true,
     "commento": "Rispetta i criteri di filiera corta e valorizzazione del territorio."
   }
-]
