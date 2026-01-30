@@ -2,8 +2,6 @@ package it.unicam.filiera.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.unicam.filiera.dto.create.CreateAcquirenteRequest;
-import it.unicam.filiera.dto.response.PacchettoResponse;
-import it.unicam.filiera.dto.response.ProdottoResponse;
 import it.unicam.filiera.dto.response.UtenteResponse;
 import it.unicam.filiera.dto.update.UpdateAcquirenteRequest;
 import it.unicam.filiera.services.AcquirentiService;
@@ -53,15 +51,4 @@ public class AcquirentiController {
         return service.patchAcquirente(id, request);
     }
 
-    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
-    @GetMapping("/{acquirenteId}/prodotti")
-    public List<ProdottoResponse> getProdottiAcquistati(@PathVariable Long acquirenteId) {
-        return service.getProdottiAcquistati(acquirenteId);
-    }
-
-    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
-    @GetMapping("/{acquirenteId}/pacchetti")
-    public List<PacchettoResponse> getPacchettiAcquistati(@PathVariable Long acquirenteId) {
-        return service.getPacchettiAcquistati(acquirenteId);
-    }
 }

@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/eventi")
 @Tag(name = "13 - Eventi", description = "Gestione eventi")
-@PreAuthorize("hasAnyRole('ANIMATORE', 'GESTORE_PIATTAFORMA')")
 public class EventiController {
 
 	private final EventiService eventiService;
@@ -22,12 +21,12 @@ public class EventiController {
 		this.eventiService = eventiService;
 	}
 
+	@PreAuthorize("hasAnyRole('ANIMATORE', 'GESTORE_PIATTAFORMA')")
 	@PostMapping
 	public Evento aggiungiEvento(@RequestBody CreateEventoRequest dto) {
 		return eventiService.creaEvento(dto);
 	}
 
-	@PreAuthorize("hasAnyRole('ANIMATORE', 'GESTORE_PIATTAFORMA', 'ACQUIRENTE', 'PRODUTTORE', 'TRASFORMATORE', 'DISTRIBUTORE_TIPICITA')")
 	@GetMapping
 	public List<EventoResponse> getTuttiEventi() {
 		return eventiService.getTuttiEventi();
@@ -38,12 +37,14 @@ public class EventiController {
 		return eventiService.getEvento(id);
 	}
 
+	@PreAuthorize("hasAnyRole('ANIMATORE', 'GESTORE_PIATTAFORMA')")
 	@PatchMapping("/{id}")
 	public Evento aggiornaEvento(@PathVariable Long id,
 								 @RequestBody CreateEventoRequest dto) {
 		return eventiService.aggiornaEvento(id, dto);
 	}
 
+	@PreAuthorize("hasAnyRole('ANIMATORE', 'GESTORE_PIATTAFORMA')")
 	@DeleteMapping("/{id}")
 	public void eliminaEvento(@PathVariable Long id) {
 		eventiService.eliminaEvento(id);

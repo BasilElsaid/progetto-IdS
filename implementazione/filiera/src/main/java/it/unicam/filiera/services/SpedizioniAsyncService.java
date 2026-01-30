@@ -1,11 +1,7 @@
 package it.unicam.filiera.services;
 
-import it.unicam.filiera.domain.AnnuncioPacchetto;
-import it.unicam.filiera.domain.AnnuncioProdotto;
 import it.unicam.filiera.domain.Ordine;
-import it.unicam.filiera.domain.OrdineItem;
 import it.unicam.filiera.enums.StatoOrdine;
-import it.unicam.filiera.models.Acquirente;
 import it.unicam.filiera.repositories.AcquirenteRepository;
 import it.unicam.filiera.repositories.AnnuncioPacchettoRepository;
 import it.unicam.filiera.repositories.AnnuncioProdottoRepository;
@@ -70,37 +66,6 @@ public class SpedizioniAsyncService {
             ordine.setStato(StatoOrdine.CONSEGNATO);
             ordine.setDataConsegna(LocalDateTime.now());
             ordineRepo.save(ordine);
-
-            gestisciPostConsegna(ordine);
         }
-    }
-
-    @Transactional
-    protected void gestisciPostConsegna(Ordine ordine) {
-        Acquirente acquirente = ordine.getAcquirente();
-
-        for (OrdineItem item : ordine.getItems()) {
-            if (item.isPacchetto()) {
-                AnnuncioPacchetto annuncio = pacchettiRepo.findById(item.getAnnuncioId()).orElse(null);
-                if (annuncio != null) {
-                    acquirente.getPacchettiAcquistati().add(annuncio.getPacchetto());
-                    if (annuncio.getStock() <= 0) {
-                        annuncio.setAttivo(false);
-                        pacchettiRepo.save(annuncio);
-                    }
-                }
-            } else {
-                AnnuncioProdotto annuncio = prodottiRepo.findById(item.getAnnuncioId()).orElse(null);
-                if (annuncio != null) {
-                    acquirente.getProdottiAcquistati().add(annuncio.getProdotto());
-                    if (annuncio.getStock() <= 0) {
-                        annuncio.setAttivo(false);
-                        prodottiRepo.save(annuncio);
-                    }
-                }
-            }
-        }
-
-        acquirenteRepo.save(acquirente);
     }
 }

@@ -64,21 +64,4 @@ public class AcquirentiService {
         return UtenteResponse.from(acquirenteRepo.save(a));
     }
 
-    public List<ProdottoResponse> getProdottiAcquistati(Long id) {
-        Acquirente a = acquirenteRepo.findById(id)
-                .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
-
-        return a.getProdottiAcquistati().stream()
-                .map(ProdottoResponse::from)
-                .toList();
-    }
-
-    public List<PacchettoResponse> getPacchettiAcquistati(Long acquirenteId) {
-        Acquirente a = acquirenteRepo.findById(acquirenteId)
-                .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
-
-        return a.getPacchettiAcquistati().stream()
-                .map(PacchettoResponse::from)
-                .toList();
-    }
 }

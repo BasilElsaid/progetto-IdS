@@ -95,9 +95,6 @@ public class TicketEventiService {
 
     public TicketEventoResponse checkIn(int numeroTicket) {
         UtenteGenerico operatore = getUtenteLoggato();
-        if (operatore.getRuolo() != Ruolo.ANIMATORE && operatore.getRuolo() != Ruolo.GESTORE_PIATTAFORMA) {
-            throw new ForbiddenException("Ruolo non autorizzato");
-        }
 
         TicketEvento ticket = ticketRepository.findByNumeroTicket(numeroTicket)
                 .orElseThrow(() -> new NotFoundException("Ticket non trovato"));

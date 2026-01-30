@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class AdminSeeder {
+public class PersonaleSeeder {
 
     @Bean
     CommandLineRunner seedPersoanle(UtenteRepository utenti, PasswordEncoder encoder) {
