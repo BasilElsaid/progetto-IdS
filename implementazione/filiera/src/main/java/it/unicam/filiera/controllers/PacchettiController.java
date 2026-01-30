@@ -31,8 +31,10 @@ public class PacchettiController {
 
     @PreAuthorize("hasRole('DISTRIBUTORE_TIPICITA')")
     @PostMapping
-    public PacchettoResponse crea(@RequestBody @Valid CreatePacchettoRequest req) {
-        return service.crea(req);
+    public List<PacchettoResponse> creaBatch(@RequestBody @Valid List<CreatePacchettoRequest> dtos) {
+        return dtos.stream()
+                .map(service::crea)
+                .toList();
     }
 
     @GetMapping("/{id}")

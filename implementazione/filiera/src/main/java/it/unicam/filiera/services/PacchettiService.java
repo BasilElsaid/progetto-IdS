@@ -5,12 +5,14 @@ import it.unicam.filiera.domain.Pacchetto;
 import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.dto.response.PacchettoResponse;
 import it.unicam.filiera.enums.Ruolo;
+import it.unicam.filiera.enums.TipoCertificatore;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.DistributoreTipicita;
 import it.unicam.filiera.models.UtenteGenerico;
 import it.unicam.filiera.repositories.AnnuncioProdottoRepository;
+import it.unicam.filiera.repositories.CertificatoCuratoreRepository;
 import it.unicam.filiera.repositories.PacchettoRepository;
 import it.unicam.filiera.repositories.ProdottoRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,11 +27,13 @@ public class PacchettiService {
     private final PacchettoRepository pacchettoRepo;
     private final ProdottoRepository prodottoRepo;
     private final AnnuncioProdottoRepository annuncioProdottoRepo;
+    private final CertificatoCuratoreRepository certificatoCuratoreRepo;
 
-    public PacchettiService(PacchettoRepository pacchettoRepo, ProdottoRepository prodottoRepo, AnnuncioProdottoRepository annuncioProdottoRepo) {
+    public PacchettiService(PacchettoRepository pacchettoRepo, ProdottoRepository prodottoRepo, AnnuncioProdottoRepository annuncioProdottoRepo, CertificatoCuratoreRepository certificatoCuratoreRepo) {
         this.pacchettoRepo = pacchettoRepo;
         this.prodottoRepo = prodottoRepo;
         this.annuncioProdottoRepo = annuncioProdottoRepo;
+        this.certificatoCuratoreRepo = certificatoCuratoreRepo;
     }
 
     public List<Pacchetto> lista() {
@@ -75,6 +79,15 @@ public class PacchettiService {
             for (Long pid : req.prodottiIds()) {
                 Prodotto prod = prodottoRepo.findById(pid)
                         .orElseThrow(() -> new BadRequestException("Prodotto con id " + pid + " non trovato"));
+
+                // Controllo certificato curatore approvato
+                TipoCertificatore tipoCert = prod.getIsTrasformato() ? TipoCertificatore.TRASFORMATORE : TipoCertificatore.PRODUTTORE;
+                boolean approvato = certificatoCuratoreRepo
+                        .existsByCertificatoTarget_ProdottoIdAndCertificatoTarget_TipoAndApprovatoTrue(pid, tipoCert);
+
+                if (!approvato) {
+                    throw new BadRequestException("Il prodotto con id " + pid + " non ha certificato curatore approvato per il tipo " + tipoCert + " e non può essere incluso nel pacchetto");
+                }
 
                 // Controllo che il prodotto non sia già su marketplace
                 if (annuncioProdottoRepo.existsByProdotto_Id(pid)) {

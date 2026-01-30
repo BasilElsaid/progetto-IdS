@@ -21,12 +21,13 @@ public class PersonaleController {
         this.service = service;
     }
 
+    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
     @PostMapping
     public UtenteResponse crea(@RequestBody CreatePersonaleRequest request) {
         return service.creaPersonale(request);
     }
 
-    @PreAuthorize("hasAnyRole('GESTORE_PIATTAFORMA')")
+    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
     @GetMapping
     public List<UtenteResponse> lista() {
         return service.listaPersonale();

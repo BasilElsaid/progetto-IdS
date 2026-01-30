@@ -25,8 +25,10 @@ public class ProdottiController {
 
     @PreAuthorize("hasRole('PRODUTTORE')")
     @PostMapping
-    public ProdottoResponse crea(@RequestBody @Valid CreateProdottoRequest dto) {
-        return service.crea(dto);
+    public List<ProdottoResponse> creaBatch(@RequestBody @Valid List<CreateProdottoRequest> dtos) {
+        return dtos.stream()
+                .map(service::crea)
+                .toList();
     }
 
     @GetMapping("/{id}")
@@ -50,4 +52,5 @@ public class ProdottiController {
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
+
 }

@@ -32,8 +32,9 @@ public class MarketplaceAnnunciController {
     // PRODOTTI
     @PreAuthorize("hasRole('PRODUTTORE')")
     @PostMapping("/prodotti")
-    public AnnuncioProdottoResponse creaProdotto(@RequestBody CreateAnnuncioProdottoRequest req) {
-        return marketplaceProdottiService.creaAnnuncio(req);
+    public List<AnnuncioProdottoResponse> creaProdotti(
+            @RequestBody List<CreateAnnuncioProdottoRequest> dtos) {
+        return marketplaceProdottiService.creaAnnunciBatch(dtos);
     }
 
     @PreAuthorize("hasAnyRole('PRODUTTORE', 'GESTORE_PIATTAFORMA')")
@@ -67,8 +68,9 @@ public class MarketplaceAnnunciController {
     // PACCHETTI
     @PreAuthorize("hasRole('DISTRIBUTORE_TIPICITA')")
     @PostMapping("/pacchetti")
-    public AnnuncioPacchettoResponse creaPacchetto(@RequestBody CreateAnnuncioPacchettoRequest req) {
-        return marketplacePacchettiService.creaAnnuncioPacchetto(req);
+    public List<AnnuncioPacchettoResponse> creaPacchetti(
+            @RequestBody List<CreateAnnuncioPacchettoRequest> dtos) {
+        return marketplacePacchettiService.creaAnnunciBatch(dtos);
     }
 
     @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'GESTORE_PIATTAFORMA')")

@@ -113,7 +113,16 @@ public class CertificatiService {
 
         StrategieCertificazioni strategy = strategieFactory.getStrategia(TipoCertificatore.CURATORE);
 
-        return strategy.verifica(target, approvato, commento, curatoreRepo);
+        boolean result = strategy.verifica(target, approvato, commento, curatoreRepo);
+
+        if (approvato && (target.getTipo() == TipoCertificatore.TRASFORMATORE
+                || target.getTipo() == TipoCertificatore.PRODUTTORE)) {
+            Prodotto p = target.getProdotto();
+            p.setVendibile(true);
+            prodottoRepo.save(p);
+        }
+
+        return result;
     }
 
     // HELPERS
