@@ -2,7 +2,6 @@ package it.unicam.filiera.services;
 
 import it.unicam.filiera.domain.Ordine;
 import it.unicam.filiera.enums.StatoOrdine;
-import it.unicam.filiera.repositories.AcquirentiRepository;
 import it.unicam.filiera.repositories.AnnunciPacchettiRepository;
 import it.unicam.filiera.repositories.AnnunciProdottiRepository;
 import it.unicam.filiera.repositories.OrdiniRepository;
@@ -18,16 +17,14 @@ public class SpedizioniAsyncService {
     private final OrdiniRepository ordineRepo;
     private final AnnunciProdottiRepository prodottiRepo;
     private final AnnunciPacchettiRepository pacchettiRepo;
-    private final AcquirentiRepository acquirenteRepo;
 
     public SpedizioniAsyncService(OrdiniRepository ordineRepo,
                                   AnnunciProdottiRepository prodottiRepo,
-                                  AnnunciPacchettiRepository pacchettiRepo,
-                                  AcquirentiRepository acquirenteRepo) {
+                                  AnnunciPacchettiRepository pacchettiRepo
+    ) {
         this.ordineRepo = ordineRepo;
         this.prodottiRepo = prodottiRepo;
         this.pacchettiRepo = pacchettiRepo;
-        this.acquirenteRepo = acquirenteRepo;
     }
 
     @Async
@@ -54,7 +51,7 @@ public class SpedizioniAsyncService {
             ordine.setStato(StatoOrdine.SPEDITO);
             ordine.setDataSpedizione(LocalDateTime.now());
             ordine.setTrackingCode("AUTO-" + ordine.getId());
-            ordineRepo.saveAndFlush(ordine); // commit immediato
+            ordineRepo.saveAndFlush(ordine);
         }
     }
 

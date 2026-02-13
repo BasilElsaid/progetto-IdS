@@ -29,17 +29,15 @@ public class TicketEventiService {
     private final SecureRandom random = new SecureRandom();
 
     private final UtentiRepository utentiRepository;
-    private final AcquirentiRepository acquirentiRepository;
 
     public TicketEventiService(
             EventiRepository eventiRepository,
             TicketEventoRepository ticketRepository,
-            UtentiRepository utentiRepository,
-            AcquirentiRepository acquirentiRepository) {
+            UtentiRepository utentiRepository
+    ) {
         this.eventiRepository = eventiRepository;
         this.ticketRepository = ticketRepository;
         this.utentiRepository = utentiRepository;
-        this.acquirentiRepository = acquirentiRepository;
     }
 
     public List<TicketEventoResponse> acquistaTicket(Long eventoId, int quantita) {

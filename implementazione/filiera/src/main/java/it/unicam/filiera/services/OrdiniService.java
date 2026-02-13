@@ -8,6 +8,7 @@ import it.unicam.filiera.enums.MetodoPagamento;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Acquirente;
+import it.unicam.filiera.models.UtenteGenerico;
 import it.unicam.filiera.repositories.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,17 +22,18 @@ import java.util.stream.StreamSupport;
 public class OrdiniService {
 
     private final OrdiniRepository ordineRepo;
-    private final AcquirentiRepository acquirenteRepo;
+    private final UtentiRepository utentiRepository;
     private final AnnunciProdottiRepository prodottiRepo;
     private final AnnunciPacchettiRepository pacchettiRepo;
     private final SpedizioniAsyncService spedizioniAsyncService;
 
     public OrdiniService(OrdiniRepository ordineRepo,
-                         AcquirentiRepository acquirenteRepo,
+                         UtentiRepository utentiRepository,
                          AnnunciProdottiRepository prodottiRepo,
-                         AnnunciPacchettiRepository pacchettiRepo, SpedizioniAsyncService spedizioniAsyncService) {
+                         AnnunciPacchettiRepository pacchettiRepo,
+                         SpedizioniAsyncService spedizioniAsyncService) {
         this.ordineRepo = ordineRepo;
-        this.acquirenteRepo = acquirenteRepo;
+        this.utentiRepository = utentiRepository;
         this.prodottiRepo = prodottiRepo;
         this.pacchettiRepo = pacchettiRepo;
         this.spedizioniAsyncService = spedizioniAsyncService;
@@ -42,8 +44,12 @@ public class OrdiniService {
         if (acquirenteId == null) throw new BadRequestException("acquirenteId mancante");
         if (items == null || items.isEmpty()) throw new BadRequestException("items mancanti");
 
-        Acquirente acquirente = acquirenteRepo.findById(acquirenteId)
+        UtenteGenerico u = utentiRepository.findById(acquirenteId)
                 .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
+
+        if (!(u instanceof Acquirente acquirente)) {
+            throw new BadRequestException("L'utente selezionato non è un acquirente");
+        }
 
         Ordine ordine = new Ordine();
         ordine.setAcquirente(acquirente);
