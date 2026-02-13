@@ -2,10 +2,10 @@ package it.unicam.filiera.services;
 
 import it.unicam.filiera.domain.Ordine;
 import it.unicam.filiera.enums.StatoOrdine;
-import it.unicam.filiera.repositories.AcquirenteRepository;
-import it.unicam.filiera.repositories.AnnuncioPacchettoRepository;
-import it.unicam.filiera.repositories.AnnuncioProdottoRepository;
-import it.unicam.filiera.repositories.OrdineRepository;
+import it.unicam.filiera.repositories.AcquirentiRepository;
+import it.unicam.filiera.repositories.AnnunciPacchettiRepository;
+import it.unicam.filiera.repositories.AnnunciProdottiRepository;
+import it.unicam.filiera.repositories.OrdiniRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -15,15 +15,15 @@ import java.time.LocalDateTime;
 @Service
 public class SpedizioniAsyncService {
 
-    private final OrdineRepository ordineRepo;
-    private final AnnuncioProdottoRepository prodottiRepo;
-    private final AnnuncioPacchettoRepository pacchettiRepo;
-    private final AcquirenteRepository acquirenteRepo;
+    private final OrdiniRepository ordineRepo;
+    private final AnnunciProdottiRepository prodottiRepo;
+    private final AnnunciPacchettiRepository pacchettiRepo;
+    private final AcquirentiRepository acquirenteRepo;
 
-    public SpedizioniAsyncService(OrdineRepository ordineRepo,
-                                  AnnuncioProdottoRepository prodottiRepo,
-                                  AnnuncioPacchettoRepository pacchettiRepo,
-                                  AcquirenteRepository acquirenteRepo) {
+    public SpedizioniAsyncService(OrdiniRepository ordineRepo,
+                                  AnnunciProdottiRepository prodottiRepo,
+                                  AnnunciPacchettiRepository pacchettiRepo,
+                                  AcquirentiRepository acquirenteRepo) {
         this.ordineRepo = ordineRepo;
         this.prodottiRepo = prodottiRepo;
         this.pacchettiRepo = pacchettiRepo;

@@ -7,6 +7,7 @@ import it.unicam.filiera.domain.AnnuncioProdotto;
 import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
+import it.unicam.filiera.models.Azienda;
 import it.unicam.filiera.repositories.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,16 +18,17 @@ import java.util.stream.Collectors;
 @Service
 public class MarketplaceProdottiService {
 
-    private final AnnuncioProdottoRepository annuncioRepo;
-    private final AziendaRepository aziendaRepo;
-    private final ProdottoRepository prodottoRepo;
-    private final CertificatoCuratoreRepository curatoreRepo;
+    private final AnnunciProdottiRepository annuncioRepo;
+    private final UtentiRepository utentiRepo;
+    private final ProdottiRepository prodottoRepo;
+    private final CertificatiCuratoreRepository curatoreRepo;
 
-    public MarketplaceProdottiService(AnnuncioProdottoRepository annuncioRepo,
-                                      AziendaRepository aziendaRepo,
-                                      ProdottoRepository prodottoRepo, CertificatoCuratoreRepository curatoreRepo) {
+    public MarketplaceProdottiService(AnnunciProdottiRepository annuncioRepo,
+                                      UtentiRepository utentiRepo,
+                                      ProdottiRepository prodottoRepo,
+                                      CertificatiCuratoreRepository curatoreRepo) {
         this.annuncioRepo = annuncioRepo;
-        this.aziendaRepo = aziendaRepo;
+        this.utentiRepo = utentiRepo;
         this.prodottoRepo = prodottoRepo;
         this.curatoreRepo = curatoreRepo;
     }
@@ -42,10 +44,14 @@ public class MarketplaceProdottiService {
             throw new BadRequestException( "prodottoId mancante");
         }
 
-        var azienda = aziendaRepo.findById(req.getAziendaId())
-                .orElseThrow(() -> new BadRequestException(
+        var utente = utentiRepo.findById(req.getAziendaId())
+                .orElseThrow(() -> new NotFoundException(
                         "Azienda non trovata: id=" + req.getAziendaId()
                 ));
+
+        if (!(utente instanceof Azienda azienda)) {
+            throw new BadRequestException("L'utente selezionato non è un'azienda");
+        }
 
         Prodotto prodotto = prodottoRepo.findById(req.getProdottoId())
                 .orElseThrow(() -> new BadRequestException(

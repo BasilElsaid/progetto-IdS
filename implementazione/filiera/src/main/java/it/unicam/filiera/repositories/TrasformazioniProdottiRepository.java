@@ -1,0 +1,13 @@
+package it.unicam.filiera.repositories;
+
+import it.unicam.filiera.domain.TrasformazioneProdotto;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface TrasformazioniProdottiRepository extends JpaRepository<TrasformazioneProdotto, Long> {
+
+
+    List<TrasformazioneProdotto> findByTrasformatoreId(Long trasformatoreId);
+
+}

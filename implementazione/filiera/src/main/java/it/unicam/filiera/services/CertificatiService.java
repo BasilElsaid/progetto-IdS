@@ -10,9 +10,9 @@ import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.models.UtenteGenerico;
-import it.unicam.filiera.repositories.CertificatoCuratoreRepository;
-import it.unicam.filiera.repositories.CertificatoRepository;
-import it.unicam.filiera.repositories.ProdottoRepository;
+import it.unicam.filiera.repositories.CertificatiCuratoreRepository;
+import it.unicam.filiera.repositories.CertificatiRepository;
+import it.unicam.filiera.repositories.ProdottiRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,14 +23,14 @@ import java.util.List;
 @Transactional
 public class CertificatiService {
 
-    private final CertificatoRepository certificatoRepo;
-    private final ProdottoRepository prodottoRepo;
-    private final CertificatoCuratoreRepository curatoreRepo;
+    private final CertificatiRepository certificatoRepo;
+    private final ProdottiRepository prodottoRepo;
+    private final CertificatiCuratoreRepository curatoreRepo;
     private final StrategieCertificazioniFactory strategieFactory;
 
-    public CertificatiService(CertificatoRepository certificatoRepo,
-                              CertificatoCuratoreRepository curatoreRepo,
-                              ProdottoRepository prodottoRepo, StrategieCertificazioniFactory strategieFactory) {
+    public CertificatiService(CertificatiRepository certificatoRepo,
+                              CertificatiCuratoreRepository curatoreRepo,
+                              ProdottiRepository prodottoRepo, StrategieCertificazioniFactory strategieFactory) {
         this.certificatoRepo = certificatoRepo;
         this.curatoreRepo = curatoreRepo;
         this.prodottoRepo = prodottoRepo;

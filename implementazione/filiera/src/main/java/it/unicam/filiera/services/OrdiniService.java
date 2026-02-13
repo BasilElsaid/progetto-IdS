@@ -20,16 +20,16 @@ import java.util.stream.StreamSupport;
 @Service
 public class OrdiniService {
 
-    private final OrdineRepository ordineRepo;
-    private final AcquirenteRepository acquirenteRepo;
-    private final AnnuncioProdottoRepository prodottiRepo;
-    private final AnnuncioPacchettoRepository pacchettiRepo;
+    private final OrdiniRepository ordineRepo;
+    private final AcquirentiRepository acquirenteRepo;
+    private final AnnunciProdottiRepository prodottiRepo;
+    private final AnnunciPacchettiRepository pacchettiRepo;
     private final SpedizioniAsyncService spedizioniAsyncService;
 
-    public OrdiniService(OrdineRepository ordineRepo,
-                         AcquirenteRepository acquirenteRepo,
-                         AnnuncioProdottoRepository prodottiRepo,
-                         AnnuncioPacchettoRepository pacchettiRepo, SpedizioniAsyncService spedizioniAsyncService) {
+    public OrdiniService(OrdiniRepository ordineRepo,
+                         AcquirentiRepository acquirenteRepo,
+                         AnnunciProdottiRepository prodottiRepo,
+                         AnnunciPacchettiRepository pacchettiRepo, SpedizioniAsyncService spedizioniAsyncService) {
         this.ordineRepo = ordineRepo;
         this.acquirenteRepo = acquirenteRepo;
         this.prodottiRepo = prodottiRepo;

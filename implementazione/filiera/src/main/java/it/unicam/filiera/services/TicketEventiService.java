@@ -28,21 +28,18 @@ public class TicketEventiService {
 
     private final SecureRandom random = new SecureRandom();
 
-    private final AcquirenteRepository acquirenteRepository;
-    private final AziendaRepository aziendaRepository;
-    private final GestorePiattaformaRepository gestorePiattaformaRepository;
+    private final UtentiRepository utentiRepository;
+    private final AcquirentiRepository acquirentiRepository;
 
     public TicketEventiService(
             EventiRepository eventiRepository,
             TicketEventoRepository ticketRepository,
-            AcquirenteRepository acquirenteRepository,
-            AziendaRepository aziendaRepository,
-            GestorePiattaformaRepository gestorePiattaformaRepository) {
+            UtentiRepository utentiRepository,
+            AcquirentiRepository acquirentiRepository) {
         this.eventiRepository = eventiRepository;
         this.ticketRepository = ticketRepository;
-        this.acquirenteRepository = acquirenteRepository;
-        this.aziendaRepository = aziendaRepository;
-        this.gestorePiattaformaRepository = gestorePiattaformaRepository;
+        this.utentiRepository = utentiRepository;
+        this.acquirentiRepository = acquirentiRepository;
     }
 
     public List<TicketEventoResponse> acquistaTicket(Long eventoId, int quantita) {
@@ -152,19 +149,13 @@ public class TicketEventiService {
 
     private UtenteGenerico getUtenteLoggato() {
         var auth = SecurityContextHolder.getContext().getAuthentication();
+
         if (auth == null || !(auth.getPrincipal() instanceof UtenteGenerico user)) {
             throw new ForbiddenException("Utente non autenticato");
         }
 
-        return switch (user.getRuolo()) {
-            case ACQUIRENTE -> acquirenteRepository.findById(user.getId())
-                    .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
-            case PRODUTTORE, TRASFORMATORE, DISTRIBUTORE_TIPICITA -> aziendaRepository.findById(user.getId())
-                    .orElseThrow(() -> new NotFoundException("Azienda non trovata"));
-            case GESTORE_PIATTAFORMA -> gestorePiattaformaRepository.findById(user.getId())
-                    .orElseThrow(() -> new NotFoundException("Personale non trovato"));
-            default -> throw new ForbiddenException("Ruolo non autorizzato");
-        };
+        return utentiRepository.findById(user.getId())
+                .orElseThrow(() -> new NotFoundException("Utente non trovato"));
     }
 
 }

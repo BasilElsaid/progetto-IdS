@@ -2,17 +2,17 @@ package it.unicam.filiera.services;
 
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.models.*;
-import it.unicam.filiera.repositories.UtenteRepository;
+import it.unicam.filiera.repositories.UtentiRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
 
-    private final UtenteRepository utenteRepository;
+    private final UtentiRepository utenteRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthService(UtenteRepository utenteRepository,
+    public AuthService(UtentiRepository utenteRepository,
                        PasswordEncoder passwordEncoder) {
         this.utenteRepository = utenteRepository;
         this.passwordEncoder = passwordEncoder;

@@ -3,7 +3,7 @@ package it.unicam.filiera.security;
 import it.unicam.filiera.models.Animatore;
 import it.unicam.filiera.models.Curatore;
 import it.unicam.filiera.models.GestorePiattaforma;
-import it.unicam.filiera.repositories.UtenteRepository;
+import it.unicam.filiera.repositories.UtentiRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class PersonaleSeeder {
 
     @Bean
-    CommandLineRunner seedPersoanle(UtenteRepository utenti, PasswordEncoder encoder) {
+    CommandLineRunner seedPersoanle(UtentiRepository utenti, PasswordEncoder encoder) {
         return args -> {
             String username = "admin";
 

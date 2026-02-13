@@ -7,6 +7,7 @@ import it.unicam.filiera.domain.AnnuncioPacchetto;
 import it.unicam.filiera.domain.Pacchetto;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
+import it.unicam.filiera.models.Azienda;
 import it.unicam.filiera.repositories.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,14 +17,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class MarketplacePacchettiService {
-    private final AziendaRepository aziendaRepo;
-    private final PacchettoRepository pacchettoRepo;
-    private final AnnuncioPacchettoRepository annuncioPacchettoRepo;
+    private final UtentiRepository utentiRepo;
+    private final PacchettiRepository pacchettoRepo;
+    private final AnnunciPacchettiRepository annuncioPacchettoRepo;
 
-    public MarketplacePacchettiService(AziendaRepository aziendaRepo,
-                                       PacchettoRepository pacchettoRepo,
-                                       AnnuncioPacchettoRepository annuncioPacchettoRepo) {
-        this.aziendaRepo = aziendaRepo;
+    public MarketplacePacchettiService(UtentiRepository utentiRepo,
+                                       PacchettiRepository pacchettoRepo,
+                                       AnnunciPacchettiRepository annuncioPacchettoRepo) {
+        this.utentiRepo = utentiRepo;
         this.pacchettoRepo = pacchettoRepo;
         this.annuncioPacchettoRepo = annuncioPacchettoRepo;
     }
@@ -39,10 +40,14 @@ public class MarketplacePacchettiService {
             throw new BadRequestException( "pacchettoId mancante");
         }
 
-        var azienda = aziendaRepo.findById(req.getAziendaId())
+        var utente = utentiRepo.findById(req.getAziendaId())
                 .orElseThrow(() -> new NotFoundException(
                         "Azienda non trovata: id=" + req.getAziendaId()
                 ));
+
+        if (!(utente instanceof Azienda azienda)) {
+            throw new BadRequestException("L'utente selezionato non è un'azienda");
+        }
 
         Pacchetto pacchetto = pacchettoRepo.findById(req.getPacchettoId())
                 .orElseThrow(() -> new NotFoundException(

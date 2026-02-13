@@ -11,36 +11,23 @@ import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Azienda;
 import it.unicam.filiera.models.DistributoreTipicita;
-import it.unicam.filiera.models.Produttore;
 import it.unicam.filiera.models.Trasformatore;
 import it.unicam.filiera.enums.Ruolo;
-import it.unicam.filiera.repositories.DistributoreTipicitaRepository;
-import it.unicam.filiera.repositories.ProduttoreRepository;
-import it.unicam.filiera.repositories.TrasformatoreRepository;
+import it.unicam.filiera.repositories.UtentiRepository;
 import it.unicam.filiera.utilities.CoordinateOSM;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class AziendeService {
 
-    private final ProduttoreRepository produttoreRepo;
-    private final TrasformatoreRepository trasformatoreRepo;
-    private final DistributoreTipicitaRepository distributoreRepo;
+    private final UtentiRepository utentiRepo;
     private final PasswordEncoder passwordEncoder;
 
-    public AziendeService(
-            ProduttoreRepository produttoreRepo,
-            TrasformatoreRepository trasformatoreRepo,
-            DistributoreTipicitaRepository distributoreRepo,
-            PasswordEncoder passwordEncoder
-    ) {
-        this.produttoreRepo = produttoreRepo;
-        this.trasformatoreRepo = trasformatoreRepo;
-        this.distributoreRepo = distributoreRepo;
+    public AziendeService(UtentiRepository utentiRepo, PasswordEncoder passwordEncoder) {
+        this.utentiRepo = utentiRepo;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -68,7 +55,6 @@ public class AziendeService {
                         .setSede(request.sede())
                         .setCoordinate(toCoordinate(request.coordinate()))
                         .build();
-                a = produttoreRepo.save((Produttore) a);
             }
             case TRASFORMATORE -> {
                 a = new TrasformatoreBuilder()
@@ -81,7 +67,6 @@ public class AziendeService {
                         .setSede(request.sede())
                         .setCoordinate(toCoordinate(request.coordinate()))
                         .build();
-                a = trasformatoreRepo.save((Trasformatore) a);
             }
             case DISTRIBUTORE_TIPICITA -> {
                 a = new DistributoreTipicitaBuilder()
@@ -94,20 +79,20 @@ public class AziendeService {
                         .setSede(request.sede())
                         .setCoordinate(toCoordinate(request.coordinate()))
                         .build();
-                a = distributoreRepo.save((DistributoreTipicita) a);
             }
             default -> throw new BadRequestException("Ruolo non gestito dal sistema");
         }
+
+        a = utentiRepo.save(a);
 
         return UtenteResponse.from(a);
     }
 
     public List<UtenteResponse> listaAziende() {
-        List<UtenteResponse> out = new ArrayList<>();
-        produttoreRepo.findAll().forEach(u -> out.add(UtenteResponse.from(u)));
-        trasformatoreRepo.findAll().forEach(u -> out.add(UtenteResponse.from(u)));
-        distributoreRepo.findAll().forEach(u -> out.add(UtenteResponse.from(u)));
-        return out;
+        return utentiRepo.findAll().stream()
+                .filter(u -> u instanceof Azienda)
+                .map(UtenteResponse::from)
+                .toList();
     }
 
     public UtenteResponse getAzienda(Long id) {
@@ -132,7 +117,7 @@ public class AziendeService {
 
     public void deleteAzienda(Long id) {
         Azienda azienda = findAziendaById(id);
-        deleteAziendaByTipo(azienda);
+        utentiRepo.delete(azienda);
     }
 
     // HELPERS
@@ -150,22 +135,14 @@ public class AziendeService {
     }
 
     private Azienda findAziendaById(Long id) {
-        return produttoreRepo.findById(id).map(a -> (Azienda) a)
-                .or(() -> trasformatoreRepo.findById(id).map(a -> (Azienda) a))
-                .or(() -> distributoreRepo.findById(id).map(a -> (Azienda) a))
+        return utentiRepo.findById(id)
+                .filter(u -> u instanceof Azienda)
+                .map(u -> (Azienda) u)
                 .orElseThrow(() -> new NotFoundException("Azienda non trovata"));
     }
 
     private Azienda saveAzienda(Azienda a) {
-        if (a instanceof Produttore p) return produttoreRepo.save(p);
-        if (a instanceof Trasformatore t) return trasformatoreRepo.save(t);
-        if (a instanceof DistributoreTipicita d) return distributoreRepo.save(d);
-        throw new IllegalStateException("Tipo di azienda non supportato");
+        return utentiRepo.save(a);
     }
 
-    private void deleteAziendaByTipo(Azienda a) {
-        if (a instanceof Produttore p) produttoreRepo.delete(p);
-        else if (a instanceof Trasformatore t) trasformatoreRepo.delete(t);
-        else if (a instanceof DistributoreTipicita d) distributoreRepo.delete(d);
-    }
 }

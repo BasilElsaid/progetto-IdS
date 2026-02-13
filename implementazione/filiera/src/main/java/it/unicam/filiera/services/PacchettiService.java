@@ -11,10 +11,10 @@ import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.DistributoreTipicita;
 import it.unicam.filiera.models.UtenteGenerico;
-import it.unicam.filiera.repositories.AnnuncioProdottoRepository;
-import it.unicam.filiera.repositories.CertificatoCuratoreRepository;
-import it.unicam.filiera.repositories.PacchettoRepository;
-import it.unicam.filiera.repositories.ProdottoRepository;
+import it.unicam.filiera.repositories.AnnunciProdottiRepository;
+import it.unicam.filiera.repositories.CertificatiCuratoreRepository;
+import it.unicam.filiera.repositories.PacchettiRepository;
+import it.unicam.filiera.repositories.ProdottiRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +24,12 @@ import java.util.List;
 @Service
 public class PacchettiService {
 
-    private final PacchettoRepository pacchettoRepo;
-    private final ProdottoRepository prodottoRepo;
-    private final AnnuncioProdottoRepository annuncioProdottoRepo;
-    private final CertificatoCuratoreRepository certificatoCuratoreRepo;
+    private final PacchettiRepository pacchettoRepo;
+    private final ProdottiRepository prodottoRepo;
+    private final AnnunciProdottiRepository annuncioProdottoRepo;
+    private final CertificatiCuratoreRepository certificatoCuratoreRepo;
 
-    public PacchettiService(PacchettoRepository pacchettoRepo, ProdottoRepository prodottoRepo, AnnuncioProdottoRepository annuncioProdottoRepo, CertificatoCuratoreRepository certificatoCuratoreRepo) {
+    public PacchettiService(PacchettiRepository pacchettoRepo, ProdottiRepository prodottoRepo, AnnunciProdottiRepository annuncioProdottoRepo, CertificatiCuratoreRepository certificatoCuratoreRepo) {
         this.pacchettoRepo = pacchettoRepo;
         this.prodottoRepo = prodottoRepo;
         this.annuncioProdottoRepo = annuncioProdottoRepo;

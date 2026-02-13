@@ -6,7 +6,6 @@ import it.unicam.filiera.dto.create.CreateProdottoRequest;
 import it.unicam.filiera.dto.response.ProdottoResponse;
 import it.unicam.filiera.dto.update.UpdateProdottoRequest;
 import it.unicam.filiera.enums.Ruolo;
-import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Produttore;
@@ -14,14 +13,14 @@ import it.unicam.filiera.models.UtenteGenerico;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import it.unicam.filiera.domain.Prodotto;
-import it.unicam.filiera.repositories.ProdottoRepository;
+import it.unicam.filiera.repositories.ProdottiRepository;
 
 @Service
 public class ProdottiService {
 
-    private final ProdottoRepository repo;
+    private final ProdottiRepository repo;
 
-    public ProdottiService(ProdottoRepository repo) {
+    public ProdottiService(ProdottiRepository repo) {
         this.repo = repo;
     }
 

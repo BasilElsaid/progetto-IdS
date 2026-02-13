@@ -4,7 +4,6 @@ import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.domain.TrasformazioneProdotto;
 import it.unicam.filiera.dto.create.CreateTrasformazioneRequest;
 import it.unicam.filiera.enums.Ruolo;
-import it.unicam.filiera.enums.TipoCertificatore;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
@@ -19,17 +18,18 @@ import java.util.List;
 @Service
 public class TrasformazioniService {
 
-    private final TrasformazioneProdottoRepository trasformazioniRepo;
-    private final ProdottoRepository prodottoRepo;
-    private final TrasformatoreRepository trasformatoreRepo;
-    private final CertificatoCuratoreRepository certificatoCuratoreRepo;
+    private final TrasformazioniProdottiRepository trasformazioniRepo;
+    private final ProdottiRepository prodottoRepo;
+    private final UtentiRepository utentiRepo;
+    private final CertificatiCuratoreRepository certificatoCuratoreRepo;
 
-    public TrasformazioniService(TrasformazioneProdottoRepository trasformazioniRepo,
-                                 ProdottoRepository prodottoRepo,
-                                 TrasformatoreRepository trasformatoreRepo, CertificatoCuratoreRepository certificatoCuratoreRepo) {
+    public TrasformazioniService(TrasformazioniProdottiRepository trasformazioniRepo,
+                                 ProdottiRepository prodottoRepo,
+                                 UtentiRepository utentiRepo,
+                                 CertificatiCuratoreRepository certificatoCuratoreRepo) {
         this.trasformazioniRepo = trasformazioniRepo;
         this.prodottoRepo = prodottoRepo;
-        this.trasformatoreRepo = trasformatoreRepo;
+        this.utentiRepo = utentiRepo;
         this.certificatoCuratoreRepo = certificatoCuratoreRepo;
     }
 
@@ -49,8 +49,12 @@ public class TrasformazioniService {
             throw new BadRequestException("Prodotto di input non ha certificato produttore approvato e non può essere trasformato");
         }
 
-        Trasformatore trasformatore = trasformatoreRepo.findById(req.trasformatoreId())
+        UtenteGenerico utente = utentiRepo.findById(req.trasformatoreId())
                 .orElseThrow(() -> new NotFoundException("Trasformatore non trovato"));
+
+        if (!(utente instanceof Trasformatore trasformatore)) {
+            throw new BadRequestException("L'utente selezionato non è un trasformatore");
+        }
 
         // Creo il prodotto di output clonando il prodotto di input
         Prodotto output = new Prodotto();

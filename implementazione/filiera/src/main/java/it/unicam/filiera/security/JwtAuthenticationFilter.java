@@ -1,7 +1,7 @@
 package it.unicam.filiera.security;
 
 import it.unicam.filiera.models.UtenteGenerico;
-import it.unicam.filiera.repositories.UtenteRepository;
+import it.unicam.filiera.repositories.UtentiRepository;
 import it.unicam.filiera.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,9 +20,9 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UtenteRepository utenteRepository;
+    private final UtentiRepository utenteRepository;
 
-    public JwtAuthenticationFilter(JwtService jwtService, UtenteRepository utenteRepository) {
+    public JwtAuthenticationFilter(JwtService jwtService, UtentiRepository utenteRepository) {
         this.jwtService = jwtService;
         this.utenteRepository = utenteRepository;
     }

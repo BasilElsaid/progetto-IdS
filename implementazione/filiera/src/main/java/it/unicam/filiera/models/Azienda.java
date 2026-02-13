@@ -8,10 +8,6 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 public class Azienda extends UtenteGenerico {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @NotBlank(message = "Nome azienda obbligatorio")
     private String nomeAzienda;
 
@@ -28,9 +24,6 @@ public class Azienda extends UtenteGenerico {
     public Azienda() {}
 
     // ===== GETTERS =====
-    public Long getId() {
-        return id;
-    }
 
     public String getNomeAzienda() {
         return nomeAzienda;
@@ -44,10 +37,6 @@ public class Azienda extends UtenteGenerico {
     public String getPartitaIva() { return partitaIva; }
 
     // ===== SETTERS =====
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setNomeAzienda(String nomeAzienda) {
         this.nomeAzienda = nomeAzienda;
     }

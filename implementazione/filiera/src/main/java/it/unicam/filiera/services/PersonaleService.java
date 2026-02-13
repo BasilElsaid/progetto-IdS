@@ -5,134 +5,97 @@ import it.unicam.filiera.dto.update.UpdatePersonaleRequest;
 import it.unicam.filiera.dto.response.UtenteResponse;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.NotFoundException;
-import it.unicam.filiera.models.Animatore;
-import it.unicam.filiera.models.Curatore;
-import it.unicam.filiera.models.GestorePiattaforma;
-import it.unicam.filiera.enums.Ruolo;
-import it.unicam.filiera.repositories.AnimatoreRepository;
-import it.unicam.filiera.repositories.CuratoreRepository;
-import it.unicam.filiera.repositories.GestorePiattaformaRepository;
+import it.unicam.filiera.models.*;
+import it.unicam.filiera.repositories.UtentiRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class PersonaleService {
 
-    private final CuratoreRepository curatoreRepository;
-    private final AnimatoreRepository animatoreRepository;
-    private final GestorePiattaformaRepository gestoreRepository;
+    private final UtentiRepository utentiRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public PersonaleService(
-            CuratoreRepository curatoreRepository,
-            AnimatoreRepository animatoreRepository,
-            GestorePiattaformaRepository gestoreRepository,
-            PasswordEncoder passwordEncoder
-    ) {
-        this.curatoreRepository = curatoreRepository;
-        this.animatoreRepository = animatoreRepository;
-        this.gestoreRepository = gestoreRepository;
+    public PersonaleService(UtentiRepository utentiRepository, PasswordEncoder passwordEncoder) {
+        this.utentiRepository = utentiRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     public UtenteResponse creaPersonale(CreatePersonaleRequest request) {
-        switch (request.ruolo()) {
-            case CURATORE:
-                if (curatoreRepository.count() > 0) {
-                    throw new BadRequestException("Curatore già presente");
-                }
-                Curatore c = new Curatore();
-                c.setUsername(request.username());
-                c.setEmail(request.email());
-                c.setPassword(passwordEncoder.encode(request.password()));
-                c.setNome(request.nome());
-                c.setCognome(request.cognome());
-                c.setTelefono(request.telefono());
-                return UtenteResponse.from(curatoreRepository.save(c));
-
-            case ANIMATORE:
-                if (animatoreRepository.count() > 0) {
-                    throw new BadRequestException("Animatore già presente");
-                }
-                Animatore a = new Animatore();
-                a.setUsername(request.username());
-                a.setEmail(request.email());
-                a.setPassword(passwordEncoder.encode(request.password()));
-                a.setNome(request.nome());
-                a.setCognome(request.cognome());
-                a.setTelefono(request.telefono());
-                return UtenteResponse.from(animatoreRepository.save(a));
-
-            case GESTORE_PIATTAFORMA:
-                if (gestoreRepository.count() > 0) {
-                    throw new BadRequestException("Gestore piattaforma già presente");
-                }
-                GestorePiattaforma g = new GestorePiattaforma();
-                g.setUsername(request.username());
-                g.setEmail(request.email());
-                g.setPassword(passwordEncoder.encode(request.password()));
-                g.setNome(request.nome());
-                g.setCognome(request.cognome());
-                g.setTelefono(request.telefono());
-                return UtenteResponse.from(gestoreRepository.save(g));
-
-            default:
-                throw new BadRequestException("Ruolo non valido per il personale");
+        // Controlla se già esiste un utente con lo stesso ruolo
+        if (utentiRepository.existsByRuolo(request.ruolo())) {
+            throw new BadRequestException(
+                    switch (request.ruolo()) {
+                        case CURATORE -> "Curatore già presente";
+                        case ANIMATORE -> "Animatore già presente";
+                        case GESTORE_PIATTAFORMA -> "Gestore piattaforma già presente";
+                        default -> "Ruolo non valido per il personale";
+                    }
+            );
         }
+
+        Personale personale;
+        switch (request.ruolo()) {
+            case CURATORE -> personale = new Curatore();
+            case ANIMATORE -> personale = new Animatore();
+            case GESTORE_PIATTAFORMA -> personale = new GestorePiattaforma();
+            default -> throw new BadRequestException("Ruolo non valido per il personale");
+        }
+
+        personale.setUsername(request.username());
+        personale.setEmail(request.email());
+        personale.setPassword(passwordEncoder.encode(request.password()));
+        personale.setNome(request.nome());
+        personale.setCognome(request.cognome());
+        personale.setTelefono(request.telefono());
+
+        return UtenteResponse.from(utentiRepository.save(personale));
     }
 
     public List<UtenteResponse> listaPersonale() {
-        List<UtenteResponse> out = new ArrayList<>();
-        curatoreRepository.findAll().stream().findFirst().ifPresent(u -> out.add(UtenteResponse.from(u)));
-        animatoreRepository.findAll().stream().findFirst().ifPresent(u -> out.add(UtenteResponse.from(u)));
-        gestoreRepository.findAll().stream().findFirst().ifPresent(u -> out.add(UtenteResponse.from(u)));
-        return out;
+        return utentiRepository.findAll().stream()
+                .filter(u -> u instanceof Personale)
+                .map(u -> UtenteResponse.from((Personale) u))
+                .toList();
     }
 
     public UtenteResponse getPersonale(Long id) {
-        return curatoreRepository.findById(id)
-                .map(UtenteResponse::from)
-                .or(() -> animatoreRepository.findById(id).map(UtenteResponse::from))
-                .or(() -> gestoreRepository.findById(id).map(UtenteResponse::from))
+        UtenteGenerico u = utentiRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Personale non trovato"));
+
+        if (!(u instanceof Personale personale)) {
+            throw new BadRequestException("L'utente non è personale");
+        }
+
+        return UtenteResponse.from(personale);
     }
 
     public void eliminaPersonale(Long id) {
-        if(curatoreRepository.existsById(id)) {
-            curatoreRepository.deleteById(id);
-            return;
+        UtenteGenerico u = utentiRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Personale non trovato"));
+        if (!(u instanceof Personale)) {
+            throw new BadRequestException("L'utente non è personale");
         }
-        if(animatoreRepository.existsById(id)) {
-            animatoreRepository.deleteById(id);
-            return;
-        }
-        if(gestoreRepository.existsById(id)) {
-            gestoreRepository.deleteById(id);
-            return;
-        }
-        throw new NotFoundException("Personale non trovato");
+        utentiRepository.delete(u);
     }
 
     public UtenteResponse patchPersonale(Long id, UpdatePersonaleRequest request) {
-        if (curatoreRepository.existsById(id)) {
-            Curatore c = curatoreRepository.findById(id).get();
-            updateUtente(c, request);
-            return UtenteResponse.from(curatoreRepository.save(c));
+        UtenteGenerico u = utentiRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Personale non trovato"));
+
+        if (!(u instanceof Personale personale)) {
+            throw new BadRequestException("L'utente non è personale");
         }
-        if (animatoreRepository.existsById(id)) {
-            Animatore a = animatoreRepository.findById(id).get();
-            updateUtente(a, request);
-            return UtenteResponse.from(animatoreRepository.save(a));
-        }
-        if (gestoreRepository.existsById(id)) {
-            GestorePiattaforma g = gestoreRepository.findById(id).get();
-            updateUtente(g, request);
-            return UtenteResponse.from(gestoreRepository.save(g));
-        }
-        throw new NotFoundException("Personale non trovato");
+
+        if (request.email() != null) personale.setEmail(request.email());
+        if (request.password() != null) personale.setPassword(passwordEncoder.encode(request.password()));
+        if (request.nome() != null) personale.setNome(request.nome());
+        if (request.cognome() != null) personale.setCognome(request.cognome());
+        if (request.telefono() != null) personale.setTelefono(request.telefono());
+
+        return UtenteResponse.from(utentiRepository.save(personale));
     }
 
     // =================== Helper ===================
