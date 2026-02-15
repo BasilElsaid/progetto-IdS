@@ -5,7 +5,6 @@ import it.unicam.filiera.dto.create.CreateCertificatoRequest;
 import it.unicam.filiera.dto.update.UpdateCertificatoRequest;
 import it.unicam.filiera.enums.TipoCertificatore;
 import it.unicam.filiera.exceptions.BadRequestException;
-import it.unicam.filiera.repositories.CertificatiCuratoreRepository;
 
 public class CertificatoCuratoreStrategy implements StrategieCertificazioni {
 
@@ -17,24 +16,16 @@ public class CertificatoCuratoreStrategy implements StrategieCertificazioni {
     }
 
     @Override
-    public boolean verifica(Certificato target, Boolean approvato, String commento, CertificatiCuratoreRepository curatoreRepo) {
-        if (target instanceof CertificatoCuratore) {
-            throw new BadRequestException("Non è possibile verificare un altro certificato curatore");
+    public boolean verifica(Certificato target, boolean approvato, String commento) {
+        if (target.getTipo() != TipoCertificatore.PRODUTTORE && target.getTipo() != TipoCertificatore.TRASFORMATORE) {
+            throw new BadRequestException("Questo certificato non può essere verificato dal curatore");
         }
 
-        if (curatoreRepo.existsByCertificatoTargetId(target.getId())) {
-            throw new BadRequestException("Questo certificato è già stato verificato dal curatore");
-        }
+        // Aggiorna i campi direttamente sul certificato esistente
+        target.setApprovato(approvato);
+        target.setCommento(commento);
 
-        CertificatoCuratore cc = new CertificatoCuratore();
-        cc.setCertificatoTarget(target);
-        cc.setProdotto(target.getProdotto());
-        cc.setApprovato(approvato);
-        cc.setCommento(commento);
-        cc.setTipo(TipoCertificatore.CURATORE);
-
-        curatoreRepo.save(cc);
-        return cc.isApprovato();
+        return target.isApprovato();
     }
 
     @Override

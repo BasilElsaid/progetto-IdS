@@ -8,8 +8,11 @@ import it.unicam.filiera.dto.update.UpdateProdottoRequest;
 import it.unicam.filiera.enums.Ruolo;
 import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
+import it.unicam.filiera.models.Azienda;
 import it.unicam.filiera.models.Produttore;
 import it.unicam.filiera.models.UtenteGenerico;
+import it.unicam.filiera.repositories.AnnunciProdottiRepository;
+import it.unicam.filiera.repositories.PacchettiRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import it.unicam.filiera.domain.Prodotto;
@@ -18,10 +21,14 @@ import it.unicam.filiera.repositories.ProdottiRepository;
 @Service
 public class ProdottiService {
 
-    private final ProdottiRepository repo;
+    private final ProdottiRepository prodottiRepository;
+    private final PacchettiRepository pacchettiRepository;
+    private final AnnunciProdottiRepository annunciProdottiRepository;
 
-    public ProdottiService(ProdottiRepository repo) {
-        this.repo = repo;
+    public ProdottiService(ProdottiRepository prodottiRepository, PacchettiRepository pacchettiRepository, AnnunciProdottiRepository annunciProdottiRepository) {
+        this.prodottiRepository = prodottiRepository;
+        this.pacchettiRepository = pacchettiRepository;
+        this.annunciProdottiRepository = annunciProdottiRepository;
     }
 
     public List<ProdottoResponse> all() {
@@ -29,9 +36,9 @@ public class ProdottiService {
         List<Prodotto> prodotti;
 
         if (isGestorePiattaforma(u)) {
-            prodotti = repo.findAll();
-        } else if (isProduttore(u)) {
-            prodotti = repo.findByProduttore((Produttore) u);
+            prodotti = prodottiRepository.findAll();
+        } else if (u instanceof Azienda) {
+            prodotti = prodottiRepository.findByProprietario((Azienda) u);
         } else {
             throw new ForbiddenException("Ruolo non autorizzato");
         }
@@ -46,33 +53,33 @@ public class ProdottiService {
         Prodotto p;
 
         if (isGestorePiattaforma(u)) {
-            p = repo.findById(id)
+            p = prodottiRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
-        } else if (isProduttore(u)) {
-            p = repo.findByIdAndProduttore(id, (Produttore) u)
+        } else if (isAzienda(u)) {
+            p = prodottiRepository.findByIdAndProprietario(id, (Azienda) u)
                     .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
         } else {
             throw new ForbiddenException("Ruolo non autorizzato");
         }
 
-        return ProdottoResponse.from(repo.save(p));
+        return ProdottoResponse.from(p);
     }
 
     public ProdottoResponse crea(CreateProdottoRequest dto) {
         UtenteGenerico u = getUtenteLoggato();
 
-        if (isProduttore(u)) {
+        if (isAzienda(u)) {
             Prodotto p = new Prodotto();
             p.setNome(dto.nome());
             p.setCategoria(dto.categoria());
-            p.setProduttore((Produttore) u);
+            p.setProprietario((Azienda) u);
 
-            Prodotto saved = repo.save(p);
-            return ProdottoResponse.from(repo.save(saved));
+            Prodotto saved = prodottiRepository.save(p);
+            return ProdottoResponse.from(saved);
         }
 
 
-        throw new ForbiddenException("Solo produttori possono creare prodotti");
+        throw new ForbiddenException("Solo aziende possono creare prodotti");
     }
 
     public ProdottoResponse patch(Long id, UpdateProdottoRequest dto) {
@@ -80,14 +87,16 @@ public class ProdottiService {
         Prodotto existing;
 
         if (isGestorePiattaforma(u)) {
-            existing = repo.findById(id)
+            existing = prodottiRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
-        } else if (isProduttore(u)) {
-            existing = repo.findByIdAndProduttore(id, (Produttore) u)
+        } else if (isAzienda(u)) {
+            existing = prodottiRepository.findByIdAndProprietario(id, (Azienda) u)
                     .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
         } else {
             throw new ForbiddenException("Ruolo non autorizzato");
         }
+
+        checkProdottoNonVincolato(existing.getId());
 
         if (dto.nome() != null) {
             existing.setNome(dto.nome());
@@ -96,24 +105,25 @@ public class ProdottiService {
             existing.setCategoria(dto.categoria());
         }
 
-        return ProdottoResponse.from(repo.save(existing));    }
+        return ProdottoResponse.from(prodottiRepository.save(existing));    }
 
     public void delete(Long id) {
         UtenteGenerico u = getUtenteLoggato();
+        Prodotto existing;
 
         if (isGestorePiattaforma(u)) {
-            Prodotto existing = repo.findById(id)
+            existing = prodottiRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
-            repo.delete(existing);
-            return;
-        } else if (isProduttore(u)) {
-            Prodotto existing = repo.findByIdAndProduttore(id, (Produttore) u)
+        } else if (isAzienda(u)) {
+            existing = prodottiRepository.findByIdAndProprietario(id, (Azienda) u)
                     .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
-            repo.delete(existing);
-            return;
+        } else {
+            throw new ForbiddenException("Ruolo non autorizzato");
         }
 
-        throw new ForbiddenException("Ruolo non autorizzato");
+        checkProdottoNonVincolato(existing.getId());
+
+        prodottiRepository.delete(existing);
     }
 
     // ================= HELPERS =================
@@ -129,8 +139,22 @@ public class ProdottiService {
         return u.getRuolo() == Ruolo.GESTORE_PIATTAFORMA;
     }
 
-    private boolean isProduttore(UtenteGenerico u) {
-        return u instanceof Produttore;
+    private boolean isAzienda(UtenteGenerico u) {
+        return u instanceof Azienda;
+    }
+
+    private void checkProdottoNonVincolato(Long prodottoId) {
+        if (pacchettiRepository.existsByProdotti_Id(prodottoId)) {
+            throw new ForbiddenException(
+                    "Il prodotto è incluso in un pacchetto e non può essere modificato/eliminato"
+            );
+        }
+
+        if (annunciProdottiRepository.existsByProdotto_Id(prodottoId)) {
+            throw new ForbiddenException(
+                    "Il prodotto è già presente sul marketplace e non può essere modificato/eliminato"
+            );
+        }
     }
 
 }

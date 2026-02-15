@@ -10,7 +10,6 @@ import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.models.UtenteGenerico;
-import it.unicam.filiera.repositories.CertificatiCuratoreRepository;
 import it.unicam.filiera.repositories.CertificatiRepository;
 import it.unicam.filiera.repositories.ProdottiRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,14 +24,11 @@ public class CertificatiService {
 
     private final CertificatiRepository certificatoRepo;
     private final ProdottiRepository prodottoRepo;
-    private final CertificatiCuratoreRepository curatoreRepo;
     private final StrategieCertificazioniFactory strategieFactory;
 
     public CertificatiService(CertificatiRepository certificatoRepo,
-                              CertificatiCuratoreRepository curatoreRepo,
                               ProdottiRepository prodottoRepo, StrategieCertificazioniFactory strategieFactory) {
         this.certificatoRepo = certificatoRepo;
-        this.curatoreRepo = curatoreRepo;
         this.prodottoRepo = prodottoRepo;
         this.strategieFactory = strategieFactory;
     }
@@ -102,27 +98,26 @@ public class CertificatiService {
     }
 
     // VERIFICA CERTIFICATO
-    public boolean verificaCertificato(Long certificatoId, Boolean approvato, String commento) {
+    public boolean verificaCertificato(Long certificatoId, boolean approvato, String commento) {
         UtenteGenerico u = getUtenteLoggato();
         if (tipoConsentito(u) != TipoCertificatore.CURATORE) {
             throw new ForbiddenException("Solo il curatore può verificare certificati");
         }
 
-        Certificato target = certificatoRepo.findById(certificatoId)
-                .orElseThrow(() -> new NotFoundException("Certificato target non trovato"));
+        Certificato c = certificatoRepo.findById(certificatoId)
+            .orElseThrow(() -> new NotFoundException("Certificato non trovato"));
 
-        StrategieCertificazioni strategy = strategieFactory.getStrategia(TipoCertificatore.CURATORE);
+        strategieFactory.getStrategia(TipoCertificatore.CURATORE)
+                .verifica(c, approvato, commento);
 
-        boolean result = strategy.verifica(target, approvato, commento, curatoreRepo);
-
-        if (approvato && (target.getTipo() == TipoCertificatore.TRASFORMATORE
-                || target.getTipo() == TipoCertificatore.PRODUTTORE)) {
-            Prodotto p = target.getProdotto();
+        if (approvato && (c.getTipo() == TipoCertificatore.TRASFORMATORE
+                || c.getTipo() == TipoCertificatore.PRODUTTORE)) {
+            Prodotto p = c.getProdotto();
             p.setVendibile(true);
             prodottoRepo.save(p);
         }
 
-        return result;
+        return certificatoRepo.save(c) != null;
     }
 
     // HELPERS
@@ -151,14 +146,14 @@ public class CertificatiService {
         if (tipo != null && c.getTipo() != tipo) return false;
 
         return (tipo == TipoCertificatore.PRODUTTORE || tipo == TipoCertificatore.TRASFORMATORE) &&
-                c.getProdotto().getProduttore().getId().equals(u.getId());
+                c.getProdotto().getProprietario().getId().equals(u.getId());
     }
 
     private void checkOwnership(Certificato c) {
         UtenteGenerico u = getUtenteLoggato();
         TipoCertificatore tipo = tipoConsentito(u);
         if (tipo == TipoCertificatore.PRODUTTORE || tipo == TipoCertificatore.TRASFORMATORE) {
-            if (!c.getProdotto().getProduttore().getId().equals(u.getId())) {
+            if (!c.getProdotto().getProprietario().getId().equals(u.getId())) {
                 throw new ForbiddenException("Non puoi modificare/eliminare questo certificato");
             }
         }

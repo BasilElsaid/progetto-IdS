@@ -5,14 +5,13 @@ import it.unicam.filiera.domain.Pacchetto;
 import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.dto.response.PacchettoResponse;
 import it.unicam.filiera.enums.Ruolo;
-import it.unicam.filiera.enums.TipoCertificatore;
 import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.DistributoreTipicita;
 import it.unicam.filiera.models.UtenteGenerico;
+import it.unicam.filiera.repositories.AnnunciPacchettiRepository;
 import it.unicam.filiera.repositories.AnnunciProdottiRepository;
-import it.unicam.filiera.repositories.CertificatiCuratoreRepository;
 import it.unicam.filiera.repositories.PacchettiRepository;
 import it.unicam.filiera.repositories.ProdottiRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,13 +26,15 @@ public class PacchettiService {
     private final PacchettiRepository pacchettoRepo;
     private final ProdottiRepository prodottoRepo;
     private final AnnunciProdottiRepository annuncioProdottoRepo;
-    private final CertificatiCuratoreRepository certificatoCuratoreRepo;
+    private final AnnunciPacchettiRepository annunciPacchettiRepository;
 
-    public PacchettiService(PacchettiRepository pacchettoRepo, ProdottiRepository prodottoRepo, AnnunciProdottiRepository annuncioProdottoRepo, CertificatiCuratoreRepository certificatoCuratoreRepo) {
+    public PacchettiService(PacchettiRepository pacchettoRepo,
+                            ProdottiRepository prodottoRepo,
+                            AnnunciProdottiRepository annuncioProdottoRepo, AnnunciPacchettiRepository annunciPacchettiRepository) {
         this.pacchettoRepo = pacchettoRepo;
         this.prodottoRepo = prodottoRepo;
         this.annuncioProdottoRepo = annuncioProdottoRepo;
-        this.certificatoCuratoreRepo = certificatoCuratoreRepo;
+        this.annunciPacchettiRepository = annunciPacchettiRepository;
     }
 
     public List<Pacchetto> lista() {
@@ -80,13 +81,10 @@ public class PacchettiService {
                 Prodotto prod = prodottoRepo.findById(pid)
                         .orElseThrow(() -> new BadRequestException("Prodotto con id " + pid + " non trovato"));
 
-                // Controllo certificato curatore approvato
-                TipoCertificatore tipoCert = prod.getIsTrasformato() ? TipoCertificatore.TRASFORMATORE : TipoCertificatore.PRODUTTORE;
-                boolean approvato = certificatoCuratoreRepo
-                        .existsByCertificatoTarget_ProdottoIdAndCertificatoTarget_TipoAndApprovatoTrue(pid, tipoCert);
-
-                if (!approvato) {
-                    throw new BadRequestException("Il prodotto con id " + pid + " non ha certificato curatore approvato per il tipo " + tipoCert + " e non può essere incluso nel pacchetto");
+                if (!prod.getVendibile()) {
+                    throw new BadRequestException(
+                            "Il prodotto non è certificato/approvato e non può essere trasformato"
+                    );
                 }
 
                 // Controllo che il prodotto non sia già su marketplace
@@ -98,9 +96,9 @@ public class PacchettiService {
             }
         }
 
-        // Controllo obbligo almeno 1 prodotto
-        if (prodotti.isEmpty()) {
-            throw new BadRequestException("Un pacchetto deve contenere almeno un prodotto");
+        // Controllo obbligo almeno 2 prodotti
+        if (prodotti.size() < 2) {
+            throw new BadRequestException("Un pacchetto deve contenere almeno due prodotti");
         }
 
         if (isDistributore(u)) {
@@ -136,6 +134,12 @@ public class PacchettiService {
 
         if (isDistributore(u) && !p.getDistributore().getId().equals(u.getId())) {
             throw new ForbiddenException("Pacchetto non tuo");
+        }
+
+        if (annunciPacchettiRepository.existsByPacchetto_Id(id)) {
+            throw new BadRequestException(
+                    "Il pacchetto è già presente su marketplace e non può essere eliminato"
+            );
         }
 
         pacchettoRepo.delete(p);

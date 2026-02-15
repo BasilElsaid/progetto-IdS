@@ -22,10 +22,10 @@ public class AziendeController {
         this.service = service;
     }
 
-    @PostMapping
-    public UtenteResponse crea(@Valid @RequestBody CreateAziendaRequest request) {
-        return service.creaAzienda(request);
-    }
+//    @PostMapping
+//    public UtenteResponse crea(@Valid @RequestBody CreateAziendaRequest request) {
+//        return service.creaAzienda(request);
+//    }
 
     @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
     @GetMapping

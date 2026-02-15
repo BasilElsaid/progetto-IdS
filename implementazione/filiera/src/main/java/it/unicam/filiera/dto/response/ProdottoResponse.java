@@ -15,8 +15,8 @@ public record ProdottoResponse(
                 p.getId(),
                 p.getNome(),
                 p.getCategoria(),
-                p.getProduttore() != null ? p.getProduttore().getId() : null,
-                p.getProduttore() != null ? p.getProduttore().getNomeAzienda() : null
+                p.getProprietario() != null ? p.getProprietario().getId() : null,
+                p.getProprietario() != null ? p.getProprietario().getNomeAzienda() : null
         );
     }
 }

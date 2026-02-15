@@ -16,6 +16,9 @@ public abstract class Certificato {
     @JoinColumn(name = "prodotto_id")
     protected Prodotto prodotto;
 
+    private boolean approvato = false;
+    private String commento;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     protected TipoCertificatore tipo;
@@ -27,4 +30,10 @@ public abstract class Certificato {
 
     public TipoCertificatore getTipo() { return tipo; }
     public void setTipo(TipoCertificatore tipo) { this.tipo = tipo; }
+
+    public boolean isApprovato() { return approvato; }
+    public void setApprovato(boolean approvato) { this.approvato = approvato; }
+
+    public String getCommento() { return commento; }
+    public void setCommento(String commento) { this.commento = commento; }
 }

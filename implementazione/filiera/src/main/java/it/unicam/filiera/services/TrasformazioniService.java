@@ -21,22 +21,24 @@ public class TrasformazioniService {
     private final TrasformazioniProdottiRepository trasformazioniRepo;
     private final ProdottiRepository prodottoRepo;
     private final UtentiRepository utentiRepo;
-    private final CertificatiCuratoreRepository certificatoCuratoreRepo;
+    private final  AnnunciProdottiRepository annunciProdottiRepository;
 
     public TrasformazioniService(TrasformazioniProdottiRepository trasformazioniRepo,
                                  ProdottiRepository prodottoRepo,
-                                 UtentiRepository utentiRepo,
-                                 CertificatiCuratoreRepository certificatoCuratoreRepo) {
+                                 UtentiRepository utentiRepo, AnnunciProdottiRepository annunciProdottiRepository) {
         this.trasformazioniRepo = trasformazioniRepo;
         this.prodottoRepo = prodottoRepo;
         this.utentiRepo = utentiRepo;
-        this.certificatoCuratoreRepo = certificatoCuratoreRepo;
+        this.annunciProdottiRepository = annunciProdottiRepository;
     }
 
     public TrasformazioneProdotto creaTrasformazione(CreateTrasformazioneRequest req) {
         UtenteGenerico u = getUtenteLoggato();
 
-        // Solo il trasformatore può creare trasformazioni su se stesso
+        if (!isTrasformatore(u)) {
+            throw new ForbiddenException("Solo un trasformatore può creare trasformazioni");
+        }
+
         if (isTrasformatore(u) && !((Trasformatore) u).getId().equals(req.trasformatoreId())) {
             throw new ForbiddenException("Non puoi creare trasformazioni per altri trasformatori");
         }
@@ -45,8 +47,16 @@ public class TrasformazioniService {
         Prodotto input = prodottoRepo.findById(req.inputId())
                 .orElseThrow(() -> new NotFoundException("Prodotto di input non trovato"));
 
-        boolean approvato = certificatoCuratoreRepo.existsByCertificatoTargetProdottoIdAndApprovatoTrue(input.getId());        if (!approvato) {
-            throw new BadRequestException("Prodotto di input non ha certificato produttore approvato e non può essere trasformato");
+        if (!input.getVendibile()) {
+            throw new BadRequestException(
+                    "Il prodotto non è certificato/approvato e non può essere trasformato"
+            );
+        }
+
+        if (annunciProdottiRepository.existsByProdotto_Id(input.getId())) {
+            throw new BadRequestException(
+                    "Il prodotto è già presente su marketplace e non può essere eliminato"
+            );
         }
 
         UtenteGenerico utente = utentiRepo.findById(req.trasformatoreId())
@@ -58,7 +68,7 @@ public class TrasformazioniService {
 
         // Creo il prodotto di output clonando il prodotto di input
         Prodotto output = new Prodotto();
-        output.setProduttore(input.getProduttore());
+        output.setProprietario((Trasformatore) utente);
         output.setCategoria(input.getCategoria());
         output.setPrezzo(input.getPrezzo());
         output.setNome(req.nuovoNomeOutput() != null ? req.nuovoNomeOutput() : input.getNome());

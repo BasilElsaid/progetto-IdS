@@ -6,6 +6,7 @@ import it.unicam.filiera.dto.update.UpdateAnnuncioMarketplaceRequest;
 import it.unicam.filiera.domain.AnnuncioProdotto;
 import it.unicam.filiera.domain.Prodotto;
 import it.unicam.filiera.exceptions.BadRequestException;
+import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Azienda;
 import it.unicam.filiera.repositories.*;
@@ -21,16 +22,13 @@ public class MarketplaceProdottiService {
     private final AnnunciProdottiRepository annuncioRepo;
     private final UtentiRepository utentiRepo;
     private final ProdottiRepository prodottoRepo;
-    private final CertificatiCuratoreRepository curatoreRepo;
 
     public MarketplaceProdottiService(AnnunciProdottiRepository annuncioRepo,
                                       UtentiRepository utentiRepo,
-                                      ProdottiRepository prodottoRepo,
-                                      CertificatiCuratoreRepository curatoreRepo) {
+                                      ProdottiRepository prodottoRepo) {
         this.annuncioRepo = annuncioRepo;
         this.utentiRepo = utentiRepo;
         this.prodottoRepo = prodottoRepo;
-        this.curatoreRepo = curatoreRepo;
     }
 
     public AnnuncioProdottoResponse creaAnnuncio(CreateAnnuncioProdottoRequest req) {
@@ -58,9 +56,16 @@ public class MarketplaceProdottiService {
                         "Prodotto non trovato: id=" + req.getProdottoId()
                 ));
 
-        boolean certificatoApprovato = curatoreRepo.existsByCertificatoTargetProdottoIdAndApprovatoTrue(prodotto.getId());
-        if (!certificatoApprovato) {
-            throw new BadRequestException("Prodotto non ha un certificato approvato dal curatore, non può essere venduto");
+        if (!prodotto.getProprietario().getId().equals(azienda.getId())) {
+            throw new ForbiddenException(
+                    "Non puoi creare un annuncio per un prodotto che non ti appartiene"
+            );
+        }
+
+        if (!prodotto.getVendibile()) {
+            throw new BadRequestException(
+                    "Il prodotto non è certificato/approvato e non può essere trasformato"
+            );
         }
 
         boolean exists = annuncioRepo.findByAziendaAndProdotto(azienda, prodotto).isPresent();

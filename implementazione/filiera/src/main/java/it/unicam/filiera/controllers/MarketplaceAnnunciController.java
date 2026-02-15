@@ -30,14 +30,14 @@ public class MarketplaceAnnunciController {
     }
 
     // PRODOTTI
-    @PreAuthorize("hasRole('PRODUTTORE')")
+    @PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE')")
     @PostMapping("/prodotti")
     public List<AnnuncioProdottoResponse> creaProdotti(
             @RequestBody List<CreateAnnuncioProdottoRequest> dtos) {
         return marketplaceProdottiService.creaAnnunciBatch(dtos);
     }
 
-    @PreAuthorize("hasAnyRole('PRODUTTORE', 'GESTORE_PIATTAFORMA')")
+    @PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/prodotti")
     public List<AnnuncioProdottoResponse> listaProdotti(@RequestParam Optional<Long> aziendaId,
                                                         @RequestParam Optional<CategoriaProdotto> categoria,
@@ -46,20 +46,20 @@ public class MarketplaceAnnunciController {
         return marketplaceProdottiService.listaAnnunci(aziendaId.orElse(null), categoriaStr, attivo.orElse(null));
     }
 
-    @PreAuthorize("hasAnyRole('PRODUTTORE', 'GESTORE_PIATTAFORMA')")
+    @PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/prodotti/{id}")
     public AnnuncioProdottoResponse dettaglioProdotto(@PathVariable Long id) {
         return marketplaceProdottiService.getAnnuncio(id);
     }
 
-    @PreAuthorize("hasRole('PRODUTTORE')")
+    @PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE')")
     @PatchMapping("/prodotti/{id}")
     public AnnuncioProdottoResponse aggiornaProdotto(@PathVariable Long id,
                                                      @RequestBody UpdateAnnuncioMarketplaceRequest req) {
         return marketplaceProdottiService.aggiornaAnnuncio(id, req);
     }
 
-    @PreAuthorize("hasAnyRole('PRODUTTORE', 'GESTORE_PIATTAFORMA')")
+    @PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
     @DeleteMapping("/prodotti/{id}")
     public void eliminaAnnuncioProdotto(@PathVariable Long id) {
         marketplaceProdottiService.eliminaAnnuncio(id);

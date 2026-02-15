@@ -21,11 +21,11 @@ public class PersonaleController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
-    @PostMapping
-    public UtenteResponse crea(@RequestBody CreatePersonaleRequest request) {
-        return service.creaPersonale(request);
-    }
+//    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
+//    @PostMapping
+//    public UtenteResponse crea(@RequestBody CreatePersonaleRequest request) {
+//        return service.creaPersonale(request);
+//    }
 
     @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
     @GetMapping

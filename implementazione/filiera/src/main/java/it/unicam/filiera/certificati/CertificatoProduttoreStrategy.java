@@ -5,7 +5,6 @@ import it.unicam.filiera.dto.create.CreateCertificatoRequest;
 import it.unicam.filiera.dto.update.UpdateCertificatoRequest;
 import it.unicam.filiera.enums.TipoCertificatore;
 import it.unicam.filiera.exceptions.BadRequestException;
-import it.unicam.filiera.repositories.CertificatiCuratoreRepository;
 
 public class CertificatoProduttoreStrategy implements StrategieCertificazioni {
 
@@ -20,7 +19,7 @@ public class CertificatoProduttoreStrategy implements StrategieCertificazioni {
     }
 
     @Override
-    public boolean verifica(Certificato target, Boolean approvato, String commento, CertificatiCuratoreRepository curatoreRepo) {
+    public boolean verifica(Certificato target, boolean approvato, String commento) {
         return true; // non serve per produttore
     }
 

@@ -11,4 +11,5 @@ public interface PacchettiRepository extends JpaRepository<Pacchetto, Long> {
     List<Pacchetto> findByDistributoreId(Long distributoreId);
     Optional<Pacchetto> findByIdAndDistributoreId(Long id, Long distributoreId);
     boolean existsByNomeAndDistributoreId(String nome, Long distributoreId);
+    boolean existsByProdotti_Id(Long prodottoId);
 }

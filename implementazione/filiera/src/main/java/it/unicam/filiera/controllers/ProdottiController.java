@@ -14,7 +14,7 @@ import it.unicam.filiera.services.ProdottiService;
 @RestController
 @RequestMapping("/api/prodotti")
 @Tag(name = "05 - Prodotti", description = "Gestione prodotti")
-@PreAuthorize("hasAnyRole('PRODUTTORE', 'GESTORE_PIATTAFORMA')")
+@PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
 public class ProdottiController {
 
     private final ProdottiService service;
@@ -25,7 +25,7 @@ public class ProdottiController {
 
     @PreAuthorize("hasRole('PRODUTTORE')")
     @PostMapping
-    public List<ProdottoResponse> creaBatch(@RequestBody @Valid List<CreateProdottoRequest> dtos) {
+    public List<ProdottoResponse> crea(@RequestBody @Valid List<CreateProdottoRequest> dtos) {
         return dtos.stream()
                 .map(service::crea)
                 .toList();
@@ -41,7 +41,7 @@ public class ProdottiController {
         return service.all();
     }
 
-    @PreAuthorize("hasRole('PRODUTTORE')")
+    @PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE')")
     @PatchMapping("/{id}")
     public ProdottoResponse patch(@PathVariable Long id,
                                   @RequestBody UpdateProdottoRequest dto) {

@@ -21,10 +21,10 @@ public class AcquirentiController {
         this.service = service;
     }
 
-    @PostMapping
-    public UtenteResponse crea(@RequestBody CreateAcquirenteRequest request) {
-        return service.creaAcquirente(request);
-    }
+//    @PostMapping
+//    public UtenteResponse crea(@RequestBody CreateAcquirenteRequest request) {
+//        return service.creaAcquirente(request);
+//    }
 
     @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
     @GetMapping

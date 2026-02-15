@@ -16,4 +16,5 @@ public interface AnnunciPacchettiRepository extends JpaRepository<AnnuncioPacche
 
     Optional<AnnuncioPacchetto> findByAziendaAndPacchetto(Azienda azienda, Pacchetto pacchetto);
 
+    boolean existsByPacchetto_Id(Long pacchettoId);
 }
