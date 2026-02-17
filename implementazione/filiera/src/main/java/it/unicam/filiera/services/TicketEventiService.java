@@ -40,7 +40,7 @@ public class TicketEventiService {
         this.utentiRepository = utentiRepository;
     }
 
-    public List<TicketEventoResponse> acquistaTicket(Long eventoId, int quantita) {
+    public List<TicketEventoResponse> prendiTicket(Long eventoId, int quantita) {
         if (quantita <= 0) {
             throw new BadRequestException("La quantita deve essere maggiore di 0");
         }
