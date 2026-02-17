@@ -35,6 +35,13 @@ public class OrdiniController {
         return service.pagaOrdine(request.acquirenteId(), id, request.metodo());
     }
 
+    @DeleteMapping("/{id}")
+    public void elimina(@PathVariable Long id,
+                        @RequestParam Long acquirenteId) {
+
+        service.eliminaOrdine(acquirenteId, id);
+    }
+
     @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/{id}")
     public OrdineResponse get(@PathVariable Long id) {

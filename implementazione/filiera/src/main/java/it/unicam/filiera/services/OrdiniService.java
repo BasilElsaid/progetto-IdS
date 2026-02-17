@@ -132,7 +132,28 @@ public class OrdiniService {
 
         spedizioniAsyncService.gestisciOrdineAutomatico(saved.getId());
 
-        return OrdineResponse.from(ordineRepo.save(ordine));
+        return OrdineResponse.from(saved);
+    }
+
+    @Transactional
+    public void eliminaOrdine(Long acquirenteId, Long ordineId) {
+
+        if (acquirenteId == null)
+            throw new BadRequestException("acquirenteId mancante");
+
+        if (ordineId == null)
+            throw new BadRequestException("ordineId mancante");
+
+        Ordine ordine = ordineRepo.findById(ordineId)
+                .orElseThrow(() -> new NotFoundException("Ordine non trovato"));
+
+        if (!ordine.getAcquirente().getId().equals(acquirenteId))
+            throw new BadRequestException("Ordine non appartiene a questo acquirente");
+
+        if (ordine.getStato() == StatoOrdine.PAGATO)
+            throw new BadRequestException("Ordine pagato non eliminabile");
+
+        ordineRepo.delete(ordine);
     }
 
     public OrdineResponse getById(Long id) {

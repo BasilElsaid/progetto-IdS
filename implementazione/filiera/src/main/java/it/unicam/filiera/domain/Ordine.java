@@ -18,12 +18,6 @@ public class Ordine {
     @ManyToOne
     private Acquirente acquirente;
 
-    @ManyToOne
-    private AnnuncioProdotto annuncioProdotto;
-
-    @ManyToOne
-    private AnnuncioPacchetto annuncioPacchetto;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ordine", orphanRemoval = true)
     private List<OrdineItem> items = new ArrayList<>();
 
@@ -59,22 +53,6 @@ public class Ordine {
 
     public void setAcquirente(Acquirente acquirente) {
         this.acquirente = acquirente;
-    }
-
-    public AnnuncioProdotto getAnnuncioProdotto() {
-        return annuncioProdotto;
-    }
-
-    public void setAnnuncioProdotto(AnnuncioProdotto annuncioProdotto) {
-        this.annuncioProdotto = annuncioProdotto;
-    }
-
-    public AnnuncioPacchetto getAnnuncioPacchetto() {
-        return annuncioPacchetto;
-    }
-
-    public void setAnnuncioPacchetto(AnnuncioPacchetto annuncioPacchetto) {
-        this.annuncioPacchetto = annuncioPacchetto;
     }
 
     public List<OrdineItem> getItems() {
