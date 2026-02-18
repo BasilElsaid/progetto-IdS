@@ -23,14 +23,22 @@ public class TrasformazioniController {
 
     @PreAuthorize("hasRole('TRASFORMATORE')")
     @PostMapping
-    public TrasformazioneResponse crea(@RequestBody CreateTrasformazioneRequest req) {
-        TrasformazioneProdotto t = service.creaTrasformazione(req);
-        return TrasformazioneResponse.from(t);
+    public List<TrasformazioneResponse> creaTrasformazioni(@RequestBody List<CreateTrasformazioneRequest> dtos) {
+        return dtos.stream()
+                .map(service::creaTrasformazione)
+                .map(TrasformazioneResponse::from)
+                .toList();
     }
 
-    @PreAuthorize("hasAnyRole('TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
-    @GetMapping("/trasformatore/{trasformatoreId}")
-    public List<TrasformazioneResponse> listaPerTrasformatore(@PathVariable Long trasformatoreId) {
-        return service.listaPerTrasformatore(trasformatoreId).stream().map(TrasformazioneResponse::from).toList();
+    @GetMapping("/mie")
+    @PreAuthorize("hasRole('TRASFORMATORE')")
+    public List<TrasformazioneProdotto> mie() {
+        return service.mieTrasformazioni();
+    }
+
+    @GetMapping("/trasformatore/{id}")
+    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
+    public List<TrasformazioneProdotto> perTrasformatore(@PathVariable Long id) {
+        return service.listaPerTrasformatore(id);
     }
 }

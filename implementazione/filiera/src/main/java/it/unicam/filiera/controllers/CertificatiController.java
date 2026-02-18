@@ -24,8 +24,11 @@ public class CertificatiController {
     }
 
     @PostMapping
-    public Certificato creaCertificato(@RequestBody CreateCertificatoRequest dto) {
-        return certificatiService.creaCertificato(dto);
+    @PreAuthorize("hasAnyRole('PRODUTTORE','TRASFORMATORE')")
+    public List<Certificato> creaCertificati(@RequestBody List<CreateCertificatoRequest> dtos) {
+        return dtos.stream()
+                .map(certificatiService::creaCertificato)
+                .toList();
     }
 
     @PreAuthorize("hasAnyRole('CURATORE', 'GESTORE_PIATTAFORMA')")
@@ -35,15 +38,9 @@ public class CertificatiController {
         return certificatiService.verificaCertificato(id, dto.approvato(), dto.commento());
     }
 
-    @PreAuthorize("hasAnyRole('CURATORE', 'GESTORE_PIATTAFORMA')")
     @GetMapping
     public List<Certificato> getTuttiCertificati() {
         return certificatiService.getTuttiCertificati();
-    }
-
-    @GetMapping("/{id}")
-    public Certificato getCertificato(@PathVariable Long id) {
-        return certificatiService.getCertificato(id);
     }
 
     @PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE')")

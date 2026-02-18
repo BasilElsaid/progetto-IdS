@@ -33,17 +33,13 @@ public class TrasformazioniService {
     }
 
     public TrasformazioneProdotto creaTrasformazione(CreateTrasformazioneRequest req) {
+
         UtenteGenerico u = getUtenteLoggato();
 
-        if (!isTrasformatore(u)) {
+        if (!(u instanceof Trasformatore trasformatore)) {
             throw new ForbiddenException("Solo un trasformatore può creare trasformazioni");
         }
 
-        if (isTrasformatore(u) && !((Trasformatore) u).getId().equals(req.trasformatoreId())) {
-            throw new ForbiddenException("Non puoi creare trasformazioni per altri trasformatori");
-        }
-
-        // Recupero prodotto di input e trasformatore
         Prodotto input = prodottoRepo.findById(req.inputId())
                 .orElseThrow(() -> new NotFoundException("Prodotto di input non trovato"));
 
@@ -59,16 +55,9 @@ public class TrasformazioniService {
             );
         }
 
-        UtenteGenerico utente = utentiRepo.findById(req.trasformatoreId())
-                .orElseThrow(() -> new NotFoundException("Trasformatore non trovato"));
-
-        if (!(utente instanceof Trasformatore trasformatore)) {
-            throw new BadRequestException("L'utente selezionato non è un trasformatore");
-        }
-
-        // Creo il prodotto di output clonando il prodotto di input
+        // Creo prodotto output
         Prodotto output = new Prodotto();
-        output.setProprietario((Trasformatore) utente);
+        output.setProprietario(trasformatore);
         output.setCategoria(input.getCategoria());
         output.setPrezzo(input.getPrezzo());
         output.setNome(req.nuovoNomeOutput() != null ? req.nuovoNomeOutput() : input.getNome());
@@ -77,7 +66,6 @@ public class TrasformazioniService {
 
         prodottoRepo.save(output);
 
-        // Creo la trasformazione
         TrasformazioneProdotto trasformazione = new TrasformazioneProdotto(
                 trasformatore,
                 input,
@@ -104,6 +92,16 @@ public class TrasformazioniService {
         }
 
         throw new ForbiddenException("Accesso non consentito");
+    }
+
+    public List<TrasformazioneProdotto> mieTrasformazioni() {
+        UtenteGenerico u = getUtenteLoggato();
+
+        if (!(u instanceof Trasformatore trasformatore)) {
+            throw new ForbiddenException("Accesso non consentito");
+        }
+
+        return trasformazioniRepo.findByTrasformatoreId(trasformatore.getId());
     }
 
     // ================= HELPERS =================
