@@ -331,6 +331,50 @@
                   "response": []
                 },
                 {
+                  "name": "login produttore3",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"produttore3\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
                   "name": "login trasformatore1",
                   "event": [
                     {
@@ -397,6 +441,50 @@
                     "body": {
                       "mode": "raw",
                       "raw": "{\n  \"username\": \"trasformatore2\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "login trasformatore3",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"trasformatore3\",\n  \"password\": \"password123\"\n}",
                       "options": {
                         "raw": {
                           "language": "json"
@@ -505,6 +593,50 @@
                     }
                   },
                   "response": []
+                },
+                {
+                  "name": "login distributore3",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"distributore3\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
                 }
               ]
             },
@@ -578,6 +710,50 @@
                     "body": {
                       "mode": "raw",
                       "raw": "{\n  \"username\": \"acquirente2\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "login acquirente3",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"acquirente3\",\n  \"password\": \"password123\"\n}",
                       "options": {
                         "raw": {
                           "language": "json"
@@ -756,7 +932,7 @@
                     "header": [],
                     "body": {
                       "mode": "raw",
-                      "raw": "[\n  {\n    \"ruolo\": \"PRODUTTORE\",\n    \"username\": \"produttore1\",\n    \"email\": \"prod1@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Azienda Agricola Rossi\",\n    \"partitaIva\": \"IT01234567890\",\n    \"sede\": \"Camerino (MC)\",\n    \"coordinate\": { \"lat\": 43.1386, \"lon\": 13.0696 }\n  },\n  {\n    \"ruolo\": \"PRODUTTORE\",\n    \"username\": \"produttore2\",\n    \"email\": \"prod2@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Fattoria Bianchi\",\n    \"partitaIva\": \"IT09876543210\",\n    \"sede\": \"Macerata (MC)\",\n    \"coordinate\": { \"lat\": 43.3007, \"lon\": 13.4534 }\n  },\n  {\n    \"ruolo\": \"TRASFORMATORE\",\n    \"username\": \"trasformatore1\",\n    \"email\": \"trasf1@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Caseificio Monti Azzurri\",\n    \"partitaIva\": \"IT22334455667\",\n    \"sede\": \"San Severino Marche (MC)\",\n    \"laboratorio\": \"Laboratorio Latticini\",\n    \"coordinate\": { \"lat\": 43.2287, \"lon\": 13.1794 }\n  },\n  {\n    \"ruolo\": \"TRASFORMATORE\",\n    \"username\": \"trasformatore2\",\n    \"email\": \"trasf2@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Salumificio del Borgo\",\n    \"partitaIva\": \"IT33445566778\",\n    \"sede\": \"Matelica (MC)\",\n    \"laboratorio\": \"Laboratorio Carni\",\n    \"coordinate\": { \"lat\": 43.2551, \"lon\": 13.0088 }\n  },\n  {\n    \"ruolo\": \"DISTRIBUTORE_TIPICITA\",\n    \"username\": \"distributore1\",\n    \"email\": \"dist1@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Distribuzione Marche Srl\",\n    \"partitaIva\": \"IT44556677889\",\n    \"sede\": \"Civitanova Marche (MC)\",\n    \"areaDistribuzione\": \"Provincia di Macerata\",\n    \"coordinate\": { \"lat\": 43.3062, \"lon\": 13.7249 }\n  },\n  {\n    \"ruolo\": \"DISTRIBUTORE_TIPICITA\",\n    \"username\": \"distributore2\",\n    \"email\": \"dist2@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Adriatica Logistica\",\n    \"partitaIva\": \"IT55667788990\",\n    \"sede\": \"Ancona (AN)\",\n    \"areaDistribuzione\": \"Marche e Abruzzo\",\n    \"coordinate\": { \"lat\": 43.6158, \"lon\": 13.5189 }\n  }\n]",
+                      "raw": "[\n  {\n    \"ruolo\": \"PRODUTTORE\",\n    \"username\": \"produttore1\",\n    \"email\": \"prod1@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Azienda Agricola Rossi\",\n    \"partitaIva\": \"IT01234567890\",\n    \"sede\": \"Camerino (MC)\",\n    \"coordinate\": { \"lat\": 43.1386, \"lon\": 13.0696 }\n  },\n  {\n    \"ruolo\": \"PRODUTTORE\",\n    \"username\": \"produttore2\",\n    \"email\": \"prod2@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Fattoria Bianchi\",\n    \"partitaIva\": \"IT09876543210\",\n    \"sede\": \"Macerata (MC)\",\n    \"coordinate\": { \"lat\": 43.3007, \"lon\": 13.4534 }\n  },\n    {\n    \"ruolo\": \"PRODUTTORE\",\n    \"username\": \"produttore3\",\n    \"email\": \"prod3@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Podere San Michele\",\n    \"partitaIva\": \"IT66778899001\",\n    \"sede\": \"Tolentino (MC)\",\n    \"coordinate\": { \"lat\": 43.2963, \"lon\": 13.5458 }\n  },\n  {\n    \"ruolo\": \"TRASFORMATORE\",\n    \"username\": \"trasformatore1\",\n    \"email\": \"trasf1@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Caseificio Monti Azzurri\",\n    \"partitaIva\": \"IT22334455667\",\n    \"sede\": \"San Severino Marche (MC)\",\n    \"laboratorio\": \"Laboratorio Latticini\",\n    \"coordinate\": { \"lat\": 43.2287, \"lon\": 13.1794 }\n  },\n  {\n    \"ruolo\": \"TRASFORMATORE\",\n    \"username\": \"trasformatore2\",\n    \"email\": \"trasf2@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Salumificio del Borgo\",\n    \"partitaIva\": \"IT33445566778\",\n    \"sede\": \"Matelica (MC)\",\n    \"laboratorio\": \"Laboratorio Carni\",\n    \"coordinate\": { \"lat\": 43.2551, \"lon\": 13.0088 }\n  },\n    {\n    \"ruolo\": \"TRASFORMATORE\",\n    \"username\": \"trasformatore3\",\n    \"email\": \"trasf3@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Caseificio Valle del Chienti\",\n    \"partitaIva\": \"IT77889900112\",\n    \"sede\": \"Corridonia (MC)\",\n    \"laboratorio\": \"Laboratorio Latticini\",\n    \"coordinate\": { \"lat\": 43.2481, \"lon\": 13.5062 }\n  },\n  {\n    \"ruolo\": \"DISTRIBUTORE_TIPICITA\",\n    \"username\": \"distributore1\",\n    \"email\": \"dist1@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Distribuzione Marche Srl\",\n    \"partitaIva\": \"IT44556677889\",\n    \"sede\": \"Civitanova Marche (MC)\",\n    \"areaDistribuzione\": \"Provincia di Macerata\",\n    \"coordinate\": { \"lat\": 43.3062, \"lon\": 13.7249 }\n  },\n  {\n    \"ruolo\": \"DISTRIBUTORE_TIPICITA\",\n    \"username\": \"distributore2\",\n    \"email\": \"dist2@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Adriatica Logistica\",\n    \"partitaIva\": \"IT55667788990\",\n    \"sede\": \"Ancona (AN)\",\n    \"areaDistribuzione\": \"Marche e Abruzzo\",\n    \"coordinate\": { \"lat\": 43.6158, \"lon\": 13.5189 }\n  },\n    {\n    \"ruolo\": \"DISTRIBUTORE_TIPICITA\",\n    \"username\": \"distributore3\",\n    \"email\": \"dist3@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Logistica Centro Italia\",\n    \"partitaIva\": \"IT88990011223\",\n    \"sede\": \"Fermo (FM)\",\n    \"areaDistribuzione\": \"Marche e Umbria\",\n    \"coordinate\": { \"lat\": 43.1622, \"lon\": 13.7205 }\n  }\n]",
                       "options": {
                         "raw": {
                           "language": "json"
@@ -814,38 +990,6 @@
                     }
                   },
                   "response": []
-                },
-                {
-                  "name": "registrazione personale",
-                  "protocolProfileBehavior": {
-                    "disabledSystemHeaders": {}
-                  },
-                  "request": {
-                    "method": "POST",
-                    "header": [],
-                    "body": {
-                      "mode": "raw",
-                      "raw": "[\n  {\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"email\": \"admin@filiera.local\",\n    \"nome\": \"Admin\",\n    \"cognome\": \"Filiera\",\n    \"telefono\": \"0000000000\",\n    \"ruolo\": \"GESTORE_PIATTAFORMA\"\n  },\n  {\n    \"username\": \"curatore\",\n    \"password\": \"curatore\",\n    \"email\": \"curatore@filiera.local\",\n    \"nome\": \"Curatore\",\n    \"cognome\": \"Filiera\",\n    \"telefono\": \"1111111111\",\n    \"ruolo\": \"CURATORE\"\n  },\n  {\n    \"username\": \"animatore\",\n    \"password\": \"animatore\",\n    \"email\": \"animatore@filiera.local\",\n    \"nome\": \"Animatore\",\n    \"cognome\": \"Filiera\",\n    \"telefono\": \"2222222222\",\n    \"ruolo\": \"ANIMATORE\"\n  }\n]",
-                      "options": {
-                        "raw": {
-                          "language": "json"
-                        }
-                      }
-                    },
-                    "url": {
-                      "raw": "localhost:8080/auth/register/personale",
-                      "host": [
-                        "localhost"
-                      ],
-                      "port": "8080",
-                      "path": [
-                        "auth",
-                        "register",
-                        "personale"
-                      ]
-                    }
-                  },
-                  "response": []
                 }
               ]
             },
@@ -862,7 +1006,7 @@
                     "header": [],
                     "body": {
                       "mode": "raw",
-                      "raw": "[\n  {\n    \"username\": \"acquirente1\",\n    \"email\": \"acquirente1@example.com\",\n    \"password\": \"password123\"\n  },\n  {\n    \"username\": \"acquirente2\",\n    \"email\": \"acquirente2@example.com\",\n    \"password\": \"password123\"\n  }\n]",
+                      "raw": "[\n  {\n    \"username\": \"acquirente1\",\n    \"email\": \"acquirente1@example.com\",\n    \"password\": \"password123\"\n  },\n  {\n    \"username\": \"acquirente2\",\n    \"email\": \"acquirente2@example.com\",\n    \"password\": \"password123\"\n  },\n    {\n    \"username\": \"acquirente3\",\n    \"email\": \"acquirente3@example.com\",\n    \"password\": \"password123\"\n  }\n]",
                       "options": {
                         "raw": {
                           "language": "json"
@@ -1320,7 +1464,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:8080/api/aziende/7",
+              "raw": "http://localhost:8080/api/aziende/8",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1329,7 +1473,7 @@
               "path": [
                 "api",
                 "aziende",
-                "7"
+                "8"
               ]
             }
           },
@@ -1347,7 +1491,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:8080/api/aziende/7",
+              "raw": "http://localhost:8080/api/aziende/8",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1356,7 +1500,7 @@
               "path": [
                 "api",
                 "aziende",
-                "7"
+                "8"
               ]
             }
           },
@@ -1374,7 +1518,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:8080/api/aziende/9",
+              "raw": "http://localhost:8080/api/aziende/11",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1383,7 +1527,7 @@
               "path": [
                 "api",
                 "aziende",
-                "9"
+                "11"
               ]
             }
           },
@@ -1648,7 +1792,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:8080/api/acquirenti/11",
+              "raw": "http://localhost:8080/api/acquirenti/15",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1657,7 +1801,7 @@
               "path": [
                 "api",
                 "acquirenti",
-                "11"
+                "15"
               ]
             }
           },
@@ -1675,7 +1819,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:8080/api/acquirenti/11",
+              "raw": "http://localhost:8080/api/acquirenti/15",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -1684,7 +1828,7 @@
               "path": [
                 "api",
                 "acquirenti",
-                "11"
+                "15"
               ]
             }
           },
@@ -2279,7 +2423,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "[\n  {\n    \"annuncioId\": 5,\n    \"quantita\": 1,\n    \"pacchetto\": false\n  }\n]\n",
+              "raw": "[\n  {\n    \"annuncioId\": 1,\n    \"quantita\": 1,\n    \"pacchetto\": false\n  }\n]\n",
               "options": {
                 "raw": {
                   "language": "json"
