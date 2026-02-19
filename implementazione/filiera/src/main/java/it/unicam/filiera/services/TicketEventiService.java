@@ -75,10 +75,6 @@ public class TicketEventiService {
     }
 
     public List<TicketEventoResponse> listaTicketEvento(Long eventoId) {
-        UtenteGenerico u = getUtenteLoggato();
-        if (u.getRuolo() != Ruolo.ANIMATORE && u.getRuolo() != Ruolo.GESTORE_PIATTAFORMA) {
-            throw new ForbiddenException("Ruolo non autorizzato");
-        }
         if (!eventiRepository.existsById(eventoId)) {
             throw new NotFoundException("Evento non trovato");
         }
@@ -98,11 +94,20 @@ public class TicketEventiService {
             throw new BadRequestException("Ticket gia utilizzato");
         }
 
+        boolean isOwner = ticket.getProprietario().getId().equals(operatore.getId());
+        boolean isElevato = operatore.getRuolo() == Ruolo.ANIMATORE
+                || operatore.getRuolo() == Ruolo.GESTORE_PIATTAFORMA;
+
+        if (!isOwner && !isElevato) {
+            throw new ForbiddenException("Non puoi fare check-in su questo ticket");
+        }
+
         ticket.setUsato(true);
         ticket.setUsatoIl(LocalDateTime.now());
         ticket.setCheckInDa(operatore);
 
-        return TicketEventoResponse.from(ticket);    }
+        return TicketEventoResponse.from(ticket);
+    }
 
     public void annullaTicket(Long ticketId) {
         UtenteGenerico u = getUtenteLoggato();

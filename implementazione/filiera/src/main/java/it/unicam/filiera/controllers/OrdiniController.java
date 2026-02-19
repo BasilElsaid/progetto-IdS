@@ -1,9 +1,7 @@
 package it.unicam.filiera.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import it.unicam.filiera.dto.create.CreatePagaOrdineRequest;
 import it.unicam.filiera.dto.response.OrdineResponse;
-import it.unicam.filiera.enums.MetodoPagamento;
 import it.unicam.filiera.services.OrdiniService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,39 +22,24 @@ public class OrdiniController {
     }
 
     @PostMapping
-    public OrdineResponse crea(@RequestBody List<CreateOrdineItemRequest> items,
-                               @RequestParam Long acquirenteId) {
-        return service.creaOrdine(acquirenteId, items);
+    public OrdineResponse crea(@RequestBody List<CreateOrdineItemRequest> items) {
+        return service.creaOrdine(items);
     }
 
-    @PostMapping("/{id}/paga")
-    public OrdineResponse paga(@PathVariable Long id,
-                               @RequestBody CreatePagaOrdineRequest request) {
-        return service.pagaOrdine(request.acquirenteId(), id, request.metodo());
+    @PostMapping("/paga/{ordineId}")
+    public OrdineResponse paga(@PathVariable Long ordineId) {
+        return service.pagaOrdine(ordineId);
     }
 
-    @DeleteMapping("/{id}")
-    public void elimina(@PathVariable Long id,
-                        @RequestParam Long acquirenteId) {
-
-        service.eliminaOrdine(acquirenteId, id);
-    }
-
-    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
-    @GetMapping("/{id}")
-    public OrdineResponse get(@PathVariable Long id) {
-        return service.getById(id);
+    @DeleteMapping("/{ordineId}")
+    public void elimina(@PathVariable Long ordineId) {
+        service.eliminaOrdine(ordineId);
     }
 
     @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
     @GetMapping
-    public List<OrdineResponse> all() {
-        return service.all();
+    public List<OrdineResponse> lista() {
+        return service.getAllOrdini();
     }
 
-    @PreAuthorize("hasAnyRole('ACQUIRENTE', 'GESTORE_PIATTAFORMA')")
-    @GetMapping("/acquirente/{acquirenteId}")
-    public List<OrdineResponse> byAcquirente(@PathVariable Long acquirenteId) {
-        return service.getByAcquirente(acquirenteId);
-    }
 }

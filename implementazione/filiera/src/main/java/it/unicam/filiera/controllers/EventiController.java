@@ -21,7 +21,7 @@ public class EventiController {
 		this.eventiService = eventiService;
 	}
 
-	@PreAuthorize("hasAnyRole('ANIMATORE', 'GESTORE_PIATTAFORMA')")
+	@PreAuthorize("hasAnyRole('ANIMATORE')")
 	@PostMapping
 	public Evento aggiungiEvento(@RequestBody CreateEventoRequest dto) {
 		return eventiService.creaEvento(dto);
@@ -32,19 +32,14 @@ public class EventiController {
 		return eventiService.getTuttiEventi();
 	}
 
-	@GetMapping("/{id}")
-	public EventoResponse getEvento(@PathVariable Long id) {
-		return eventiService.getEvento(id);
-	}
-
-	@PreAuthorize("hasAnyRole('ANIMATORE', 'GESTORE_PIATTAFORMA')")
+	@PreAuthorize("hasAnyRole('ANIMATORE')")
 	@PatchMapping("/{id}")
 	public Evento aggiornaEvento(@PathVariable Long id,
 								 @RequestBody CreateEventoRequest dto) {
 		return eventiService.aggiornaEvento(id, dto);
 	}
 
-	@PreAuthorize("hasAnyRole('ANIMATORE', 'GESTORE_PIATTAFORMA')")
+	@PreAuthorize("hasAnyRole('ANIMATORE')")
 	@DeleteMapping("/{id}")
 	public void eliminaEvento(@PathVariable Long id) {
 		eventiService.eliminaEvento(id);

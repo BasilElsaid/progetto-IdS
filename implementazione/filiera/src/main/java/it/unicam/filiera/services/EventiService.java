@@ -20,7 +20,6 @@ public class EventiService {
         this.eventoRepo = eventoRepo;
     }
 
-    // CREATE
     public Evento creaEvento(CreateEventoRequest dto) {
         Evento evento = new Evento();
         evento.setNome(dto.nome());
@@ -45,21 +44,6 @@ public class EventiService {
                 .toList();
     }
 
-    public EventoResponse getEvento(Long id) {
-        Evento e = eventoRepo.findById(id)
-                .orElseThrow(() -> new NotFoundException("Evento non trovato"));
-
-        return new EventoResponse(
-                e.getId(),
-                e.getNome(),
-                e.getDataOra(),
-                e.getPrezzo(),
-                e.getTipo(),
-                e.getPosti()
-        );
-    }
-
-    // PATCH
     public Evento aggiornaEvento(Long id, CreateEventoRequest dto) {
         Evento e = eventoRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Evento non trovato:"));
@@ -73,7 +57,6 @@ public class EventiService {
         return e; // JPA dirty checking
     }
 
-    // DELETE
     public void eliminaEvento(Long id) {
         Evento e = eventoRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Evento non trovato"));
