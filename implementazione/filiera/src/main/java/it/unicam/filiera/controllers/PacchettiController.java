@@ -37,11 +37,6 @@ public class PacchettiController {
                 .toList();
     }
 
-    @GetMapping("/{id}")
-    public Pacchetto get(@PathVariable Long id) {
-        return service.get(id);
-    }
-
     @DeleteMapping("/{id}")
     public void elimina(@PathVariable Long id) {
         service.elimina(id);

@@ -48,23 +48,6 @@ public class ProdottiService {
                 .toList();
     }
 
-    public ProdottoResponse get(Long id) {
-        UtenteGenerico u = getUtenteLoggato();
-        Prodotto p;
-
-        if (isGestorePiattaforma(u)) {
-            p = prodottiRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
-        } else if (isAzienda(u)) {
-            p = prodottiRepository.findByIdAndProprietario(id, (Azienda) u)
-                    .orElseThrow(() -> new NotFoundException("Prodotto non trovato"));
-        } else {
-            throw new ForbiddenException("Ruolo non autorizzato");
-        }
-
-        return ProdottoResponse.from(p);
-    }
-
     public ProdottoResponse crea(CreateProdottoRequest dto) {
         UtenteGenerico u = getUtenteLoggato();
 

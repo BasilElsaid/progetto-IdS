@@ -31,11 +31,6 @@ public class ProdottiController {
                 .toList();
     }
 
-    @GetMapping("/{id}")
-    public ProdottoResponse get(@PathVariable Long id) {
-        return service.get(id);
-    }
-
     @GetMapping
     public List<ProdottoResponse> all() {
         return service.all();

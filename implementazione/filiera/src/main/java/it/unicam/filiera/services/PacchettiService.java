@@ -51,23 +51,6 @@ public class PacchettiService {
         throw new ForbiddenException("Accesso non consentito");
     }
 
-    public Pacchetto get(Long id) {
-        UtenteGenerico u = getUtenteLoggato();
-
-        if (isGestorePiattaforma(u)) {
-            return pacchettoRepo.findById(id)
-                    .orElseThrow(() -> new NotFoundException("Pacchetto non trovato"));
-        }
-
-        if (isDistributore(u)) {
-            return pacchettoRepo
-                    .findByIdAndDistributoreId(id, u.getId())
-                    .orElseThrow(() -> new NotFoundException("Pacchetto non trovato"));
-        }
-
-        throw new ForbiddenException("Accesso non consentito");
-    }
-
     public PacchettoResponse crea(CreatePacchettoRequest req) {
         UtenteGenerico u = getUtenteLoggato();
 
