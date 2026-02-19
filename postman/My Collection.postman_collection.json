@@ -1,0 +1,2447 @@
+{
+  "info": {
+    "_postman_id": "cbe0e3ba-0904-4be5-a116-811e85e83205",
+    "name": "My Collection",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52507817",
+    "_collection_link": "https://go.postman.co/collection/52507817-cbe0e3ba-0904-4be5-a116-811e85e83205?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "certificati",
+      "item": [
+        {
+          "name": "crea certificati produttore1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_produttore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n{\n    \"tipo\": \"PRODUTTORE\",\n    \"prodottoId\": 1,\n    \"azienda\": \"Azienda Agricola Rossi\",\n    \"origineMateriaPrima\": \"Grano duro 100% Marche\"\n  },\n  {\n    \"tipo\": \"PRODUTTORE\",\n    \"prodottoId\": 4,\n    \"azienda\": \"Fattoria Bianchi\",\n    \"origineMateriaPrima\": \"Latte vaccino locale\"\n  },\n  {\n    \"tipo\": \"PRODUTTORE\",\n    \"prodottoId\": 2,\n    \"azienda\": \"Coltivazioni Verdi\",\n    \"origineMateriaPrima\": \"Pomodoro marchigiano\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/certificati",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "certificati"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get certificati produttore1",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_produttore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/certificati",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "certificati"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get certificati trasformatore1",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_trasformatore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/certificati",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "certificati"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get certificati curatore",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_curatore}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/certificati",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "certificati"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "crea certificati trasformatore1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_trasformatore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"tipo\": \"TRASFORMATORE\",\n    \"prodottoId\": 13,\n    \"processo\": \"Produzione ricotta da siero di latte\",\n    \"impianto\": \"Laboratorio Latticini Monti Azzurri - San Severino Marche (MC)\"\n  },\n  {\n    \"tipo\": \"TRASFORMATORE\",\n    \"prodottoId\": 14,\n    \"processo\": \"Cagliatura e stagionatura breve per Pecorino Fresco\",\n    \"impianto\": \"Laboratorio Latticini Monti Azzurri - San Severino Marche (MC)\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/certificati",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "certificati"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "post approvazioni curatore",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_curatore}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"approvato\": true,\n  \"commento\": \"Commento di verifica del curatore\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/certificati/5/verifica",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "certificati",
+                "5",
+                "verifica"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "login",
+          "item": [
+            {
+              "name": "aziende",
+              "item": [
+                {
+                  "name": "login produttore1",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "",
+                          "// Salva nel tuo ambiente attivo",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);",
+                          "",
+                          "// Log per verificare",
+                          "console.log(\"JWT saved:\", pm.environment.get(\"jwt_\" + username));"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"produttore1\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "login produttore2",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"produttore2\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "login trasformatore1",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"trasformatore1\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "login trasformatore2",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"trasformatore2\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "login distributore1",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"distributore1\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "login distributore2",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"distributore2\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "acquirenti",
+              "item": [
+                {
+                  "name": "login acquirente1",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"acquirente1\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "login acquirente2",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"acquirente2\",\n  \"password\": \"password123\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "personale",
+              "item": [
+                {
+                  "name": "login admin",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "login curatore",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"curatore\",\n  \"password\": \"curatore\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "login animatore",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "var jsonData = pm.response.json();",
+                          "var username = pm.request.body.raw.match(/\"username\":\\s*\"([^\"]+)\"/)[1];",
+                          "pm.environment.set(\"jwt_\" + username, jsonData.token);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"username\": \"animatore\",\n  \"password\": \"animatore\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/auth/login",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "registrazione",
+          "item": [
+            {
+              "name": "aziende",
+              "item": [
+                {
+                  "name": "registrazione aziende",
+                  "protocolProfileBehavior": {
+                    "disabledSystemHeaders": {}
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "[\n  {\n    \"ruolo\": \"PRODUTTORE\",\n    \"username\": \"produttore1\",\n    \"email\": \"prod1@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Azienda Agricola Rossi\",\n    \"partitaIva\": \"IT01234567890\",\n    \"sede\": \"Camerino (MC)\",\n    \"coordinate\": { \"lat\": 43.1386, \"lon\": 13.0696 }\n  },\n  {\n    \"ruolo\": \"PRODUTTORE\",\n    \"username\": \"produttore2\",\n    \"email\": \"prod2@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Fattoria Bianchi\",\n    \"partitaIva\": \"IT09876543210\",\n    \"sede\": \"Macerata (MC)\",\n    \"coordinate\": { \"lat\": 43.3007, \"lon\": 13.4534 }\n  },\n  {\n    \"ruolo\": \"TRASFORMATORE\",\n    \"username\": \"trasformatore1\",\n    \"email\": \"trasf1@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Caseificio Monti Azzurri\",\n    \"partitaIva\": \"IT22334455667\",\n    \"sede\": \"San Severino Marche (MC)\",\n    \"laboratorio\": \"Laboratorio Latticini\",\n    \"coordinate\": { \"lat\": 43.2287, \"lon\": 13.1794 }\n  },\n  {\n    \"ruolo\": \"TRASFORMATORE\",\n    \"username\": \"trasformatore2\",\n    \"email\": \"trasf2@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Salumificio del Borgo\",\n    \"partitaIva\": \"IT33445566778\",\n    \"sede\": \"Matelica (MC)\",\n    \"laboratorio\": \"Laboratorio Carni\",\n    \"coordinate\": { \"lat\": 43.2551, \"lon\": 13.0088 }\n  },\n  {\n    \"ruolo\": \"DISTRIBUTORE_TIPICITA\",\n    \"username\": \"distributore1\",\n    \"email\": \"dist1@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Distribuzione Marche Srl\",\n    \"partitaIva\": \"IT44556677889\",\n    \"sede\": \"Civitanova Marche (MC)\",\n    \"areaDistribuzione\": \"Provincia di Macerata\",\n    \"coordinate\": { \"lat\": 43.3062, \"lon\": 13.7249 }\n  },\n  {\n    \"ruolo\": \"DISTRIBUTORE_TIPICITA\",\n    \"username\": \"distributore2\",\n    \"email\": \"dist2@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Adriatica Logistica\",\n    \"partitaIva\": \"IT55667788990\",\n    \"sede\": \"Ancona (AN)\",\n    \"areaDistribuzione\": \"Marche e Abruzzo\",\n    \"coordinate\": { \"lat\": 43.6158, \"lon\": 13.5189 }\n  }\n]",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "localhost:8080/auth/register/aziende",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "register",
+                        "aziende"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "personale",
+              "item": [
+                {
+                  "name": "registrazione personale",
+                  "protocolProfileBehavior": {
+                    "disabledSystemHeaders": {}
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "[\n  {\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"email\": \"admin@filiera.local\",\n    \"nome\": \"Admin\",\n    \"cognome\": \"Filiera\",\n    \"telefono\": \"0000000000\",\n    \"ruolo\": \"GESTORE_PIATTAFORMA\"\n  },\n  {\n    \"username\": \"curatore\",\n    \"password\": \"curatore\",\n    \"email\": \"curatore@filiera.local\",\n    \"nome\": \"Curatore\",\n    \"cognome\": \"Filiera\",\n    \"telefono\": \"1111111111\",\n    \"ruolo\": \"CURATORE\"\n  },\n  {\n    \"username\": \"animatore\",\n    \"password\": \"animatore\",\n    \"email\": \"animatore@filiera.local\",\n    \"nome\": \"Animatore\",\n    \"cognome\": \"Filiera\",\n    \"telefono\": \"2222222222\",\n    \"ruolo\": \"ANIMATORE\"\n  }\n]",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "localhost:8080/auth/register/personale",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "register",
+                        "personale"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "registrazione personale",
+                  "protocolProfileBehavior": {
+                    "disabledSystemHeaders": {}
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "[\n  {\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"email\": \"admin@filiera.local\",\n    \"nome\": \"Admin\",\n    \"cognome\": \"Filiera\",\n    \"telefono\": \"0000000000\",\n    \"ruolo\": \"GESTORE_PIATTAFORMA\"\n  },\n  {\n    \"username\": \"curatore\",\n    \"password\": \"curatore\",\n    \"email\": \"curatore@filiera.local\",\n    \"nome\": \"Curatore\",\n    \"cognome\": \"Filiera\",\n    \"telefono\": \"1111111111\",\n    \"ruolo\": \"CURATORE\"\n  },\n  {\n    \"username\": \"animatore\",\n    \"password\": \"animatore\",\n    \"email\": \"animatore@filiera.local\",\n    \"nome\": \"Animatore\",\n    \"cognome\": \"Filiera\",\n    \"telefono\": \"2222222222\",\n    \"ruolo\": \"ANIMATORE\"\n  }\n]",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "localhost:8080/auth/register/personale",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "register",
+                        "personale"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "acquirenti",
+              "item": [
+                {
+                  "name": "registrazione acquirenti",
+                  "protocolProfileBehavior": {
+                    "disabledSystemHeaders": {}
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "[\n  {\n    \"username\": \"acquirente1\",\n    \"email\": \"acquirente1@example.com\",\n    \"password\": \"password123\"\n  },\n  {\n    \"username\": \"acquirente2\",\n    \"email\": \"acquirente2@example.com\",\n    \"password\": \"password123\"\n  }\n]",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "localhost:8080/auth/register/acquirenti",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "auth",
+                        "register",
+                        "acquirenti"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "prodotti",
+      "item": [
+        {
+          "name": "post prodotti produttore1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_produttore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  { \"nome\": \"Mele Golden Bio\", \"categoria\": \"ORTOFRUTTA\" },\n  { \"nome\": \"Pomodori San Marzano\", \"categoria\": \"ORTOFRUTTA\" },\n  { \"nome\": \"Zucchine Verdi\", \"categoria\": \"ORTOFRUTTA\" },\n  { \"nome\": \"Latte Fresco Intero\", \"categoria\": \"LATTICINI\" },\n  { \"nome\": \"Pecorino Stagionato\", \"categoria\": \"LATTICINI\" },\n  { \"nome\": \"Farina di Grano Tenero Tipo 1\", \"categoria\": \"CEREALI\" },\n  { \"nome\": \"Pasta Artigianale di Grano Duro\", \"categoria\": \"CEREALI\" },\n  { \"nome\": \"Olio Extra Vergine di Oliva\", \"categoria\": \"OLI_E_CONSERVE\" },\n  { \"nome\": \"Passata di Pomodoro\", \"categoria\": \"OLI_E_CONSERVE\" },\n  { \"nome\": \"Miele Millefiori\", \"categoria\": \"DOLCI_E_MIELE\" },\n  { \"nome\": \"Confettura di Albicocche\", \"categoria\": \"DOLCI_E_MIELE\" }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/prodotti",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "prodotti"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get prodotti produttore1",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_produttore1}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/prodotti",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "prodotti"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "patch prodotti produttore1",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_produttore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"nome\": \"Uva\", \"categoria\": \"ORTOFRUTTA\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/prodotti/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "prodotti",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete prodotti produttore1",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_produttore1}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/prodotti/12",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "prodotti",
+                "12"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "trasformazioni",
+      "item": [
+        {
+          "name": "trasforma prodotto trasformatore1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_trasformatore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"inputId\": 1,\n    \"nuovoNomeOutput\": \"Latte Pastorizzato\",\n    \"note\": \"Pastorizzazione a bassa temperatura\"\n  },\n  {\n    \"inputId\": 1,\n    \"trasformatoreId\": 6,\n    \"nuovoNomeOutput\": \"Ricotta Fresca\",\n    \"note\": \"Produzione di ricotta da siero di latte\"\n  },\n  {\n    \"inputId\": 1,\n    \"trasformatoreId\": 6,\n    \"nuovoNomeOutput\": \"Pecorino Fresco\",\n    \"note\": \"Cagliatura e stagionatura breve\"\n  },\n  {\n    \"inputId\": 2,\n    \"nuovoNomeOutput\": \"Passata di Pomodoro Artigianale\",\n    \"note\": \"Cottura lenta e imbottigliamento\"\n  },\n  {\n    \"inputId\": 2,\n    \"nuovoNomeOutput\": \"Pomodori Pelati\",\n    \"note\": \"Pelatura a vapore e conservazione in vetro\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/trasformazioni",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "trasformazioni"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "pacchetti",
+      "item": [
+        {
+          "name": "crea pacchetti distributore1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_distributore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"nome\": \"Box Latticini\",\n    \"prodottiIds\": [12, 13, 14]\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/pacchetti",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "pacchetti"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get pacchetti distributore1",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_distributore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"nome\": \"Box Frutta Varia\",\n    \"prodottiIds\": [1, 2, 3]\n  },\n  {\n    \"nome\": \"Box Latticini\",\n    \"prodottiIds\": [4, 5]\n  },\n  {\n    \"nome\": \"Box Cereali\",\n    \"prodottiIds\": [6, 7]\n  },\n  {\n    \"nome\": \"Box Oli e conserve\",\n    \"prodottiIds\": [8, 9]\n  },\n  {\n    \"nome\": \"Box Dolci\",\n    \"prodottiIds\": [10, 11]\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/pacchetti",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "pacchetti"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete pacchetto distributore1",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_distributore1}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/pacchetti/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "pacchetti",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "aziende",
+      "item": [
+        {
+          "name": "get dati produttore1",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_produttore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/aziende",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "aziende"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get dati trasformatore1",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_trasformatore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/aziende",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "aziende"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get dati distributore1",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_distributore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/aziende",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "aziende"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get dati tutti ADMIN",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_admin}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/aziende",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "aziende"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "patch trasformatore2",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_trasformatore2}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "  {\n    \"ruolo\": \"TRASFORMATORE\",\n    \"username\": \"trasformatore2\",\n    \"email\": \"prova@example.com\",\n    \"password\": \"password123\",\n    \"nomeAzienda\": \"Salumificio del Borgo\",\n    \"partitaIva\": \"IT33445566778\",\n    \"sede\": \"Matelica (MC)\",\n    \"laboratorio\": \"Laboratorio Carni\",\n    \"coordinate\": { \"lat\": 43.2551, \"lon\": 13.0088 }\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/aziende/7",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "aziende",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete trasformatore2",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_trasformatore2}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/aziende/7",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "aziende",
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete distributore2 ADMIN",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_admin}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/aziende/9",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "aziende",
+                "9"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "personale",
+      "item": [
+        {
+          "name": "get dati curatore",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_curatore}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/personale",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "personale"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get dati animatore",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_animatore}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/personale",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "personale"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get dati tutti ADMIN",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_admin}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/personale",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "personale"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "patch animatore",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_animatore}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "  {\n    \"username\": \"animatore\",\n    \"password\": \"animatore\",\n    \"email\": \"animatore@filiera.local\",\n    \"nome\": \"Animatore\",\n    \"cognome\": \"Filiera\",\n    \"telefono\": \"2222222222\",\n    \"ruolo\": \"ANIMATORE\"\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/personale/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "personale",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete animatore",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_animatore}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/personale/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "personale",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "acquirenti",
+      "item": [
+        {
+          "name": "get dati acquirente1",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_acquirente1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/acquirenti",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "acquirenti"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get dati tutti ADMIN",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_admin}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/acquirenti",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "acquirenti"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "patch acquirente2",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "jwt{{acquirente2}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "  {\n    \"username\": \"acquirente2\",\n    \"email\": \"prova@example.com\",\n    \"password\": \"password123\"\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/acquirenti/11",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "acquirenti",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete acquirente2",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "jwt{{{acquirente2}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/acquirenti/11",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "acquirenti",
+                "11"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "marketplaceAnnunci",
+      "item": [
+        {
+          "name": "post annunci produttore1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_produttore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"prodottoId\": 1,\n    \"prezzo\": 3.50,\n    \"stock\": 100,\n    \"attivo\": true\n  },\n  {\n    \"prodottoId\": 2,\n    \"prezzo\": 2.80,\n    \"stock\": 150,\n    \"attivo\": true\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/marketplace/annunci/prodotti",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "marketplace",
+                "annunci",
+                "prodotti"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "post annunci trasformatore1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_trasformatore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"prodottoId\": 13,\n    \"prezzo\": 6.50,\n    \"stock\": 60,\n    \"attivo\": true\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/marketplace/annunci/prodotti",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "marketplace",
+                "annunci",
+                "prodotti"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "post annunci distributore1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_distributore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"pacchettoId\": 1,\n    \"prezzo\": 25.00,\n    \"stock\": 30,\n    \"attivo\": true\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/marketplace/annunci/pacchetti",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "marketplace",
+                "annunci",
+                "pacchetti"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get annunci produttore1",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_produttore1}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/marketplace/annunci/prodotti",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "marketplace",
+                "annunci",
+                "prodotti"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get annunci trasformatore1",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_trasformatore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/marketplace/annunci/prodotti",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "marketplace",
+                "annunci",
+                "prodotti"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get annunci distributore1",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_distributore1}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/marketplace/annunci/pacchetti",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "marketplace",
+                "annunci",
+                "pacchetti"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "elimina annunci produttore1",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_produttore1}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/marketplace/annunci/prodotti/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "marketplace",
+                "annunci",
+                "prodotti",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "marketplace",
+      "item": [
+        {
+          "name": "lista prodotti",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/marketplace/prodotti",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "marketplace",
+                "prodotti"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "lista pacchetti",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/marketplace/pacchetti",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "marketplace",
+                "pacchetti"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "eventi",
+      "item": [
+        {
+          "name": "nuovo evento animatore",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_animatore}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Visita guidata alla Fattoria Rossi\",\n    \"dataOra\": \"2026-02-05T10:00:00.000Z\",\n    \"prezzo\": 15,\n    \"tipo\": \"VISITA\",\n    \"posti\": 20\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/eventi",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "eventi"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get tutti eventi animatore",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_animatore}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/eventi",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "eventi"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get tutti eventi ADMIN",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_admin}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/eventi",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "eventi"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "patch evento animatore",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_animatore}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nome\": \"Visita guidata alla Fattoria Rossi\",\n    \"dataOra\": \"2026-02-05T10:00:00.000Z\",\n    \"prezzo\": 20,\n    \"tipo\": \"VISITA\",\n    \"posti\": 25\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/eventi/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "eventi",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "elimina evento animatore",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_animatore}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/eventi/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "eventi",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ticketEventi",
+      "item": [
+        {
+          "name": "prendi ticket produttore1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_produttore1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantita\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/eventi/1/tickets",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "eventi",
+                "1",
+                "tickets"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "checkin ticket produttore1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Beare {{jwt_produttore1}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/{numero}/checkin",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "{numero}",
+                "checkin"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "lista ticket produttore1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/eventi/1/tickets",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "eventi",
+                "1",
+                "tickets"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "eventiStats",
+      "item": [
+        {
+          "name": "get stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/eventi/1/stats",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "eventi",
+                "1",
+                "stats"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ordini",
+      "item": [
+        {
+          "name": "crea ordine acquirente1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_acquirente1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"annuncioId\": 5,\n    \"quantita\": 1,\n    \"pacchetto\": false\n  }\n]\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/ordini",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ordini"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "annulla ordine acquirente1",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_acquirente1}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/ordini/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ordini",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "paga ordine acquirente1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_acquirente1}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/ordini/paga/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ordini",
+                "paga",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get ordini acquirente1",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_acquirente1}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/ordini",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ordini"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get ordini TUTTI ADMIN",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_admin}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/ordini",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "ordini"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}

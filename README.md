@@ -16,7 +16,7 @@
 
 ---
 
-## 📌 Descrizione del progetto
+## Descrizione del progetto
 
 Il progetto ha come obiettivo la realizzazione di una **piattaforma software per la digitalizzazione e la valorizzazione della filiera agricola locale**, con particolare riferimento a un territorio comunale.
 
@@ -29,7 +29,7 @@ Il sistema è pensato come uno strumento di **supporto alla trasparenza e alla q
 
 ---
 
-## 🎯 Finalità del progetto
+## Finalità del progetto
 
 La piattaforma si propone di:
 
@@ -41,7 +41,7 @@ La piattaforma si propone di:
 
 ---
 
-## 🧱 Ambito di sviluppo
+## Ambito di sviluppo
 
 Il progetto è sviluppato nell’ambito del corso di **Ingegneria del Software (IDS)** e si concentra sulla realizzazione del **backend dell’applicazione**, secondo i principi dell’ingegneria del software.
 
@@ -49,7 +49,7 @@ Il sistema è progettato come **applicazione RESTful**, in cui le funzionalità 
 
 ---
 
-## 🧩 Contesto applicativo
+## Contesto applicativo
 
 La piattaforma è pensata per supportare diversi soggetti coinvolti nella filiera agricola, permettendo:
 - la gestione dei prodotti agricoli locali
@@ -59,11 +59,12 @@ La piattaforma è pensata per supportare diversi soggetti coinvolti nella filier
 
 ---
 
-## 🛠️ Tecnologie utilizzate
+## Tecnologie utilizzate
 
 - **Java 17**
 - **Spring Boot**
 - **Spring Data JPA**
+- **Postman**
 - **Swagger / OpenAPI**
 - **Gradle**
 - **Database H2**
@@ -74,14 +75,14 @@ La piattaforma è pensata per supportare diversi soggetti coinvolti nella filier
 
 ---
 
-## 👥 Membri del gruppo
+## Membri del gruppo
 
 - **Basil Elsaid**  
 - **Ahmad Kassar**  
 
 ---
 
-## 🌍 Accesso all'Applicazione
+## Accesso all'Applicazione
 Una volta avviata, l'applicazione sarà raggiungibile all'indirizzo:
 
 ```
@@ -90,7 +91,8 @@ http://localhost:8080
 
 Sono disponibili due bottoni nella pagina principale:  
 
-- **Swagger UI**: per testare direttamente tutte le API dell’applicazione.  
+- **Postman ANCORA IN PROVA**: per testare tutte le API dell'applicazione.  
+- **Swagger UI**: per testare tutte le API dell’applicazione tramite browser.  
 - **H2 Database Console**: per accedere al database in memoria e verificare i dati.
 
 ---
