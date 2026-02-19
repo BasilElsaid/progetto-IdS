@@ -27,10 +27,6 @@ La piattaforma consente la **gestione, la tracciabilità e la condivisione delle
 
 Il sistema è pensato come uno strumento di **supporto alla trasparenza e alla qualità**, permettendo agli utenti di comprendere l’origine, il percorso produttivo e le caratteristiche dei prodotti tipici del territorio.
 
----
-
-## Finalità del progetto
-
 La piattaforma si propone di:
 
 - digitalizzare le informazioni della filiera agricola
@@ -38,6 +34,13 @@ La piattaforma si propone di:
 - supportare la tracciabilità dei prodotti lungo le diverse fasi della filiera
 - favorire la promozione del territorio e delle sue eccellenze
 - facilitare l’organizzazione e la gestione di **eventi locali**, come fiere, mercati e visite guidate alle aziende agricole
+
+---
+
+## Membri del gruppo
+
+- **Basil Elsaid**  
+- **Ahmad Kassar**  
 
 ---
 
@@ -49,13 +52,18 @@ Il sistema è progettato come **applicazione RESTful**, in cui le funzionalità 
 
 ---
 
-## Contesto applicativo
+## Accesso all'Applicazione
+Una volta avviata, l'applicazione sarà raggiungibile all'indirizzo:
 
-La piattaforma è pensata per supportare diversi soggetti coinvolti nella filiera agricola, permettendo:
-- la gestione dei prodotti agricoli locali
-- la rappresentazione delle fasi della filiera
-- la diffusione delle informazioni verso cittadini e consumatori
-- la promozione delle attività e degli eventi del territorio
+```
+http://localhost:8080
+```
+
+Sono disponibili due bottoni nella pagina principale:  
+
+- **Postman ANCORA IN PROVA**: per testare tutte le API dell'applicazione.  
+- **Swagger UI**: per testare tutte le API dell’applicazione tramite browser.  
+- **H2 Database Console**: per accedere al database in memoria e verificare i dati.
 
 ---
 
@@ -72,27 +80,5 @@ La piattaforma è pensata per supportare diversi soggetti coinvolti nella filier
 ### Ambienti di sviluppo
 - **Eclipse**
 - **IntelliJ IDEA**
-
----
-
-## Membri del gruppo
-
-- **Basil Elsaid**  
-- **Ahmad Kassar**  
-
----
-
-## Accesso all'Applicazione
-Una volta avviata, l'applicazione sarà raggiungibile all'indirizzo:
-
-```
-http://localhost:8080
-```
-
-Sono disponibili due bottoni nella pagina principale:  
-
-- **Postman ANCORA IN PROVA**: per testare tutte le API dell'applicazione.  
-- **Swagger UI**: per testare tutte le API dell’applicazione tramite browser.  
-- **H2 Database Console**: per accedere al database in memoria e verificare i dati.
 
 ---
