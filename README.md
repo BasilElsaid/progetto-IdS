@@ -1,20 +1,4 @@
-# 🌱 Progetto IDS  
-## Piattaforma di Digitalizzazione e Valorizzazione della Filiera Agricola Locale
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Java-17-orange?logo=java" />
-  <img src="https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen?logo=springboot" />
-  <img src="https://img.shields.io/badge/Swagger-OpenAPI-blue?logo=swagger" />
-  <img src="https://img.shields.io/badge/Gradle-Build-success?logo=gradle" />
-  <img src="https://img.shields.io/badge/H2-Database-lightgrey" />
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/IDE-Eclipse-blueviolet?logo=eclipseide" />
-  <img src="https://img.shields.io/badge/IDE-IntelliJ%20IDEA-black?logo=intellijidea" />
-</p>
-
----
+# 🌱 Progetto IDS  : Piattaforma di Digitalizzazione e Valorizzazione della Filiera Agricola Locale
 
 ## Descrizione del progetto
 
