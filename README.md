@@ -45,9 +45,11 @@ http://localhost:8080
 
 Sono disponibili due bottoni nella pagina principale:  
 
-- **Postman**: per testare tutte le API dell'applicazione.  
 - **Swagger UI**: per testare tutte le API dell’applicazione tramite browser.  
 - **H2 Database Console**: per accedere al database in memoria e verificare i dati.
+
+Si può comunque testare le chiamate con POSTMAN con la collection pronta nella cartella postman.
+- **Postman**: per testare tutte le API dell'applicazione.  
 
 ---
 
