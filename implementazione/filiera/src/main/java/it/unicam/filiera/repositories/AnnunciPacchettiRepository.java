@@ -7,6 +7,7 @@ import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface AnnunciPacchettiRepository extends JpaRepository<AnnuncioPacchetto, Long> {
@@ -17,4 +18,7 @@ public interface AnnunciPacchettiRepository extends JpaRepository<AnnuncioPacche
     Optional<AnnuncioPacchetto> findByAziendaAndPacchetto(Azienda azienda, Pacchetto pacchetto);
 
     boolean existsByPacchetto_Id(Long pacchettoId);
+
+    List<AnnuncioPacchetto> findByAzienda_Id(Long aziendaId);
+
 }

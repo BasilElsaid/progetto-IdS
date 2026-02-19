@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/aziende")
 @Tag(name = "02 - Aziende", description = "Gestione Produttori, Trasformatori e Distributori di tipicità")
+@PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
 public class AziendeController {
 
     private final AziendeService service;
@@ -22,30 +23,16 @@ public class AziendeController {
         this.service = service;
     }
 
-//    @PostMapping
-//    public UtenteResponse crea(@Valid @RequestBody CreateAziendaRequest request) {
-//        return service.creaAzienda(request);
-//    }
-
-    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
     @GetMapping
     public List<UtenteResponse> listaTutti() {
         return service.listaAziende();
     }
 
-    @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
-    @GetMapping("/{id}")
-    public UtenteResponse get(@PathVariable Long id) {
-        return service.getAzienda(id);
-    }
-
-    @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         service.deleteAzienda(id);
     }
 
-    @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
     @PatchMapping("/{id}")
     public UtenteResponse patch(@PathVariable Long id,
                                 @RequestBody UpdateAziendaRequest request) {

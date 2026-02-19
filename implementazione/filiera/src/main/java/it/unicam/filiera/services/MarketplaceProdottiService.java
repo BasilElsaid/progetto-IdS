@@ -9,7 +9,9 @@ import it.unicam.filiera.exceptions.BadRequestException;
 import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Azienda;
+import it.unicam.filiera.models.UtenteGenerico;
 import it.unicam.filiera.repositories.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,35 +22,26 @@ import java.util.stream.Collectors;
 public class MarketplaceProdottiService {
 
     private final AnnunciProdottiRepository annuncioRepo;
-    private final UtentiRepository utentiRepo;
     private final ProdottiRepository prodottoRepo;
 
     public MarketplaceProdottiService(AnnunciProdottiRepository annuncioRepo,
-                                      UtentiRepository utentiRepo,
                                       ProdottiRepository prodottoRepo) {
         this.annuncioRepo = annuncioRepo;
-        this.utentiRepo = utentiRepo;
         this.prodottoRepo = prodottoRepo;
     }
 
     public AnnuncioProdottoResponse creaAnnuncio(CreateAnnuncioProdottoRequest req) {
         if (req == null) {
-            throw new BadRequestException( "Body mancante");
-        }
-        if (req.getAziendaId() == null) {
-            throw new BadRequestException("aziendaId mancante");
+            throw new BadRequestException("Body mancante");
         }
         if (req.getProdottoId() == null) {
-            throw new BadRequestException( "prodottoId mancante");
+            throw new BadRequestException("prodottoId mancante");
         }
 
-        var utente = utentiRepo.findById(req.getAziendaId())
-                .orElseThrow(() -> new NotFoundException(
-                        "Azienda non trovata: id=" + req.getAziendaId()
-                ));
-
+        // prendi l'utente loggato
+        var utente = getUtenteLoggato();
         if (!(utente instanceof Azienda azienda)) {
-            throw new BadRequestException("L'utente selezionato non è un'azienda");
+            throw new ForbiddenException("Solo un'azienda può creare annunci");
         }
 
         Prodotto prodotto = prodottoRepo.findById(req.getProdottoId())
@@ -57,15 +50,11 @@ public class MarketplaceProdottiService {
                 ));
 
         if (!prodotto.getProprietario().getId().equals(azienda.getId())) {
-            throw new ForbiddenException(
-                    "Non puoi creare un annuncio per un prodotto che non ti appartiene"
-            );
+            throw new ForbiddenException("Non puoi creare un annuncio per un prodotto che non ti appartiene");
         }
 
         if (!prodotto.getVendibile()) {
-            throw new BadRequestException(
-                    "Il prodotto non è certificato/approvato e non può essere trasformato"
-            );
+            throw new BadRequestException("Il prodotto non è certificato/approvato e non può essere venduto");
         }
 
         boolean exists = annuncioRepo.findByAziendaAndProdotto(azienda, prodotto).isPresent();
@@ -95,41 +84,45 @@ public class MarketplaceProdottiService {
                 .collect(Collectors.toList());
     }
 
-    public List<AnnuncioProdottoResponse> listaAnnunci(Long aziendaId, String categoria, Boolean attivo) {
-        return annuncioRepo.findAll().stream()
-                .filter(a -> aziendaId == null || (a.getAzienda() != null && a.getAzienda().getId().equals(aziendaId)))
-                .filter(a -> attivo == null || a.isAttivo() == attivo)
-                .filter(a -> categoria == null || categoria.isBlank()
-                        || (a.getProdotto() != null
-                        && a.getProdotto().getCategoria() != null
-                        && a.getProdotto().getCategoria().equalsIgnoreCase(categoria)))
-                .map(AnnuncioProdottoResponse::from)
-                .collect(Collectors.toList());
-    }
+    public List<AnnuncioProdottoResponse> listaAnnunci() {
 
-    public AnnuncioProdottoResponse getAnnuncio(Long id) {
-        if (id == null) {
-            throw new BadRequestException( "id mancante");
+        var utente = getUtenteLoggato();
+
+        List<AnnuncioProdotto> annunci;
+
+        if (utente instanceof Azienda azienda) {
+            annunci = annuncioRepo.findByAzienda_Id(azienda.getId());
+        } else {
+            annunci = annuncioRepo.findAll();
         }
-        AnnuncioProdotto a = annuncioRepo.findById(id)
-                .orElseThrow(() -> new NotFoundException(
-                        "Annuncio non trovato: id=" + id
-                ));
-        return AnnuncioProdottoResponse.from(a);
+
+        return annunci.stream()
+                .map(AnnuncioProdottoResponse::from)
+                .toList();
     }
 
+    @Transactional
     public AnnuncioProdottoResponse aggiornaAnnuncio(Long id, UpdateAnnuncioMarketplaceRequest req) {
         if (id == null) {
-            throw new BadRequestException( "id mancante");
+            throw new BadRequestException("id mancante");
         }
         if (req == null) {
-            throw new BadRequestException( "Body mancante");
+            throw new BadRequestException("Body mancante");
         }
 
         AnnuncioProdotto a = annuncioRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException(
                         "Annuncio non trovato: id=" + id
                 ));
+
+        var utente = getUtenteLoggato();
+        if (!(utente instanceof Azienda azienda)) {
+            throw new ForbiddenException("Solo un'azienda può aggiornare un annuncio");
+        }
+
+        if (!a.getAzienda().getId().equals(azienda.getId())) {
+            throw new ForbiddenException("Non puoi aggiornare un annuncio che non ti appartiene");
+        }
 
         if (req.prezzo() != null) a.setPrezzo(req.prezzo());
         if (req.stock() != null) a.setStock(req.stock());
@@ -140,8 +133,24 @@ public class MarketplaceProdottiService {
 
     public void eliminaAnnuncio(Long id) {
         AnnuncioProdotto a = annuncioRepo.findById(id)
-                .orElseThrow(() -> new NotFoundException("Annuncio non trovato: id=" + id
-                ));
+                .orElseThrow(() -> new NotFoundException("Annuncio non trovato: id=" + id));
+
+        var utente = getUtenteLoggato();
+
+        // Se è gestore piattaforma → può eliminare tutto
+        if (utente.getRuolo().name().equals("GESTORE_PIATTAFORMA")) {
+            annuncioRepo.delete(a);
+            return;
+        }
+
+        if (!(utente instanceof Azienda azienda)) {
+            throw new ForbiddenException("Solo un'azienda può eliminare un annuncio");
+        }
+
+        if (!a.getAzienda().getId().equals(azienda.getId())) {
+            throw new ForbiddenException("Non puoi eliminare un annuncio che non ti appartiene");
+        }
+
         annuncioRepo.delete(a);
     }
 
@@ -150,5 +159,13 @@ public class MarketplaceProdottiService {
         return annuncioRepo.findAll().stream()
                 .map(AnnuncioProdottoResponse::from) // usa il metodo statico dal DTO
                 .toList();
+    }
+
+    private UtenteGenerico getUtenteLoggato() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !(auth.getPrincipal() instanceof UtenteGenerico u)) {
+            throw new ForbiddenException("Utente non autenticato");
+        }
+        return (UtenteGenerico) auth.getPrincipal();
     }
 }

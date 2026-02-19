@@ -4,9 +4,11 @@ import it.unicam.filiera.dto.create.CreatePersonaleRequest;
 import it.unicam.filiera.dto.update.UpdatePersonaleRequest;
 import it.unicam.filiera.dto.response.UtenteResponse;
 import it.unicam.filiera.exceptions.BadRequestException;
+import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.*;
 import it.unicam.filiera.repositories.UtentiRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -55,38 +57,50 @@ public class PersonaleService {
     }
 
     public List<UtenteResponse> listaPersonale() {
-        return utentiRepository.findAll().stream()
-                .filter(u -> u instanceof Personale)
-                .map(u -> UtenteResponse.from((Personale) u))
-                .toList();
-    }
+        UtenteGenerico u = getUtenteLoggato();
 
-    public UtenteResponse getPersonale(Long id) {
-        UtenteGenerico u = utentiRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Personale non trovato"));
-
-        if (!(u instanceof Personale personale)) {
-            throw new BadRequestException("L'utente non è personale");
+        if (u instanceof GestorePiattaforma) {
+            return utentiRepository.findAll().stream()
+                    .filter(p -> p instanceof Personale)
+                    .map(p -> UtenteResponse.from((Personale) p))
+                    .toList();
         }
 
-        return UtenteResponse.from(personale);
+        if (u instanceof Personale personale) {
+            return List.of(UtenteResponse.from(personale));
+        }
+
+        throw new ForbiddenException("Non puoi vedere il personale");
     }
 
     public void eliminaPersonale(Long id) {
-        UtenteGenerico u = utentiRepository.findById(id)
+        UtenteGenerico u = getUtenteLoggato();
+        UtenteGenerico target = utentiRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Personale non trovato"));
-        if (!(u instanceof Personale)) {
+
+        if (!(target instanceof Personale personale)) {
             throw new BadRequestException("L'utente non è personale");
         }
-        utentiRepository.delete(u);
+
+        if (!u.getId().equals(personale.getId()) && !(u instanceof GestorePiattaforma)) {
+            throw new ForbiddenException("Non puoi eliminare questo personale");
+        }
+
+        utentiRepository.delete(personale);
     }
 
     public UtenteResponse patchPersonale(Long id, UpdatePersonaleRequest request) {
-        UtenteGenerico u = utentiRepository.findById(id)
+        UtenteGenerico u = getUtenteLoggato();
+        UtenteGenerico target = utentiRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Personale non trovato"));
 
-        if (!(u instanceof Personale personale)) {
+        if (!(target instanceof Personale personale)) {
             throw new BadRequestException("L'utente non è personale");
+        }
+
+        // Controllo proprietà o ruolo gestore
+        if (!u.getId().equals(personale.getId())) {
+            throw new ForbiddenException("Non puoi modificare questo personale");
         }
 
         if (request.email() != null) personale.setEmail(request.email());
@@ -99,27 +113,11 @@ public class PersonaleService {
     }
 
     // =================== Helper ===================
-    private void updateUtente(Object utente, UpdatePersonaleRequest request) {
-        if (utente instanceof Curatore c) {
-            if (request.email() != null) c.setEmail(request.email());
-            if (request.password() != null) c.setPassword(passwordEncoder.encode(request.password()));
-            if (request.nome() != null) c.setNome(request.nome());
-            if (request.cognome() != null) c.setCognome(request.cognome());
-            if (request.telefono() != null) c.setTelefono(request.telefono());
-
-        } else if (utente instanceof Animatore a) {
-            if (request.email() != null) a.setEmail(request.email());
-            if (request.password() != null) a.setPassword(passwordEncoder.encode(request.password()));
-            if (request.nome() != null) a.setNome(request.nome());
-            if (request.cognome() != null) a.setCognome(request.cognome());
-            if (request.telefono() != null) a.setTelefono(request.telefono());
-
-        } else if (utente instanceof GestorePiattaforma g) {
-            if (request.email() != null) g.setEmail(request.email());
-            if (request.password() != null) g.setPassword(passwordEncoder.encode(request.password()));
-            if (request.nome() != null) g.setNome(request.nome());
-            if (request.cognome() != null) g.setCognome(request.cognome());
-            if (request.telefono() != null) g.setTelefono(request.telefono());
+    private UtenteGenerico getUtenteLoggato() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !(auth.getPrincipal() instanceof UtenteGenerico user)) {
+            throw new ForbiddenException("Utente non autenticato");
         }
+        return user;
     }
 }

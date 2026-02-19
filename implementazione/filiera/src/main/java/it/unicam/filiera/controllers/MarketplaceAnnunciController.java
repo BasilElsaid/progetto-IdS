@@ -39,17 +39,8 @@ public class MarketplaceAnnunciController {
 
     @PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/prodotti")
-    public List<AnnuncioProdottoResponse> listaProdotti(@RequestParam Optional<Long> aziendaId,
-                                                        @RequestParam Optional<CategoriaProdotto> categoria,
-                                                        @RequestParam Optional<Boolean> attivo) {
-        String categoriaStr = categoria.map(Enum::name).orElse(null);
-        return marketplaceProdottiService.listaAnnunci(aziendaId.orElse(null), categoriaStr, attivo.orElse(null));
-    }
-
-    @PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE', 'GESTORE_PIATTAFORMA')")
-    @GetMapping("/prodotti/{id}")
-    public AnnuncioProdottoResponse dettaglioProdotto(@PathVariable Long id) {
-        return marketplaceProdottiService.getAnnuncio(id);
+    public List<AnnuncioProdottoResponse> listaProdotti() {
+        return marketplaceProdottiService.listaAnnunci();
     }
 
     @PreAuthorize("hasAnyRole('PRODUTTORE', 'TRASFORMATORE')")
@@ -75,17 +66,8 @@ public class MarketplaceAnnunciController {
 
     @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'GESTORE_PIATTAFORMA')")
     @GetMapping("/pacchetti")
-    public List<AnnuncioPacchettoResponse> listaPacchetti(
-            @RequestParam Optional<Long> aziendaId,
-            @RequestParam Optional<Boolean> attivo
-    ) {
-        return marketplacePacchettiService.listaAnnunci(aziendaId.orElse(null), attivo.orElse(null));
-    }
-
-    @PreAuthorize("hasAnyRole('DISTRIBUTORE_TIPICITA', 'GESTORE_PIATTAFORMA')")
-    @GetMapping("/pacchetti/{id}")
-    public AnnuncioPacchettoResponse dettaglioPacchetto(@PathVariable Long id) {
-        return marketplacePacchettiService.getAnnuncio(id);
+    public List<AnnuncioPacchettoResponse> listaPacchetti() {
+        return marketplacePacchettiService.listaAnnunci();
     }
 
     @PreAuthorize("hasRole('DISTRIBUTORE_TIPICITA')")

@@ -5,10 +5,13 @@ import it.unicam.filiera.dto.create.CreateAcquirenteRequest;
 import it.unicam.filiera.dto.response.UtenteResponse;
 import it.unicam.filiera.dto.update.UpdateAcquirenteRequest;
 import it.unicam.filiera.exceptions.BadRequestException;
+import it.unicam.filiera.exceptions.ForbiddenException;
 import it.unicam.filiera.exceptions.NotFoundException;
 import it.unicam.filiera.models.Acquirente;
+import it.unicam.filiera.models.GestorePiattaforma;
 import it.unicam.filiera.models.UtenteGenerico;
 import it.unicam.filiera.repositories.UtentiRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -47,10 +50,20 @@ public class AcquirentiService {
     }
 
     public List<UtenteResponse> listaAcquirenti() {
-        return utentiRepository.findAll().stream()
-                .filter(u -> u instanceof Acquirente)
-                .map(u -> UtenteResponse.from((Acquirente) u))
-                .toList();
+        UtenteGenerico u = getUtenteLoggato();
+
+        if (u instanceof GestorePiattaforma) {
+            return utentiRepository.findAll().stream()
+                    .filter(a -> a instanceof Acquirente)
+                    .map(a -> UtenteResponse.from((Acquirente) a))
+                    .toList();
+        }
+
+        if (u instanceof Acquirente acquirente) {
+            return List.of(UtenteResponse.from(acquirente));
+        }
+
+        throw new ForbiddenException("Non puoi vedere gli acquirenti");
     }
 
     public UtenteResponse getAcquirente(Long id) {
@@ -65,28 +78,48 @@ public class AcquirentiService {
     }
 
     public void deleteAcquirente(Long id) {
-        UtenteGenerico u = utentiRepository.findById(id)
+        UtenteGenerico u = getUtenteLoggato();
+        UtenteGenerico target = utentiRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
 
-        if (!(u instanceof Acquirente)) {
+        if (!(target instanceof Acquirente acquirente)) {
             throw new BadRequestException("L'utente selezionato non è un Acquirente");
         }
 
-        utentiRepository.delete(u);
+        if (!u.getId().equals(acquirente.getId()) && !(u instanceof GestorePiattaforma)) {
+            throw new ForbiddenException("Non puoi eliminare questo acquirente");
+        }
+
+        utentiRepository.delete(acquirente);
     }
 
     public UtenteResponse patchAcquirente(Long id, UpdateAcquirenteRequest request) {
-        UtenteGenerico u = utentiRepository.findById(id)
+        UtenteGenerico u = getUtenteLoggato();
+        UtenteGenerico target = utentiRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Acquirente non trovato"));
 
-        if (!(u instanceof Acquirente acquirente)) {
+        if (!(target instanceof Acquirente acquirente)) {
             throw new BadRequestException("L'utente selezionato non è un Acquirente");
+        }
+
+        if (!u.getId().equals(acquirente.getId()) && !(u instanceof GestorePiattaforma)) {
+            throw new ForbiddenException("Non puoi modificare questo acquirente");
         }
 
         if (request.email() != null) acquirente.setEmail(request.email());
         if (request.password() != null) acquirente.setPassword(passwordEncoder.encode(request.password()));
 
         return UtenteResponse.from(utentiRepository.save(acquirente));
+    }
+
+    // HELPER
+
+    private UtenteGenerico getUtenteLoggato() {
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !(auth.getPrincipal() instanceof UtenteGenerico user)) {
+            throw new ForbiddenException("Utente non autenticato");
+        }
+        return user;
     }
 
 }

@@ -2,16 +2,12 @@ package it.unicam.filiera.dto.create;
 
 public class CreateAnnuncioPacchettoRequest {
 
-    private Long aziendaId;
     private Long pacchettoId;
     private double prezzo;
     private int stock;
     private boolean attivo = true;
 
     public CreateAnnuncioPacchettoRequest() {}
-
-    public Long getAziendaId() { return aziendaId; }
-    public void setAziendaId(Long aziendaId) { this.aziendaId = aziendaId; }
 
     public Long getPacchettoId() { return pacchettoId; }
     public void setPacchettoId(Long pacchettoId) { this.pacchettoId = pacchettoId; }

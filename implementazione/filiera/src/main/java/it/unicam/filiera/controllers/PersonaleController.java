@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/personale")
 @Tag(name = "03 - Personale", description = "Gestione Curatore, Animatore e Gestore Piattaforma")
+@PreAuthorize("hasAnyRole('CURATORE', 'ANIMATORE', 'GESTORE_PIATTAFORMA')")
 public class PersonaleController {
 
     private final PersonaleService service;
@@ -21,31 +22,16 @@ public class PersonaleController {
         this.service = service;
     }
 
-//    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
-//    @PostMapping
-//    public UtenteResponse crea(@RequestBody CreatePersonaleRequest request) {
-//        return service.creaPersonale(request);
-//    }
-
-    @PreAuthorize("hasRole('GESTORE_PIATTAFORMA')")
     @GetMapping
     public List<UtenteResponse> lista() {
         return service.listaPersonale();
     }
 
-    @PreAuthorize("hasAnyRole('CURATORE', 'ANIMATORE', 'GESTORE_PIATTAFORMA')")
-    @GetMapping("/{id}")
-    public UtenteResponse get(@PathVariable Long id) {
-        return service.getPersonale(id);
-    }
-
-    @PreAuthorize("hasAnyRole('CURATORE', 'ANIMATORE', 'GESTORE_PIATTAFORMA')")
     @DeleteMapping("/{id}")
     public void elimina(@PathVariable Long id) {
         service.eliminaPersonale(id);
     }
 
-    @PreAuthorize("hasAnyRole('CURATORE', 'ANIMATORE', 'GESTORE_PIATTAFORMA')")
     @PatchMapping("/{id}")
     public UtenteResponse patch(@PathVariable Long id,
                                 @RequestBody UpdatePersonaleRequest request) {
